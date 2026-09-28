@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Peso</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#f3f6f9;
+  --card:#ffffff;
+  --text:#243b53;
+  --muted:#7890a7;
+  --line:#e2e8f0;
+  --blue:#365673;
+  --blue2:#2e4d68;
+  --green:#079447;
+  --greenbg:#effaf3;
+  --shadow:0 4px 16px rgba(15,39,66,.055);
+}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===== HEADER ===== */
+.app-header{
+  width:calc(100% - 60px);
+  max-width:1100px;
+  min-height:88px;
+  margin:11px auto 0;
+  padding:16px 22px;
+  background:#fff;
+  border:1px solid rgba(226,232,240,.95);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.app-header-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  min-width:0;
+}
+
+.app-icon{
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--blue);
+  color:#fff;
+}
+
+.app-icon svg{
+  width:25px;
+  height:25px;
+}
+
+.app-header-copy{
+  min-width:0;
+}
+
+.app-header h1{
+  margin:0;
+  color:var(--text);
+  font-size:22px;
+  font-weight:650;
+  letter-spacing:.1px;
+}
+
+.app-header p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.system-status{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 12px;
+  border-radius:18px;
+  background:var(--greenbg);
+  color:var(--green);
+  font-size:11px;
+  font-weight:600;
+}
+
+.status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#16c765;
+}
+
+/* ===== CONTENIDO ===== */
+.main{
+  width:calc(100% - 60px);
+  max-width:1100px;
+  margin:18px auto 24px;
+}
+
+.card{
+  background:var(--card);
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  margin-bottom:14px;
+}
+
+.section-title{
+  margin:0 0 13px;
+  font-size:15px;
+  font-weight:700;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.section-title::before{
+  content:"";
+  width:4px;
+  height:18px;
+  border-radius:5px;
+  background:var(--blue);
+}
+
+/* ===== MATERIAL ===== */
+.material-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+
+.material-option{
+  position:relative;
+}
+
+.material-option input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.material-option label{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  padding:7px 10px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+  color:#4b6074;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.18s ease;
+}
+
+.material-option label:hover{
+  border-color:#a9bbc9;
+  background:#f8fafc;
+}
+
+.material-option input:checked + label{
+  background:#edf3f8;
+  border-color:#7f9bb2;
+  color:var(--blue2);
+  box-shadow:inset 0 0 0 1px #7f9bb2;
+}
+
+/* ===== FORMULARIOS ===== */
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  align-items:end;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+}
+
+.field label{
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:7px;
+  color:#55697c;
+}
+
+.field input,
+.field select{
+  width:100%;
+  height:40px;
+  padding:8px 11px;
+  border:1px solid #cfd8e3;
+  border-radius:8px;
+  background:#fff;
+  color:#243b53;
+  font-size:14px;
+  outline:none;
+  transition:.15s ease;
+}
+
+.field input:focus,
+.field select:focus{
+  border-color:#7694ad;
+  box-shadow:0 0 0 3px rgba(54,86,115,.09);
+}
+
+.unit{
+  font-size:10px;
+  color:#90a2b3;
+  margin-top:4px;
+}
+
+.limpiar-container{
+  justify-content:flex-end;
+}
+
+.btn-limpiar{
+  height:40px;
+  width:100%;
+  border:1px solid #cfd8e3;
+  border-radius:8px;
+  background:#fff;
+  color:#52687b;
+  font-weight:650;
+  font-size:13px;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.btn-limpiar:hover{
+  background:#f6f8fa;
+  border-color:#aebdca;
+}
+
+/* ===== RESULTADO ===== */
+.resultado-card{
+  background:linear-gradient(135deg,#365673,#2c4b66);
+  color:#fff;
+  padding:16px 22px;
+  border-radius:14px;
+  box-shadow:0 7px 18px rgba(35,62,85,.16);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.resultado-label{
+  font-size:13px;
+  opacity:.82;
+  margin-bottom:4px;
+}
+
+.resultado-valor{
+  font-size:30px;
+  font-weight:750;
+  letter-spacing:.2px;
+}
+
+.resultado-valor span:last-child{
+  font-size:17px;
+  font-weight:600;
+  opacity:.9;
+  margin-left:4px;
+}
+
+.resultado-icon{
+  width:52px;
+  height:52px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.12);
+}
+
+.resultado-icon svg{
+  width:27px;
+  height:27px;
+}
+
+
+.calculator-card{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:20px;
+  align-items:end;
+}
+
+.forma-block{
+  min-width:0;
+}
+
+.dimensiones-block{
+  min-width:0;
+}
+
+.inline-fields{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  align-items:end;
+}
+
+.inline-fields .field{
+  min-width:0;
+}
+
+@media(max-width:1050px){
+  .calculator-card{
+    grid-template-columns:1fr;
+    align-items:stretch;
+  }
+  .inline-fields{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .material-grid{grid-template-columns:repeat(3,1fr)}
+  .form-grid{grid-template-columns:repeat(2,1fr)}
+  .inline-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:760px){
+  .app-header{
+    width:calc(100% - 28px);
+    min-height:78px;
+    padding:13px 15px;
+  }
+  .system-status{display:none}
+  .app-header h1{font-size:18px}
+  .app-icon{width:44px;height:44px;flex-basis:44px}
+  .main{width:calc(100% - 28px);margin-top:14px}
+  .material-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  .inline-fields{grid-template-columns:1fr}
+  .card{padding:16px}
+  .resultado-valor{font-size:28px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+  <div class="app-header-left">
+    <div class="app-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 5h12l2 5-3 9H7l-3-9 2-5z"/>
+        <path d="M9 9h6"/>
+        <path d="M12 9v4"/>
+      </svg>
+    </div>
+    <div class="app-header-copy">
+      <h1>Calculadora de Peso</h1>
+      <p>Cálculo rápido de peso según material, geometría y dimensiones</p>
+    </div>
+  </div>
+  <div class="system-status"><span class="status-dot"></span>Sistema Pesos</div>
+</header>
+
+<main class="main">
+
+  <section class="card">
+    <h2 class="section-title">Material</h2>
+    <div class="material-grid">
+      <div class="material-option"><input id="mat-al" type="radio" name="mat" value="2700"><label for="mat-al">Aluminio</label></div>
+      <div class="material-option"><input id="mat-cu" type="radio" name="mat" value="8960"><label for="mat-cu">Cobre</label></div>
+      <div class="material-option"><input id="mat-ac" type="radio" name="mat" value="7850" checked><label for="mat-ac">Acero</label></div>
+      <div class="material-option"><input id="mat-la" type="radio" name="mat" value="8500"><label for="mat-la">Latón</label></div>
+      <div class="material-option"><input id="mat-br" type="radio" name="mat" value="8800"><label for="mat-br">Bronce</label></div>
+      <div class="material-option"><input id="mat-ny" type="radio" name="mat" value="1150"><label for="mat-ny">Nylon</label></div>
+      <div class="material-option"><input id="mat-pvc" type="radio" name="mat" value="1420"><label for="mat-pvc">PVC</label></div>
+      <div class="material-option"><input id="mat-de" type="radio" name="mat" value="1400"><label for="mat-de">Delrin</label></div>
+      <div class="material-option"><input id="mat-te" type="radio" name="mat" value="2200"><label for="mat-te">Teflón</label></div>
+      <div class="material-option"><input id="mat-pe" type="radio" name="mat" value="950"><label for="mat-pe">Polietileno</label></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">Datos de cálculo</h2>
+
+    <div class="calculator-card">
+      <div class="forma-block">
+        <div class="field">
+          <label for="forma">Forma</label>
+          <select id="forma" onchange="renderCampos(); calcular();">
+            <option value="redondo">Redondo</option>
+            <option value="cuadrado">Cuadrado</option>
+            <option value="hexagonal">Hexagonal</option>
+            <option value="placa">Placa</option>
+            <option value="tuboRedondo">Tubo Redondo</option>
+            <option value="tuboCuadrado">Tubo Cuadrado</option>
+            <option value="tuboRect">Tubo Rectangular</option>
+            <option value="pletina">Pletina</option>
+            <option value="anguloIgual">Ángulo Igual</option>
+            <option value="anguloDesigual">Ángulo Desigual</option>
+            <option value="perfilU">Perfil U</option>
+            <option value="perfilT">Perfil T</option>
+          </select>
+          <div class="unit">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="dimensiones-block">
+        <div id="campos" class="inline-fields"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="resultado-card">
+    <div>
+      <div class="resultado-label">Peso total calculado</div>
+      <div class="resultado-valor"><span id="peso">0.00</span><span>kg</span></div>
+    </div>
+    <div class="resultado-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 20h14"/>
+        <path d="M7 20l1-11h8l1 11"/>
+        <path d="M9 9a3 3 0 0 1 6 0"/>
+      </svg>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function campo(id,label){
+  return `
+    <div class="field">
+      <label for="${id}">${label}</label>
+      <input id="${id}" type="number" min="0" step="any" inputmode="decimal">
+      <div class="unit">mm</div>
+    </div>`;
+}
+
+function campoCantidad(){
+  return `
+    <div class="field">
+      <label for="cant">Cantidad</label>
+      <input id="cant" type="number" min="1" step="1" value="1">
+      <div class="unit">piezas</div>
+    </div>`;
+}
+
+function botonLimpiar(){
+  return `
+    <div class="field limpiar-container">
+      <label>&nbsp;</label>
+      <button type="button" onclick="limpiar()" class="btn-limpiar">Limpiar</button>
+      <div class="unit">&nbsp;</div>
+    </div>`;
+}
+
+function renderCampos(){
+  const f=document.getElementById("forma").value;
+  const c=document.getElementById("campos");
+  const cantidad=campoCantidad();
+  const limpiarBtn=botonLimpiar();
+
+  if(f==="redondo") c.innerHTML=campo("d","Diámetro")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="cuadrado") c.innerHTML=campo("a","Lado")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="hexagonal") c.innerHTML=campo("a","Cara a cara")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="placa") c.innerHTML=campo("l","Largo")+campo("b","Ancho")+campo("e","Espesor")+cantidad+limpiarBtn;
+  if(f==="tuboRedondo") c.innerHTML=campo("de","Diám. exterior")+campo("di","Diám. interior")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="tuboCuadrado") c.innerHTML=campo("a","Lado exterior")+campo("e","Espesor")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="tuboRect") c.innerHTML=campo("h","Alto")+campo("b","Ancho")+campo("e","Espesor")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="pletina") c.innerHTML=campo("b","Ancho")+campo("e","Espesor")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="anguloIgual") c.innerHTML=campo("a","Ala")+campo("e","Espesor")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="anguloDesigual") c.innerHTML=campo("a","Ala 1")+campo("b","Ala 2")+campo("e","Espesor")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="perfilU") c.innerHTML=campo("h","Alto")+campo("b","Base")+campo("e","Espesor")+campo("l","Largo")+cantidad+limpiarBtn;
+  if(f==="perfilT") c.innerHTML=campo("b","Base")+campo("h","Alto")+campo("e","Espesor")+campo("l","Largo")+cantidad+limpiarBtn;
+}
+
+function getVal(id){
+  const el=document.getElementById(id);
+  return el ? (parseFloat(el.value)||0)/1000 : 0;
+}
+
+function calcular(){
+  const material=document.querySelector('input[name="mat"]:checked');
+  if(!material) return;
+
+  const densidad=parseFloat(material.value);
+  const f=document.getElementById("forma").value;
+  const cant=parseFloat(document.getElementById("cant").value)||1;
+  let v=0;
+
+  if(f==="redondo"){
+    const d=getVal("d"),l=getVal("l");
+    v=Math.PI*(d/2)**2*l;
+  }
+
+  if(f==="cuadrado"){
+    const a=getVal("a"),l=getVal("l");
+    v=a*a*l;
+  }
+
+  if(f==="hexagonal"){
+    const a=getVal("a"),l=getVal("l");
+    v=(Math.sqrt(3)/2)*a*a*l;
+  }
+
+  if(f==="placa"){
+    const l=getVal("l"),b=getVal("b"),e=getVal("e");
+    v=l*b*e;
+  }
+
+  if(f==="tuboRedondo"){
+    const de=getVal("de"),di=getVal("di"),l=getVal("l");
+    v=Math.PI*((de/2)**2-(di/2)**2)*l;
+  }
+
+  if(f==="tuboCuadrado"){
+    const a=getVal("a"),e=getVal("e"),l=getVal("l");
+    if(a>2*e) v=(a*a-(a-2*e)**2)*l;
+  }
+
+  if(f==="tuboRect"){
+    const h=getVal("h"),b=getVal("b"),e=getVal("e"),l=getVal("l");
+    if(h>2*e && b>2*e) v=(h*b-(h-2*e)*(b-2*e))*l;
+  }
+
+  if(f==="pletina"){
+    const b=getVal("b"),e=getVal("e"),l=getVal("l");
+    v=b*e*l;
+  }
+
+  if(f==="anguloIgual"){
+    const a=getVal("a"),e=getVal("e"),l=getVal("l");
+    v=(2*a*e-e*e)*l;
+  }
+
+  if(f==="anguloDesigual"){
+    const a=getVal("a"),b=getVal("b"),e=getVal("e"),l=getVal("l");
+    v=(a*e+b*e-e*e)*l;
+  }
+
+  if(f==="perfilU"){
+    const h=getVal("h"),b=getVal("b"),e=getVal("e"),l=getVal("l");
+    v=(2*h*e+b*e)*l;
+  }
+
+  if(f==="perfilT"){
+    const b=getVal("b"),h=getVal("h"),e=getVal("e"),l=getVal("l");
+    v=(b*e+(h-e)*e)*l;
+  }
+
+  const peso=Math.max(0,v*densidad*cant);
+  document.getElementById("peso").innerText=peso.toFixed(2);
+}
+
+function limpiar(){
+  document.getElementById("forma").selectedIndex=0;
+  renderCampos();
+  document.getElementById("cant").value=1;
+  document.getElementById("peso").innerText="0.00";
+}
+
+document.addEventListener("input",calcular);
+document.addEventListener("change",calcular);
+
+renderCampos();
+calcular();
+</script>
+
+</body>
+</html>

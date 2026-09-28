@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Aprobación de Trabajo</title>
+
+<style>
+
+  * {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #eef2f7, #d9e2ec);
+  padding: 40px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  max-width: 625px;
+  margin: auto;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #1f2937;
+}
+
+.sub {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0,120,212,0.2);
+}
+
+.cc-box {
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-around;
+  column-gap: 30px;
+}
+
+.cc-box label {
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px;
+  width: 100%;
+  background: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #005fa3;
+  transform: translateY(-1px);
+}
+
+.footer {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.cc-box {
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+  border: 1px solid #e5e7eb;
+}
+
+.cc-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.cc-item input {
+  margin: 0;
+}
+
+.cc-item label {
+  margin: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+/* 🔥 IMPORTANTE: anulamos el estilo anterior */
+.cc-box label {
+  display: inline;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Solicitud de Aprobación</h2>
+  <div class="sub">Completar datos y enviar para validación</div>
+
+  <label>Orden de Fabricación Nº</label>
+  <input type="text" id="of" placeholder="Ej: 5678">
+
+  <label>Orden de Compra N°</label>
+  <input type="text" id="oc" placeholder="Ej: 1234">
+
+  <label>Proveedor</label>
+  <input type="text" id="proveedor" placeholder="Ej: Metalúrgica SRL">
+
+  <label>Trabajo</label>
+  <input type="text" id="trabajo" placeholder="Ej: Mecanizado de piezas">
+
+  <label>Monto</label>
+  <input type="text" id="monto" placeholder="Ej: Monto facturado">
+
+  <label>Aprobador (responde)</label>
+  <select id="aprobador">
+    <option value="thernandez@mecanica14.com">Tomás</option>
+    <option value="svend@mecanica14.com">Svend</option>
+  </select>
+
+  <label>Enviar copia a (CC)</label>
+<div class="cc-box">
+  <div class="cc-item">
+    <input type="checkbox" value="thernandez@empresa.com" id="cc1">
+    <label for="cc1">Tomás</label>
+  </div>
+
+  <div class="cc-item">
+    <input type="checkbox" value="svend@mecanica14.com" id="cc2">
+    <label for="cc2">Svend</label>
+  </div>
+
+  <div class="cc-item">
+    <input type="checkbox" value="ggodoy@mecanica14.com" id="cc3">
+    <label for="cc3">Gabriel</label>
+  </div>
+
+  <div class="cc-item">
+    <input type="checkbox" value="manuelmorillo@mecanica14.com" id="cc3">
+    <label for="cc3">Manuel</label>
+  </div>
+
+</div>
+
+  <button onclick="enviarMail()">Enviar solicitud</button>
+
+  <div class="footer">
+    El aprobador deberá responder con OK o RECHAZADO
+  </div>
+</div>
+
+<script>
+function enviarMail() {
+
+  let proveedor = document.getElementById("proveedor").value.trim();
+  let trabajo = document.getElementById("trabajo").value.trim();
+  let oc = document.getElementById("oc").value.trim();
+  let of = document.getElementById("of").value.trim();
+  let aprobador = document.getElementById("aprobador").value;
+  let monto = document.getElementById("monto").value;
+
+  let cc = Array.from(document.querySelectorAll(".cc-box input:checked"))
+    .map(c => c.value)
+    .join(";");
+
+  if(!proveedor || !trabajo || !oc){
+    alert("Completá todos los campos");
+    return;
+  }
+
+  let asunto = `Aprobación trabajo - OF ${of} | OC ${oc}`;
+
+  let body = 
+`Se solicita aprobación del siguiente trabajo:
+
+Orden de Fabricación: ${of}
+
+Orden de Compra: ${oc}
+Proveedor: ${proveedor}
+Trabajo: ${trabajo}
+Monto: ${monto} (iva incluido)
+
+Responder este mail con:
+
+OK → para aprobar
+RECHAZADO → indicando motivo
+
+IMPORTANTE:
+La aprobación por este medio será considerada suficiente para autorizar la emisión del pago correspondiente a la factura del trabajo indicado.
+
+------------------------------
+JOSÉ MARÍA GÓMEZ
+Sector Compras`;
+
+  let mailto = `mailto:${aprobador}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(body)}`;
+
+  if(cc){
+    mailto += `&cc=${cc}`;
+  }
+
+  window.location.href = mailto;
+}
+</script>
+
+</body>
+</html>

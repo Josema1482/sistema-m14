@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Seguimiento de Remitos</title>
+
+<style>
+
+/* =========================================
+   GENERAL
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+    margin: 30px;
+    background: #eef2f7;
+    color: #1f2937;
+}
+
+
+/* =========================================
+   CABECERA
+========================================= */
+
+.app-header {
+    background: white;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.app-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.app-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: #334e68;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-icon svg {
+    width: 27px;
+    height: 27px;
+}
+
+.app-title h1 {
+    margin: 0;
+    font-size: 23px;
+    color: #243b53;
+}
+
+.app-title p {
+    margin: 3px 0 0 0;
+    color: #829ab1;
+    font-size: 13px;
+}
+
+.app-status {
+    font-size: 13px;
+    font-weight: 600;
+    color: #16a34a;
+    background: #f0fdf4;
+    padding: 8px 12px;
+    border-radius: 20px;
+}
+
+
+/* =========================================
+   FORMULARIO
+========================================= */
+
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.form-header h3 {
+    margin: 0;
+    font-size: 17px;
+    color: #243b53;
+}
+
+.form-header p {
+    margin: 3px 0 0 0;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.form-fields {
+    display: grid;
+    grid-template-columns:
+        145px
+        120px
+        minmax(200px, 1.4fr)
+        minmax(190px, 1.2fr)
+        minmax(220px, 1.5fr)
+        100px
+        auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.field label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+input,
+select {
+    width: 100%;
+    height: 38px;
+    padding: 8px 10px;
+    margin: 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 14px;
+    background: white;
+    color: #1f2937;
+    transition: 0.2s;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #4a6fa5;
+    box-shadow: 0 0 0 3px rgba(74,111,165,0.15);
+}
+
+
+/* =========================================
+   ANULADO
+========================================= */
+
+.field-anulado {
+    align-items: center;
+}
+
+.field-anulado label:first-child {
+    align-self: flex-start;
+}
+
+.checkbox-anulado {
+    height: 38px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 7px;
+    cursor: pointer;
+    color: #b91c1c;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.checkbox-anulado input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #dc2626;
+}
+
+
+/* =========================================
+   BOTONES
+========================================= */
+
+button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    color: white;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    filter: brightness(0.96);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.add-btn {
+    background: #2563eb;
+    height: 38px;
+    white-space: nowrap;
+}
+
+.delete-btn {
+    background: #dc2626;
+    width: 32px;
+    height: 30px;
+    padding: 0;
+    border-radius: 6px;
+}
+
+.clear-btn {
+    background: #64748b;
+    height: 40px;
+}
+
+.tools-btn {
+    background: #475569;
+    height: 40px;
+}
+
+
+/* =========================================
+   BUSCADOR / HERRAMIENTAS
+========================================= */
+
+.toolbar {
+    background: white;
+    padding: 14px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+.search-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.search-wrapper svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+#buscador {
+    width: 100%;
+    height: 40px;
+    padding-left: 40px;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   LEYENDA
+========================================= */
+
+.status-bar {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 0 3px 12px 3px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot-azul {
+    background: #93c5fd;
+}
+
+.dot-amarillo {
+    background: #fde68a;
+}
+
+.dot-completo {
+    background: #86efac;
+}
+
+.dot-anulado {
+    background: #fca5a5;
+}
+
+
+/* =========================================
+   TABLA
+========================================= */
+
+.table-container {
+    max-height: 700px;
+    overflow: auto;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: #334e68;
+    color: white;
+    padding: 11px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+
+td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(148,163,184,0.25);
+    text-align: center;
+    font-size: 13px;
+}
+
+tbody tr {
+    transition: 0.12s;
+}
+
+tbody tr:hover {
+    filter: brightness(0.975);
+}
+
+
+/* =========================================
+   COLORES ESTADO
+========================================= */
+
+tr.azul {
+    background: #dbeafe;
+}
+
+tr.amarillo {
+    background: #fef3c7;
+}
+
+tr.completo {
+    background: #dcfce7;
+}
+
+tr.anulado {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* =========================================
+   CHECKBOX TABLA
+========================================= */
+
+td input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #2563eb;
+}
+
+/* Cuando ya está marcado damos una pequeña
+   indicación visual de que está protegido */
+
+td input[type="checkbox"]:checked {
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   REMITO
+========================================= */
+
+.remito-numero {
+    font-weight: 700;
+    color: #243b53;
+}
+
+tr.anulado .remito-numero {
+    color: #991b1b;
+}
+
+
+/* =========================================
+   SIN RESULTADOS
+========================================= */
+
+.no-results {
+    display: none;
+    background: white;
+    padding: 30px;
+    text-align: center;
+    color: #94a3b8;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+
+/* =========================================
+   MODAL ELIMINAR
+========================================= */
+
+.modal-delete {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15,23,42,0.60);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    text-align: center;
+    width: 340px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+}
+
+.modal-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 14px auto;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.modal-content h3 {
+    margin: 0 0 7px 0;
+}
+
+.modal-content p {
+    margin: 0 0 20px 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-cancel {
+    background: #64748b;
+}
+
+.btn-confirm {
+    background: #dc2626;
+}
+
+
+
+/* =========================================
+   EDITAR
+========================================= */
+.edit-btn{
+    background:#2563eb;
+    height:30px;
+    padding:0 10px;
+    border-radius:6px;
+}
+.actions-cell{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    white-space:nowrap;
+}
+.modal-edit{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.60);
+    backdrop-filter:blur(4px);
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+    padding:20px;
+}
+.modal-edit-content{
+    width:min(760px,100%);
+    max-height:calc(100vh - 40px);
+    overflow:auto;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 18px 45px rgba(0,0,0,.22);
+}
+.modal-edit-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:20px 22px 16px;
+    border-bottom:1px solid #e5e7eb;
+}
+.modal-edit-header h3{margin:0;color:#243b53;font-size:18px}
+.modal-edit-header p{margin:4px 0 0;color:#94a3b8;font-size:12px}
+.modal-close{
+    width:34px;height:34px;padding:0;border-radius:8px;
+    background:#eef2f7;color:#64748b;font-size:20px;
+}
+.modal-edit-body{padding:20px 22px}
+.edit-grid{
+    display:grid;
+    grid-template-columns:150px 150px 1fr 1fr;
+    gap:14px;
+}
+.edit-grid .field-wide{grid-column:span 2}
+.edit-anulado-box{
+    margin-top:18px;
+    padding:12px 14px;
+    border:1px solid #fecaca;
+    border-radius:9px;
+    background:#fff7f7;
+}
+.edit-anulado-box label{
+    display:flex;align-items:center;gap:8px;
+    color:#b91c1c;font-size:13px;font-weight:600;cursor:pointer;
+}
+.edit-anulado-box input{
+    width:17px;height:17px;margin:0;accent-color:#dc2626;
+}
+.modal-edit-footer{
+    display:flex;justify-content:flex-end;gap:9px;
+    padding:16px 22px 20px;
+    border-top:1px solid #e5e7eb;
+    background:#fafcff;
+}
+.btn-save-edit{background:#2563eb}
+
+@media(max-width:760px){
+    .edit-grid{grid-template-columns:1fr 1fr}
+    .edit-grid .field-wide{grid-column:span 2}
+}
+@media(max-width:520px){
+    .edit-grid{grid-template-columns:1fr}
+    .edit-grid .field-wide{grid-column:auto}
+    .modal-edit-footer{flex-direction:column-reverse}
+    .modal-edit-footer button{width:100%}
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:1450px) {
+
+    .form-fields {
+        grid-template-columns: repeat(4,1fr);
+    }
+
+}
+
+@media(max-width:850px) {
+
+    body {
+        margin:15px;
+    }
+
+    .app-header {
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .form-fields {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .toolbar {
+        flex-wrap:wrap;
+    }
+
+    .search-wrapper {
+        flex-basis:100%;
+    }
+
+    .status-bar {
+        flex-wrap:wrap;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- CABECERA -->
+
+<div class="app-header">
+
+    <div class="app-title">
+
+        <div class="app-icon">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <path d="M6 2h9l4 4v16H6z"/>
+                <path d="M14 2v5h5"/>
+                <path d="M9 12h6"/>
+                <path d="M9 16h6"/>
+
+            </svg>
+
+        </div>
+
+        <div>
+            <h1>Seguimiento de Remitos</h1>
+            <p>Control y seguimiento de documentación despachada</p>
+        </div>
+
+    </div>
+
+    <div class="app-status">
+        ● Sistema de Remitos
+    </div>
+
+</div>
+
+
+
+<!-- FORMULARIO -->
+
+<form id="form">
+
+    <div class="form-header">
+
+        <div>
+            <h3>Nuevo remito</h3>
+            <p>Ingresá los datos del despacho</p>
+        </div>
+
+    </div>
+
+
+    <div class="form-fields">
+
+        <div class="field">
+
+            <label>Fecha</label>
+
+            <input
+                type="date"
+                id="fecha"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Remito</label>
+
+            <input
+                type="number"
+                id="remito"
+                placeholder="Nº"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Cliente</label>
+
+            <select id="cliente">
+
+                <option value="" disabled selected>
+                    Seleccionar cliente...
+                </option>
+
+                <option value="" disabled>
+                    ───── Baker ─────
+                </option>
+
+                <option value="Baker Neuquen">
+                    Baker Neuquen
+                </option>
+
+                <option value="Baker Mendoza">
+                    Baker Mendoza
+                </option>
+
+
+                <option value="" disabled>
+                    ─── Weatherford ───
+                </option>
+
+                <option value="Weatherford">
+                    Weatherford
+                </option>
+
+
+                <option value="" disabled>
+                    ────── YPF ──────
+                </option>
+
+                <option value="YPF">
+                    YPF
+                </option>
+
+                <option value="YPF - UTE Loma Campana">
+                    YPF - UTE Loma Campana
+                </option>
+
+                <option value="YPF - UTE La Amarga Chica">
+                    YPF - UTE La Amarga Chica
+                </option>
+
+                <option value="YPF - UTE Bandurria Sur">
+                    YPF - UTE Bandurria Sur
+                </option>
+
+                <option value="YPF - UTE Rio Neuquen">
+                    YPF - UTE Rio Neuquen
+                </option>
+
+                <option value="YPF - UTE Bajo del Toro">
+                    YPF - UTE Bajo del Toro
+                </option>
+
+
+                <option value="" disabled>
+                    ─── Halliburton ───
+                </option>
+
+                <option value="Halliburton">
+                    Halliburton
+                </option>
+
+
+                <option value="" disabled>
+                    ───── Otros ─────
+                </option>
+
+                <option value="CNQ7-7A AREA">
+                    CNQ7-7A AREA
+                </option>
+
+                <option value="Infinity OS SRL">
+                    Infinity OS SRL
+                </option>
+
+                <option value="Siderca S.A.I.C.">
+                    Siderca S.A.I.C.
+                </option>
+
+                <option value="Schlumberger">
+                    Schlumberger
+                </option>
+
+                <option value="Invap">
+                    INVAP
+                </option>
+
+                <option value="Siderca (Instrumentos)">
+                    Siderca (Instrumentos)
+                </option>
+
+                <option value="Torneria San Sebastian">
+                    Torneria San Sebastian
+                </option>
+
+                <option value="Alpha Energy Service de Argentina">
+                    Alpha Energy Service de Argentina
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Transporte</label>
+
+            <select id="transporte">
+
+                <option value="" disabled selected>
+                    Seleccionar transporte...
+                </option>
+
+                <option value="Transporte del Neuquen">
+                    Transporte del Neuquen
+                </option>
+
+                <option value="Imaz">
+                    Imaz
+                </option>
+
+                <option value="Aldebaran">
+                    Aldebaran
+                </option>
+
+                <option value="Andesmar">
+                    Andesmar
+                </option>
+
+                <option value="Multiservicios">
+                    Multiservicios
+                </option>
+
+                <option value="Retira Cliente">
+                    Retira Cliente
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Aclaraciones</label>
+
+            <input
+                type="text"
+                id="aclaraciones"
+                placeholder="Observaciones..."
+            >
+
+        </div>
+
+
+        <div class="field field-anulado">
+
+            <label>Estado</label>
+
+            <label class="checkbox-anulado">
+
+                <input
+                    type="checkbox"
+                    id="anulado"
+                >
+
+                Anulado
+
+            </label>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>&nbsp;</label>
+
+            <button
+                type="submit"
+                class="add-btn"
+            >
+                ＋ Agregar remito
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+
+<!-- BUSCADOR -->
+
+<div class="toolbar">
+
+    <div class="search-wrapper">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round">
+
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-4-4"></path>
+
+        </svg>
+
+        <input
+            type="text"
+            id="buscador"
+            placeholder="Buscar por remito, cliente, transporte o aclaraciones..."
+        >
+
+    </div>
+
+
+    <button
+        type="button"
+        id="clearSearch"
+        class="clear-btn"
+    >
+        Limpiar
+    </button>
+
+
+    <button
+        type="button"
+        id="fixDataBtn"
+        class="tools-btn"
+    >
+        🔧 Reordenar base
+    </button>
+
+</div>
+
+
+
+<!-- LEYENDA -->
+
+<div class="status-bar">
+
+    <span class="status-item">
+        <span class="status-dot dot-azul"></span>
+        Rosado pendiente
+    </span>
+
+    <span class="status-item">
+        <span class="status-dot dot-amarillo"></span>
+        Amarillo pendiente
+    </span>
+
+    <span class="status-item">
+        <span class="status-dot dot-completo"></span>
+        Completo
+    </span>
+
+    <span class="status-item">
+        <span class="status-dot dot-anulado"></span>
+        Anulado
+    </span>
+
+</div>
+
+
+
+<!-- TABLA -->
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+    <th>✓ Amarillo</th>
+    <th>✓ Rosado</th>
+    <th>Fecha</th>
+    <th>Remito</th>
+    <th>Cliente</th>
+    <th>Transporte</th>
+    <th>Aclaraciones</th>
+    <th>Acciones</th>
+</tr>
+
+</thead>
+
+<tbody id="tabla"></tbody>
+
+</table>
+
+</div>
+
+
+<div id="noResults" class="no-results">
+    No se encontraron remitos con ese criterio.
+</div>
+
+
+
+
+<!-- MODAL EDITAR -->
+<div id="modalEditar" class="modal-edit">
+  <div class="modal-edit-content">
+
+    <div class="modal-edit-header">
+      <div>
+        <h3>Editar remito</h3>
+        <p>Modificá los datos y guardá los cambios.</p>
+      </div>
+      <button type="button" class="modal-close" onclick="cerrarModalEditar()" title="Cerrar">×</button>
+    </div>
+
+    <div class="modal-edit-body">
+      <div class="edit-grid">
+
+        <div class="field">
+          <label>Fecha</label>
+          <input type="date" id="editarFecha">
+        </div>
+
+        <div class="field">
+          <label>Remito</label>
+          <input type="number" id="editarRemito">
+        </div>
+
+        <div class="field field-wide">
+          <label>Cliente</label>
+          <select id="editarCliente">
+            <option value="">Seleccionar cliente...</option>
+            <option value="" disabled>───── Baker ─────</option>
+            <option value="Baker Neuquen">Baker Neuquen</option>
+            <option value="Baker Mendoza">Baker Mendoza</option>
+            <option value="" disabled>─── Weatherford ───</option>
+            <option value="Weatherford">Weatherford</option>
+            <option value="" disabled>────── YPF ──────</option>
+            <option value="YPF">YPF</option>
+            <option value="YPF - UTE Loma Campana">YPF - UTE Loma Campana</option>
+            <option value="YPF - UTE La Amarga Chica">YPF - UTE La Amarga Chica</option>
+            <option value="YPF - UTE Bandurria Sur">YPF - UTE Bandurria Sur</option>
+            <option value="YPF - UTE Rio Neuquen">YPF - UTE Rio Neuquen</option>
+            <option value="YPF - UTE Bajo del Toro">YPF - UTE Bajo del Toro</option>
+            <option value="" disabled>─── Halliburton ───</option>
+            <option value="Halliburton">Halliburton</option>
+            <option value="" disabled>───── Otros ─────</option>
+            <option value="CNQ7-7A AREA">CNQ7-7A AREA</option>
+            <option value="Infinity OS SRL">Infinity OS SRL</option>
+            <option value="Siderca S.A.I.C.">Siderca S.A.I.C.</option>
+            <option value="Schlumberger">Schlumberger</option>
+            <option value="Invap">INVAP</option>
+            <option value="Siderca (Instrumentos)">Siderca (Instrumentos)</option>
+            <option value="Torneria San Sebastian">Torneria San Sebastian</option>
+            <option value="Alpha Energy Service de Argentina">Alpha Energy Service de Argentina</option>
+          </select>
+        </div>
+
+        <div class="field field-wide">
+          <label>Transporte</label>
+          <select id="editarTransporte">
+            <option value="">Seleccionar transporte...</option>
+            <option value="Transporte del Neuquen">Transporte del Neuquen</option>
+            <option value="Imaz">Imaz</option>
+            <option value="Aldebaran">Aldebaran</option>
+            <option value="Andesmar">Andesmar</option>
+            <option value="Multiservicios">Multiservicios</option>
+            <option value="Retira Cliente">Retira Cliente</option>
+          </select>
+        </div>
+
+        <div class="field field-wide">
+          <label>Aclaraciones</label>
+          <input type="text" id="editarAclaraciones" placeholder="Observaciones...">
+        </div>
+
+      </div>
+
+      <div class="edit-anulado-box">
+        <label>
+          <input type="checkbox" id="editarAnulado">
+          Marcar remito como anulado
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-edit-footer">
+      <button type="button" class="btn-cancel" onclick="cerrarModalEditar()">Cancelar</button>
+      <button type="button" class="btn-save-edit" onclick="guardarEdicion()">Guardar cambios</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL ELIMINAR -->
+
+<div id="modalEliminar" class="modal-delete">
+
+    <div class="modal-content">
+
+        <div class="modal-icon">
+            !
+        </div>
+
+        <h3>Eliminar remito</h3>
+
+        <p>
+            ¿Seguro que querés eliminar este remito?
+            Esta acción no se puede deshacer.
+        </p>
+
+        <div class="modal-buttons">
+
+            <button
+                class="btn-cancel"
+                onclick="cerrarModal()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn-confirm"
+                onclick="confirmarEliminar()"
+            >
+                Eliminar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script type="module">
+
+
+/* =========================================
+   FIREBASE
+========================================= */
+
+import {
+    initializeApp
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot,
+    deleteDoc,
+    doc,
+    updateDoc,
+    query,
+    orderBy,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+
+
+/* =========================================
+   CONFIG FIREBASE
+========================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyAuf4jScad52QQWgE0TihJypVPhKIUtwmE",
+
+    authDomain:
+        "app-remitos.firebaseapp.com",
+
+    projectId:
+        "app-remitos",
+
+    storageBucket:
+        "app-remitos.firebasestorage.app",
+
+    messagingSenderId:
+        "620026371986",
+
+    appId:
+        "1:620026371986:web:7f3e6e06b07983f3656b4b"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getFirestore(app);
+
+
+
+/* =========================================
+   ELEMENTOS
+========================================= */
+
+const tabla =
+    document.getElementById("tabla");
+
+
+const form =
+    document.getElementById("form");
+
+
+const fixBtn =
+    document.getElementById("fixDataBtn");
+
+
+const buscador =
+    document.getElementById("buscador");
+
+
+const clearSearch =
+    document.getElementById("clearSearch");
+
+
+const noResults =
+    document.getElementById("noResults");
+
+
+let idAEliminar = null;
+let idAEditar = null;
+
+
+
+/* =========================================
+   FECHA AUTOMATICA
+========================================= */
+
+function establecerFechaHoy() {
+
+    const fecha =
+        document.getElementById("fecha");
+
+
+    if (!fecha.value) {
+
+        const hoy =
+            new Date();
+
+
+        const yyyy =
+            hoy.getFullYear();
+
+
+        const mm =
+            String(
+                hoy.getMonth() + 1
+            ).padStart(2,"0");
+
+
+        const dd =
+            String(
+                hoy.getDate()
+            ).padStart(2,"0");
+
+
+        fecha.value =
+            `${yyyy}-${mm}-${dd}`;
+
+    }
+
+}
+
+
+establecerFechaHoy();
+
+
+
+/* =========================================
+   AGREGAR REMITO
+========================================= */
+
+form.addEventListener(
+    "submit",
+    async (e) => {
+
+
+        e.preventDefault();
+
+
+        let cliente =
+            form.cliente.value || "";
+
+
+        let transporte =
+            form.transporte.value || "";
+
+
+        let aclaraciones =
+            form.aclaraciones.value || "";
+
+
+        const anulado =
+            form.anulado.checked;
+
+
+
+        if (anulado) {
+
+            cliente =
+                "ANULADO";
+
+            transporte =
+                "ANULADO";
+
+            aclaraciones =
+                "ANULADO";
+
+        }
+
+
+
+        await addDoc(
+
+            collection(
+                db,
+                "remitos"
+            ),
+
+            {
+
+                fecha:
+                    form.fecha.value,
+
+                remito:
+                    Number(
+                        form.remito.value
+                    ),
+
+                cliente,
+
+                transporte,
+
+                aclaraciones,
+
+                azul: false,
+
+                amarillo: false,
+
+                anulado
+
+            }
+
+        );
+
+
+        form.reset();
+
+
+        establecerFechaHoy();
+
+
+        form.remito.focus();
+
+    }
+);
+
+
+
+/* =========================================
+   REPARAR BASE
+========================================= */
+
+fixBtn.addEventListener(
+    "click",
+    async () => {
+
+
+        if (
+            !confirm(
+                "Esto va a corregir TODOS los remitos. ¿Continuar?"
+            )
+        ) {
+            return;
+        }
+
+
+        const snapshot =
+            await getDocs(
+
+                collection(
+                    db,
+                    "remitos"
+                )
+
+            );
+
+
+        let corregidos = 0;
+
+
+
+        for (
+            const docu
+            of snapshot.docs
+        ) {
+
+
+            const data =
+                docu.data();
+
+
+            let remitoNumero =
+                Number(
+
+                    String(
+                        data.remito
+                    )
+                    .replace(
+                        /\D/g,
+                        ""
+                    )
+                    .trim()
+
+                );
+
+
+            if (
+                !isNaN(remitoNumero)
+                &&
+                remitoNumero !== data.remito
+            ) {
+
+
+                await updateDoc(
+
+                    doc(
+                        db,
+                        "remitos",
+                        docu.id
+                    ),
+
+                    {
+                        remito:
+                            remitoNumero
+                    }
+
+                );
+
+
+                corregidos++;
+
+            }
+
+        }
+
+
+        alert(
+            "Listo. Registros corregidos: "
+            +
+            corregidos
+        );
+
+    }
+);
+
+
+
+/* =========================================
+   QUERY
+========================================= */
+
+const q =
+    query(
+
+        collection(
+            db,
+            "remitos"
+        ),
+
+        orderBy(
+            "remito",
+            "desc"
+        )
+
+    );
+
+
+
+/* =========================================
+   MOSTRAR DATOS
+========================================= */
+
+onSnapshot(
+    q,
+    (snapshot) => {
+
+
+        tabla.innerHTML = "";
+
+
+        snapshot.forEach(
+            (docu) => {
+
+
+                const data =
+                    docu.data();
+
+
+                const fila =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+
+                /* =================================
+                   COLOR DE FILA
+                ================================= */
+
+                function aplicarColor() {
+
+
+                    fila.classList.remove(
+                        "azul",
+                        "amarillo",
+                        "completo",
+                        "anulado"
+                    );
+
+
+                    if (data.anulado) {
+
+                        fila.classList.add(
+                            "anulado"
+                        );
+
+                    }
+
+                    else if (
+                        data.azul
+                        &&
+                        data.amarillo
+                    ) {
+
+                        fila.classList.add(
+                            "completo"
+                        );
+
+                    }
+
+                    else if (
+                        data.azul
+                    ) {
+
+                        fila.classList.add(
+                            "azul"
+                        );
+
+                    }
+
+                    else if (
+                        data.amarillo
+                    ) {
+
+                        fila.classList.add(
+                            "amarillo"
+                        );
+
+                    }
+
+                }
+
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        <input
+                            type="checkbox"
+                            ${data.azul ? "checked" : ""}
+                            title="${data.azul ? "Protegido - doble clic para quitar" : "Marcar"}"
+                        >
+                    </td>
+
+
+                    <td>
+                        <input
+                            type="checkbox"
+                            ${data.amarillo ? "checked" : ""}
+                            title="${data.amarillo ? "Protegido - doble clic para quitar" : "Marcar"}"
+                        >
+                    </td>
+
+
+                    <td>
+                        ${data.fecha || ""}
+                    </td>
+
+
+                    <td class="remito-numero">
+                        ${data.remito || ""}
+                    </td>
+
+
+                    <td>
+                        ${data.cliente || ""}
+                    </td>
+
+
+                    <td>
+                        ${data.transporte || ""}
+                    </td>
+
+
+                    <td>
+                        ${data.aclaraciones || ""}
+                    </td>
+
+
+                    <td>
+  <div class="actions-cell">
+    <button class="edit-btn" title="Editar remito">Editar</button>
+    <button class="delete-btn" title="Eliminar remito">×</button>
+  </div>
+</td>
+
+                `;
+
+
+
+                const checks =
+                    fila.querySelectorAll(
+                        'input[type="checkbox"]'
+                    );
+
+
+
+                /* =========================================
+                   CHECKBOX PROTEGIDOS
+                ========================================= */
+
+                function configurarCheckboxProtegido(
+                    checkbox,
+                    campo,
+                    valorInicial
+                ) {
+
+
+                    let guardado =
+                        valorInicial === true;
+
+
+                    /*
+                    IMPORTANTE:
+
+                    Usamos mousedown para bloquear el cambio
+                    ANTES de que el navegador cambie el checkbox.
+
+                    Esto hace que un clic normal nunca pueda
+                    quitar accidentalmente una marca guardada.
+                    */
+
+
+                    checkbox.addEventListener(
+                        "mousedown",
+                        (e) => {
+
+
+                            if (
+                                guardado
+                                &&
+                                e.detail === 1
+                            ) {
+
+                                e.preventDefault();
+
+                            }
+
+                        }
+                    );
+
+
+
+                    /* =================================
+                       CLICK NORMAL
+                    ================================= */
+
+                    checkbox.addEventListener(
+                        "click",
+                        async (e) => {
+
+
+                            /*
+                            Si estaba marcado y guardado,
+                            obligamos a que siga marcado.
+                            */
+
+
+                            if (guardado) {
+
+
+                                e.preventDefault();
+
+
+                                checkbox.checked =
+                                    true;
+
+
+                                return;
+
+                            }
+
+
+
+                            /*
+                            Si estaba sin marcar,
+                            permitimos marcarlo normalmente.
+                            */
+
+
+                            if (checkbox.checked) {
+
+
+                                guardado =
+                                    true;
+
+
+                                data[campo] =
+                                    true;
+
+
+                                checkbox.title =
+                                    "Protegido - doble clic para quitar";
+
+
+                                await updateDoc(
+
+                                    doc(
+                                        db,
+                                        "remitos",
+                                        docu.id
+                                    ),
+
+                                    {
+                                        [campo]:
+                                            true
+                                    }
+
+                                );
+
+
+                                aplicarColor();
+
+                            }
+
+                        }
+                    );
+
+
+
+                    /* =================================
+                       DOBLE CLICK PARA QUITAR
+                    ================================= */
+
+                    checkbox.addEventListener(
+                        "dblclick",
+                        async (e) => {
+
+
+                            e.preventDefault();
+
+                            e.stopPropagation();
+
+
+
+                            if (!guardado) {
+
+                                return;
+
+                            }
+
+
+
+                            const confirmar =
+                                confirm(
+
+                                    "¿Seguro que querés quitar esta marca?\n\n" +
+                                    "Esta acción modificará el estado del remito."
+
+                                );
+
+
+
+                            if (!confirmar) {
+
+
+                                checkbox.checked =
+                                    true;
+
+
+                                return;
+
+                            }
+
+
+
+                            /*
+                            Confirmado:
+                            recién acá permitimos quitarla.
+                            */
+
+
+                            checkbox.checked =
+                                false;
+
+
+                            guardado =
+                                false;
+
+
+                            data[campo] =
+                                false;
+
+
+                            checkbox.title =
+                                "Marcar";
+
+
+
+                            await updateDoc(
+
+                                doc(
+                                    db,
+                                    "remitos",
+                                    docu.id
+                                ),
+
+                                {
+                                    [campo]:
+                                        false
+                                }
+
+                            );
+
+
+                            aplicarColor();
+
+                        }
+                    );
+
+
+                }
+
+
+
+                /* =========================================
+                   ACTIVAR PROTECCION
+                ========================================= */
+
+                configurarCheckboxProtegido(
+                    checks[0],
+                    "azul",
+                    data.azul
+                );
+
+
+                configurarCheckboxProtegido(
+                    checks[1],
+                    "amarillo",
+                    data.amarillo
+                );
+
+
+
+                /* =========================================
+                   EDITAR
+                ========================================= */
+
+                fila
+                    .querySelector(".edit-btn")
+                    .addEventListener(
+                        "click",
+                        () => abrirModalEditar(docu.id, data)
+                    );
+
+
+                /* =========================================
+                   ELIMINAR
+                ========================================= */
+
+                fila
+                    .querySelector(
+                        ".delete-btn"
+                    )
+                    .addEventListener(
+                        "click",
+                        () => {
+
+
+                            idAEliminar =
+                                docu.id;
+
+
+                            document
+                                .getElementById(
+                                    "modalEliminar"
+                                )
+                                .style
+                                .display =
+                                "flex";
+
+                        }
+                    );
+
+
+
+                aplicarColor();
+
+
+                tabla.appendChild(
+                    fila
+                );
+
+
+            }
+        );
+
+
+        filtrarTabla();
+
+    }
+);
+
+
+
+
+/* =========================================
+   EDITAR REMITO
+========================================= */
+
+function seleccionarValor(select, valor){
+
+    const existe =
+        Array.from(select.options)
+        .some(opcion => opcion.value === valor);
+
+    if(valor && !existe){
+
+        const opcion =
+            document.createElement("option");
+
+        opcion.value =
+            valor;
+
+        opcion.textContent =
+            valor;
+
+        select.appendChild(opcion);
+    }
+
+    select.value =
+        valor || "";
+}
+
+
+function abrirModalEditar(id, data){
+
+    idAEditar =
+        id;
+
+    document.getElementById("editarFecha").value =
+        data.fecha || "";
+
+    document.getElementById("editarRemito").value =
+        data.remito ?? "";
+
+    seleccionarValor(
+        document.getElementById("editarCliente"),
+        data.cliente || ""
+    );
+
+    seleccionarValor(
+        document.getElementById("editarTransporte"),
+        data.transporte || ""
+    );
+
+    document.getElementById("editarAclaraciones").value =
+        data.aclaraciones || "";
+
+    document.getElementById("editarAnulado").checked =
+        data.anulado === true;
+
+    document.getElementById("modalEditar").style.display =
+        "flex";
+}
+
+
+window.cerrarModalEditar = () => {
+
+    document.getElementById("modalEditar").style.display =
+        "none";
+
+    idAEditar =
+        null;
+};
+
+
+window.guardarEdicion = async () => {
+
+    if(!idAEditar){
+        return;
+    }
+
+    const fecha =
+        document.getElementById("editarFecha").value;
+
+    const remito =
+        Number(
+            document.getElementById("editarRemito").value
+        );
+
+    let cliente =
+        document.getElementById("editarCliente").value;
+
+    let transporte =
+        document.getElementById("editarTransporte").value;
+
+    let aclaraciones =
+        document.getElementById("editarAclaraciones").value.trim();
+
+    const anulado =
+        document.getElementById("editarAnulado").checked;
+
+    if(!fecha){
+        alert("Ingresá una fecha.");
+        return;
+    }
+
+    if(!Number.isFinite(remito) || remito <= 0){
+        alert("Ingresá un número de remito válido.");
+        return;
+    }
+
+    if(anulado){
+        cliente = "ANULADO";
+        transporte = "ANULADO";
+        aclaraciones = "ANULADO";
+    }
+
+    await updateDoc(
+        doc(
+            db,
+            "remitos",
+            idAEditar
+        ),
+        {
+            fecha,
+            remito,
+            cliente,
+            transporte,
+            aclaraciones,
+            anulado
+        }
+    );
+
+    window.cerrarModalEditar();
+};
+
+
+document
+    .getElementById("modalEditar")
+    .addEventListener(
+        "click",
+        (e) => {
+
+            if(e.target.id === "modalEditar"){
+                window.cerrarModalEditar();
+            }
+
+        }
+    );
+
+
+/* =========================================
+   BUSCADOR
+========================================= */
+
+function filtrarTabla() {
+
+
+    const texto =
+        buscador
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const filas =
+        tabla.querySelectorAll(
+            "tr"
+        );
+
+
+    let visibles = 0;
+
+
+
+    filas.forEach(
+        (fila) => {
+
+
+            const contenido =
+                fila
+                .innerText
+                .toLowerCase();
+
+
+            const coincide =
+                contenido.includes(
+                    texto
+                );
+
+
+            fila.style.display =
+                coincide
+                ?
+                ""
+                :
+                "none";
+
+
+            if (coincide) {
+
+                visibles++;
+
+            }
+
+        }
+    );
+
+
+
+    noResults.style.display =
+        filas.length > 0
+        &&
+        visibles === 0
+
+        ?
+
+        "block"
+
+        :
+
+        "none";
+
+}
+
+
+buscador.addEventListener(
+    "input",
+    filtrarTabla
+);
+
+
+
+clearSearch.addEventListener(
+    "click",
+    () => {
+
+
+        buscador.value =
+            "";
+
+
+        filtrarTabla();
+
+
+        buscador.focus();
+
+    }
+);
+
+
+
+/* =========================================
+   ELIMINAR
+========================================= */
+
+window.cerrarModal =
+() => {
+
+
+    document
+        .getElementById(
+            "modalEliminar"
+        )
+        .style
+        .display =
+        "none";
+
+
+    idAEliminar =
+        null;
+
+};
+
+
+
+window.confirmarEliminar =
+async () => {
+
+
+    if (!idAEliminar) {
+
+        return;
+
+    }
+
+
+    await deleteDoc(
+
+        doc(
+            db,
+            "remitos",
+            idAEliminar
+        )
+
+    );
+
+
+    window.cerrarModal();
+
+};
+
+
+
+/* =========================================
+   CLICK FUERA DEL MODAL
+========================================= */
+
+document
+    .getElementById(
+        "modalEliminar"
+    )
+    .addEventListener(
+        "click",
+        (e) => {
+
+
+            if (
+                e.target.id
+                ===
+                "modalEliminar"
+            ) {
+
+                window.cerrarModal();
+            window.cerrarModalEditar();
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================
+   ESC
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    (e) => {
+
+
+        if (
+            e.key === "Escape"
+        ) {
+
+            window.cerrarModal();
+
+        }
+
+    }
+);
+
+
+</script>
+
+</body>
+</html>

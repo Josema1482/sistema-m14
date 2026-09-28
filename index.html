@@ -1,0 +1,4520 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Portal M14</title>
+
+
+<style>
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+:root{
+
+    --navy:#0f2742;
+    --navy-2:#173b63;
+
+    --blue:#2563eb;
+
+    --bg:#eef3f8;
+    --card:#ffffff;
+
+    --text:#1e293b;
+    --muted:#7b8a9a;
+
+    --border:#e2e8f0;
+
+    --green:#16a34a;
+
+    --shadow:
+        0 7px 25px rgba(15,39,66,.08);
+}
+
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+    background:#eef3f8;
+
+    color:var(--text);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.topbar{
+
+    min-height:112px;
+
+    background:
+        linear-gradient(
+            115deg,
+            #0e243d,
+            #173b63
+        );
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-around;
+
+    padding:18px 42px;
+
+    color:white;
+
+    box-shadow:
+        0 4px 18px rgba(15,39,66,.22);
+
+    gap: 350px;
+}
+
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:22px;
+}
+
+
+.logo-box{
+
+    width:155px;
+
+    display:flex;
+
+    align-items:center;
+}
+
+
+.logo-box img{
+
+    max-width:145px;
+
+    max-height:86px;
+
+    object-fit:contain;
+}
+
+
+.brand-divider{
+
+    width:1px;
+
+    height:52px;
+
+    background:
+        rgba(255,255,255,.22);
+}
+
+
+.brand-text h1{
+
+    margin:0;
+
+    font-size:22px;
+
+    font-weight:600;
+
+    letter-spacing:.3px;
+}
+
+
+.brand-text p{
+
+    margin:5px 0 0;
+
+    font-size:12px;
+
+    opacity:.68;
+}
+
+
+.topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+}
+
+
+.system-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:8px 13px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.10);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    font-size:12px;
+}
+
+
+.status-dot{
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#4ade80;
+
+    box-shadow:
+        0 0 0 4px rgba(74,222,128,.12);
+}
+
+
+.clock-box{
+
+    text-align:right;
+}
+
+
+.clock-time{
+
+    font-size:20px;
+
+    font-weight:600;
+}
+
+
+.clock-date{
+
+    font-size:11px;
+
+    opacity:.65;
+
+    margin-top:2px;
+}
+
+
+/* =========================================================
+   CONTENIDO
+========================================================= */
+
+.main{
+
+    width:calc(100% - 60px);
+
+    max-width:1450px;
+
+    margin:28px auto 45px;
+}
+
+
+/* =========================================================
+   BIENVENIDA
+========================================================= */
+
+.welcome{
+
+    margin-bottom:22px;
+}
+
+
+.section-label{
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.2px;
+
+    margin-bottom:6px;
+}
+
+
+.welcome h2{
+
+    margin:0;
+
+    color:#1e3650;
+
+    font-size:24px;
+
+    font-weight:650;
+}
+
+
+.welcome p{
+
+    margin:5px 0 0;
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   COTIZACIONES
+========================================================= */
+
+.currency-panel{
+
+    background:white;
+
+    border-radius:15px;
+
+    box-shadow:var(--shadow);
+
+    border:
+        1px solid rgba(226,232,240,.8);
+
+    margin-bottom:28px;
+
+    overflow:hidden;
+}
+
+
+.currency-header{
+
+    padding:15px 20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.currency-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+}
+
+
+.currency-icon{
+
+    width:37px;
+
+    height:37px;
+
+    border-radius:9px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#edf5ff;
+
+    color:#2563eb;
+
+    font-size:18px;
+
+    font-weight:700;
+}
+
+
+.currency-title h3{
+
+    margin:0;
+
+    font-size:15px;
+
+    color:#243b53;
+}
+
+
+.currency-title p{
+
+    margin:2px 0 0;
+
+    color:#94a3b8;
+
+    font-size:11px;
+}
+
+
+.bna-badge{
+
+    background:#eff6ff;
+
+    color:#2563eb;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    padding:6px 10px;
+
+    border-radius:20px;
+}
+
+
+/* =========================================================
+   GRID COTIZACIONES
+========================================================= */
+
+.currency-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+}
+
+
+.currency-card{
+
+    padding:20px 20px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr auto auto;
+
+    align-items:center;
+
+    gap:16px;
+
+    border-right:
+        1px solid var(--border);
+}
+
+
+.currency-card:last-child{
+
+    border-right:none;
+}
+
+
+.currency-card.divisa{
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #fbfdff
+        );
+}
+
+
+.currency-name{
+
+    font-size:13px;
+
+    font-weight:650;
+
+    color:#334e68;
+}
+
+
+.currency-subtitle{
+
+    font-size:10.5px;
+
+    color:#94a3b8;
+
+    margin-top:3px;
+}
+
+
+.quote{
+
+    min-width:80px;
+}
+
+
+.quote-label{
+
+    font-size:9px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    color:#94a3b8;
+
+    margin-bottom:4px;
+}
+
+
+.quote-value{
+
+    font-size:18px;
+
+    font-weight:650;
+
+    color:#102f50;
+
+    white-space:nowrap;
+}
+
+
+.currency-footer{
+
+    min-height:33px;
+
+    padding:9px 20px;
+
+    border-top:
+        1px solid #edf2f7;
+
+    color:#94a3b8;
+
+    font-size:10px;
+
+    text-align:right;
+
+    background:#fafcff;
+}
+
+
+/* =========================================================
+   TITULO APLICACIONES
+========================================================= */
+
+.apps-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:13px;
+}
+
+
+.apps-header h3{
+
+    margin:0;
+
+    font-size:16px;
+
+    color:#334e68;
+}
+
+
+/* =========================================================
+   GRID APLICACIONES
+========================================================= */
+
+.apps-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            5,
+            minmax(180px,1fr)
+        );
+
+    gap:15px;
+}
+
+
+/* =========================================================
+   TARJETAS
+========================================================= */
+
+.app-card{
+
+    background:var(--card);
+
+    border-radius:13px;
+
+    min-height:145px;
+
+    padding:20px;
+
+    border:
+        1px solid rgba(226,232,240,.95);
+
+    box-shadow:
+        0 4px 16px rgba(15,39,66,.055);
+
+    cursor:pointer;
+
+    position:relative;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+
+.app-card:hover{
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 12px 28px rgba(15,39,66,.12);
+
+    border-color:#bfdbfe;
+}
+
+
+.app-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    height:3px;
+
+    width:100%;
+
+    background:#40668c;
+
+    opacity:0;
+
+    transition:.2s;
+}
+
+
+.app-card:hover::before{
+
+    opacity:1;
+}
+
+
+.icon-box{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:11px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#edf3f8;
+
+    color:#334e68;
+
+    margin-bottom:17px;
+
+    transition:.18s;
+}
+
+
+.app-card:hover .icon-box{
+
+    background:#e7f0fb;
+
+    color:#2563eb;
+}
+
+
+.icon-box svg{
+
+    width:25px;
+
+    height:25px;
+}
+
+
+.card-bottom{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+    gap:8px;
+}
+
+
+.app-name{
+
+    font-size:14px;
+
+    font-weight:650;
+
+    color:#243b53;
+
+    line-height:1.25;
+}
+
+
+.app-description{
+
+    color:#94a3b8;
+
+    font-size:10.5px;
+
+    margin-top:4px;
+
+    line-height:1.3;
+}
+
+
+.arrow{
+
+    flex-shrink:0;
+
+    width:26px;
+
+    height:26px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#94a3b8;
+
+    background:#f8fafc;
+
+    transition:.18s;
+}
+
+
+.app-card:hover .arrow{
+
+    background:#2563eb;
+
+    color:white;
+
+    transform:
+        translateX(2px);
+}
+
+
+
+/* =========================================================
+   TO-DO / PIZARRA DE ALERTAS
+========================================================= */
+
+.welcome{
+    position:relative;
+    padding-right:170px;
+}
+
+.todo-open-btn{
+    position:absolute;
+    right:0;
+    top:12px;
+    height:42px;
+    padding:0 15px;
+    border:none;
+    border-radius:11px;
+    background:#ffffff;
+    color:#334e68;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(15,39,66,.08);
+    border:1px solid #dce5ee;
+    transition:.18s ease;
+}
+
+.todo-open-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(15,39,66,.12);
+    border-color:#bfd0df;
+}
+
+.todo-open-btn svg{
+    width:18px;
+    height:18px;
+}
+
+.todo-panel{
+    background:#ffffff;
+    border-radius:15px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(226,232,240,.88);
+    margin-bottom:28px;
+    overflow:hidden;
+}
+
+.todo-panel-header{
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    border-bottom:1px solid var(--border);
+}
+
+.todo-panel-title{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.todo-panel-icon{
+    width:36px;
+    height:36px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f3f0ff;
+    color:#7c3aed;
+}
+
+.todo-panel-icon svg{
+    width:19px;
+    height:19px;
+}
+
+.todo-panel-title h3{
+    margin:0;
+    font-size:15px;
+    color:#243b53;
+}
+
+.todo-panel-title p{
+    margin:2px 0 0;
+    color:#94a3b8;
+    font-size:10.5px;
+}
+
+.todo-summary{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.todo-counter{
+    padding:5px 8px;
+    border-radius:13px;
+    font-size:10px;
+    font-weight:700;
+    background:#f1f5f9;
+    color:#64748b;
+}
+
+.todo-counter.red{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.todo-counter.yellow{
+    background:#fef3c7;
+    color:#a16207;
+}
+
+.todo-counter.purple{
+    background:#ede9fe;
+    color:#6d28d9;
+}
+
+.todo-board{
+     padding:12px 14px;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:8px;
+}
+
+@media(max-width:1100px){
+    .todo-board{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media(max-width:700px){
+    .todo-board{
+        grid-template-columns:1fr;
+    }
+}
+
+.todo-alert{
+    min-height:58px;
+    display:grid;
+    grid-template-columns:7px minmax(0,1fr) auto;
+    align-items:center;
+    gap:11px;
+    padding:10px 12px;
+    border:1px solid #e7edf3;
+    border-radius:10px;
+    background:#fcfdff;
+}
+
+.todo-alert-line{
+    width:7px;
+    align-self:stretch;
+    border-radius:5px;
+    background:#94a3b8;
+}
+
+.todo-alert.vencida .todo-alert-line{
+    background:#dc2626;
+}
+
+.todo-alert.hoy .todo-alert-line{
+    background:#f59e0b;
+}
+
+.todo-alert.recordatorio .todo-alert-line{
+    background:#8b5cf6;
+}
+
+.todo-alert-title{
+    font-size:12.5px;
+    font-weight:700;
+    color:#334e68;
+    line-height:1.25;
+}
+
+.todo-alert-note{
+    margin-top:3px;
+    color:#8393a3;
+    font-size:10.5px;
+    line-height:1.3;
+}
+
+.todo-alert-meta{
+    text-align:right;
+    white-space:nowrap;
+}
+
+.todo-alert-status{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:12px;
+    font-size:9.5px;
+    font-weight:800;
+}
+
+.todo-alert.vencida .todo-alert-status{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.todo-alert.hoy .todo-alert-status{
+    background:#fef3c7;
+    color:#a16207;
+}
+
+.todo-alert.recordatorio .todo-alert-status{
+    background:#ede9fe;
+    color:#6d28d9;
+}
+
+.todo-alert-date{
+    margin-top:5px;
+    color:#64748b;
+    font-size:9.5px;
+    line-height:1.45;
+}
+
+.todo-alert-date div{
+    display:flex;
+    justify-content:flex-end;
+    gap:4px;
+}
+
+.todo-alert-date strong{
+    font-weight:700;
+    color:#475569;
+}
+
+.todo-empty{
+    padding:24px 16px;
+    text-align:center;
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.todo-more{
+    padding:0 16px 12px;
+    text-align:right;
+    color:#64748b;
+    font-size:10px;
+    font-weight:600;
+}
+
+@media(max-width:700px){
+
+    .welcome{
+        padding-right:0;
+    }
+
+    .todo-open-btn{
+        position:static;
+        margin-top:13px;
+        width:100%;
+        justify-content:center;
+    }
+
+    .todo-panel-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .todo-summary{
+        justify-content:flex-start;
+    }
+
+    .todo-alert{
+        grid-template-columns:7px 1fr;
+    }
+
+    .todo-alert-meta{
+        grid-column:2;
+        text-align:left;
+        white-space:normal;
+    }
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+
+    margin-top:38px;
+
+    padding-top:17px;
+
+    border-top:
+        1px solid #dde5ed;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#94a3b8;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1350px){
+
+    .currency-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .currency-card:nth-child(2){
+
+        border-right:none;
+    }
+
+    .currency-card:nth-child(1),
+    .currency-card:nth-child(2){
+
+        border-bottom:
+            1px solid var(--border);
+    }
+
+}
+
+
+@media(max-width:1200px){
+
+    .apps-grid{
+
+        grid-template-columns:
+            repeat(4,1fr);
+    }
+
+}
+
+
+@media(max-width:950px){
+
+    .apps-grid{
+
+        grid-template-columns:
+            repeat(3,1fr);
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .topbar{
+
+        height:auto;
+
+        padding:20px;
+
+        align-items:flex-start;
+    }
+
+
+    .brand-divider,
+    .brand-text p,
+    .system-status{
+
+        display:none;
+    }
+
+
+    .logo-box{
+
+        width:110px;
+    }
+
+
+    .logo-box img{
+
+        max-width:100px;
+    }
+
+
+    .brand-text h1{
+
+        font-size:17px;
+    }
+
+
+    .main{
+
+        width:
+            calc(100% - 30px);
+    }
+
+
+    .apps-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+
+    .currency-grid{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .currency-card,
+    .currency-card:nth-child(2){
+
+        border-right:none;
+
+        border-bottom:
+            1px solid var(--border);
+    }
+
+
+    .currency-card:last-child{
+
+        border-bottom:none;
+    }
+
+
+    .currency-card{
+
+        grid-template-columns:
+            1fr auto auto;
+
+        gap:10px;
+
+        padding:16px;
+    }
+
+
+    .quote-value{
+
+        font-size:17px;
+    }
+
+}
+
+
+@media(max-width:480px){
+
+    .apps-grid{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+::selection{
+
+    background:#2563eb;
+
+    color:white;
+}
+
+
+/* =========================================================
+   ACCESO M14
+========================================================= */
+body.auth-pending .topbar,
+body.auth-pending .main{display:none}
+
+.login-screen{
+    position:fixed; inset:0; z-index:99999;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    background:radial-gradient(circle at 20% 15%,rgba(37,99,235,.13),transparent 30%),
+               linear-gradient(135deg,#eaf0f6,#f7f9fc);
+}
+.login-screen.oculto{display:none}
+.login-card{
+    width:min(430px,100%); background:#fff;
+    border:1px solid #dfe7ef; border-radius:20px;
+    box-shadow:0 22px 55px rgba(15,39,66,.16); overflow:hidden;
+}
+.login-brand{
+    padding:28px 30px 23px;
+    background:linear-gradient(115deg,#0e243d,#173b63); color:#fff;
+}
+.login-brand img{
+    display:block; max-width:145px; max-height:72px;
+    object-fit:contain; margin-bottom:20px;
+}
+.login-brand h1{margin:0;font-size:22px;font-weight:650}
+.login-brand p{margin:6px 0 0;font-size:12px;opacity:.7}
+.login-form{padding:28px 30px 30px}
+.login-label{
+    display:block;margin:0 0 7px;color:#475569;
+    font-size:11px;font-weight:700
+}
+.login-input{
+    width:100%;height:44px;padding:0 13px;margin-bottom:16px;
+    border:1px solid #d7e0e9;border-radius:10px;outline:none;
+    font:inherit;font-size:13px;color:#243b53;background:#fbfdff;
+}
+.login-input:focus{
+    border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10);
+    background:#fff
+}
+.login-btn{
+    width:100%;height:45px;margin-top:2px;border:0;border-radius:10px;
+    background:#173b63;color:#fff;font:inherit;font-size:13px;
+    font-weight:700;cursor:pointer
+}
+.login-btn:hover{background:#0f2f52}
+.login-btn:disabled{opacity:.65;cursor:wait}
+.login-error{
+    min-height:18px;margin-top:13px;color:#b91c1c;
+    font-size:11px;line-height:1.4;text-align:center
+}
+.user-box{
+    display:none;align-items:center;gap:10px;padding:7px 10px 7px 12px;
+    border:1px solid rgba(255,255,255,.14);border-radius:12px;
+    background:rgba(255,255,255,.08)
+}
+.user-box.visible{display:flex}
+.user-info{text-align:right}
+.user-name{font-size:11px;font-weight:700}
+.user-role{margin-top:1px;font-size:9.5px;opacity:.65}
+.logout-btn{
+    height:30px;padding:0 10px;border:1px solid rgba(255,255,255,.18);
+    border-radius:8px;background:rgba(255,255,255,.08);color:#fff;
+    font:inherit;font-size:10px;font-weight:700;cursor:pointer
+}
+.logout-btn:hover{background:rgba(255,255,255,.16)}
+@media(max-width:700px){
+    .login-form,.login-brand{padding-left:22px;padding-right:22px}
+    .user-info{display:none}
+}
+
+
+/* =========================================================
+   ADMINISTRACION M14
+========================================================= */
+.app-card.permiso-oculto{display:none !important}
+
+.admin-open-btn{
+    display:none;
+    height:38px;
+    padding:0 13px;
+    border:1px solid #d7e0e9;
+    border-radius:10px;
+    background:#fff;
+    color:#334e68;
+    font:inherit;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 3px 10px rgba(15,39,66,.06);
+}
+.admin-open-btn.visible{display:inline-flex;align-items:center;gap:7px}
+.admin-open-btn:hover{border-color:#b9c9d8;background:#f8fbff}
+
+.admin-modal{
+    position:fixed;
+    inset:0;
+    z-index:100000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:rgba(15,39,66,.48);
+    backdrop-filter:blur(3px);
+}
+.admin-modal.visible{display:flex}
+
+.admin-dialog{
+    width:min(980px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 25px 70px rgba(15,39,66,.25);
+}
+.admin-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    padding:18px 22px;
+    color:#fff;
+    background:linear-gradient(115deg,#0e243d,#173b63);
+}
+.admin-head h2{margin:0;font-size:18px}
+.admin-head p{margin:3px 0 0;font-size:10.5px;opacity:.7}
+.admin-close{
+    width:34px;height:34px;border:1px solid rgba(255,255,255,.18);
+    border-radius:9px;background:rgba(255,255,255,.08);color:#fff;
+    font-size:20px;cursor:pointer
+}
+.admin-body{padding:22px}
+.admin-section{
+    border:1px solid #e1e8ef;border-radius:13px;overflow:hidden;margin-bottom:18px
+}
+.admin-section-title{
+    padding:12px 15px;background:#f8fafc;border-bottom:1px solid #e5ebf1;
+    font-size:12px;font-weight:800;color:#334e68
+}
+.admin-create{
+    display:grid;
+    grid-template-columns:1.2fr 1fr 1fr auto;
+    gap:10px;padding:14px
+}
+.admin-input{
+    width:100%;height:40px;padding:0 11px;border:1px solid #d7e0e9;
+    border-radius:9px;outline:none;font:inherit;font-size:12px
+}
+.admin-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.admin-primary{
+    height:40px;padding:0 15px;border:0;border-radius:9px;background:#173b63;
+    color:#fff;font:inherit;font-size:11px;font-weight:800;cursor:pointer
+}
+.admin-message{padding:0 14px 12px;font-size:10.5px;color:#64748b;min-height:14px}
+.admin-message.error{color:#b91c1c}
+.admin-users{padding:10px}
+.admin-user{
+    border:1px solid #e4eaf0;border-radius:11px;padding:13px;margin-bottom:9px
+}
+.admin-user:last-child{margin-bottom:0}
+.admin-user-top{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px
+}
+.admin-user-email{font-size:12px;font-weight:800;color:#243b53}
+.admin-user-role{font-size:9px;font-weight:800;padding:4px 7px;border-radius:10px;background:#eef2ff;color:#4338ca}
+.admin-permissions{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px
+}
+.permission-item{
+    display:flex;align-items:center;gap:7px;padding:7px 9px;
+    border:1px solid #edf1f5;border-radius:8px;background:#fbfdff;
+    color:#526579;font-size:10.5px
+}
+.permission-item input{accent-color:#2563eb}
+.admin-user-actions{display:flex;justify-content:flex-end;margin-top:10px}
+.admin-save{
+    height:31px;padding:0 11px;border:0;border-radius:8px;background:#2563eb;
+    color:#fff;font:inherit;font-size:10px;font-weight:800;cursor:pointer
+}
+.admin-delete{
+    height:31px;padding:0 11px;border:1px solid #fecaca;border-radius:8px;
+    background:#fff;color:#b91c1c;font:inherit;font-size:10px;font-weight:800;
+    cursor:pointer;margin-right:7px
+}
+.admin-delete:hover{background:#fef2f2;border-color:#fca5a5}
+
+@media(max-width:800px){
+    .admin-create{grid-template-columns:1fr}
+    .admin-permissions{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){
+    .admin-permissions{grid-template-columns:1fr}
+}
+
+</style>
+
+</head>
+
+
+
+<body class="auth-pending">
+
+<div class="login-screen" id="loginScreen">
+    <div class="login-card">
+        <div class="login-brand">
+            <img src="logo M14 PNG.png" alt="Mecánica 14">
+            <h1>Acceso M14</h1>
+            <p>Portal interno · Aplicaciones y herramientas</p>
+        </div>
+        <form class="login-form" id="loginForm">
+            <label class="login-label" for="loginEmail">Correo electrónico</label>
+            <input class="login-input" id="loginEmail" type="email"
+                   value="compras@mecanica14.com" autocomplete="username" required>
+
+            <label class="login-label" for="loginPassword">Contraseña</label>
+            <input class="login-input" id="loginPassword" type="password"
+                   autocomplete="current-password" required>
+
+            <button class="login-btn" id="loginBtn" type="submit">
+                Ingresar al Portal
+            </button>
+            <div class="login-error" id="loginError"></div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="topbar">
+
+
+    <div class="brand">
+
+
+        <div class="logo-box">
+
+            <img
+                src="logo M14 PNG.png"
+                alt="Mecánica 14"
+            >
+
+        </div>
+
+
+        <div class="brand-divider"></div>
+
+
+        <div class="brand-text">
+
+            <h1>
+                Portal Interno
+            </h1>
+
+            <p>
+                Centro de aplicaciones y herramientas
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="topbar-right">
+
+        <div class="user-box" id="userBox">
+            <div class="user-info">
+                <div class="user-name" id="userName">—</div>
+                <div class="user-role" id="userRole">Usuario</div>
+            </div>
+            <button class="logout-btn" id="logoutBtn" type="button">Cerrar sesión</button>
+        </div>
+
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            Sistemas disponibles
+
+        </div>
+
+
+        <div class="clock-box">
+
+            <div
+                class="clock-time"
+                id="hora"
+            >
+                --:--
+            </div>
+
+            <div
+                class="clock-date"
+                id="fecha"
+            >
+                --
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</header>
+
+
+
+<!-- =====================================================
+     CONTENIDO
+===================================================== -->
+
+<main class="main">
+
+
+    <div class="welcome">
+
+        <div class="section-label">
+            Panel principal
+        </div>
+
+        <h2>
+            Aplicaciones M14
+        </h2>
+
+        <p>
+            Acceso rápido a herramientas administrativas y operativas.
+        </p>
+
+        <button
+            class="todo-open-btn" id="todoOpenBtn" data-app="todo"
+            onclick="abrir('todo_M14_v2_recordatorio_vencimiento.html')"
+            title="Abrir Mis Pendientes"
+        >
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M5 4h14v16H5z"/>
+                <path d="M8 8h8"/>
+                <path d="M8 12h8"/>
+                <path d="M8 16h5"/>
+            </svg>
+
+            Abrir To-Do
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         COTIZACIONES
+    ================================================== -->
+
+    <section class="currency-panel">
+
+
+        <div class="currency-header">
+
+
+            <div class="currency-title">
+
+                <div class="currency-icon">
+                    $
+                </div>
+
+                <div>
+
+                    <h3>
+                        Cotizaciones Banco Nación
+                    </h3>
+
+                    <p>
+                        Dólar y Euro · Billete / Divisa
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="bna-badge">
+                BNA
+            </div>
+
+
+        </div>
+
+
+
+        <div class="currency-grid">
+
+
+            <!-- DOLAR BILLETE -->
+
+            <div class="currency-card">
+
+
+                <div>
+
+                    <div class="currency-name">
+                        Dólar Billete
+                    </div>
+
+                    <div class="currency-subtitle">
+                        Dólar U.S.A.
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Compra
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="billeteCompra"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Venta
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="billeteVenta"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- DOLAR DIVISA -->
+
+            <div class="currency-card divisa">
+
+
+                <div>
+
+                    <div class="currency-name">
+                        Dólar Divisa
+                    </div>
+
+                    <div class="currency-subtitle">
+                        Mercado de cambios
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Compra
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="divisaCompra"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Venta
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="divisaVenta"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- EURO BILLETE -->
+
+            <div class="currency-card">
+
+
+                <div>
+
+                    <div class="currency-name">
+                        Euro Billete
+                    </div>
+
+                    <div class="currency-subtitle">
+                        Banco Nación
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Compra
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="euroCompra"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Venta
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="euroVenta"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- EURO DIVISA -->
+
+            <div class="currency-card divisa">
+
+
+                <div>
+
+                    <div class="currency-name">
+                        Euro Divisa
+                    </div>
+
+                    <div class="currency-subtitle">
+                        Mercado de cambios
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Compra
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="euroDivisaCompra"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+                <div class="quote">
+
+                    <div class="quote-label">
+                        Venta
+                    </div>
+
+                    <div
+                        class="quote-value"
+                        id="euroDivisaVenta"
+                    >
+                        $ —
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <div
+            class="currency-footer"
+            id="actualizacionCotizaciones"
+        >
+            Cotizaciones pendientes de actualización
+        </div>
+
+
+    </section>
+
+
+
+
+    <!-- =================================================
+         PIZARRA TO-DO
+    ================================================== -->
+
+    <section class="todo-panel" data-app="pendientes">
+
+        <div class="todo-panel-header">
+
+            <div class="todo-panel-title">
+
+                <div class="todo-panel-icon">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M5 4h14v16H5z"/>
+                        <path d="M8 8h8"/>
+                        <path d="M8 12h8"/>
+                        <path d="M8 16h5"/>
+                    </svg>
+                </div>
+
+                <div>
+                    <h3>Mis Pendientes</h3>
+                    <p>Alertas activas del To-Do personal</p>
+                </div>
+
+            </div>
+
+
+            <div class="todo-summary">
+
+                <span class="todo-counter red">
+                    Vencidas: <span id="todoVencidas">0</span>
+                </span>
+
+                <span class="todo-counter yellow">
+                    Vencen hoy: <span id="todoHoy">0</span>
+                </span>
+
+                <span class="todo-counter purple">
+                    Recordatorios: <span id="todoRecordatorios">0</span>
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="todo-board"
+            id="todoBoard"
+        >
+            <div class="todo-empty">
+                Cargando pendientes...
+            </div>
+        </div>
+
+
+        <div
+            class="todo-more"
+            id="todoMore"
+            style="display:none"
+        ></div>
+
+    </section>
+
+
+    <!-- =================================================
+         APLICACIONES
+    ================================================== -->
+
+    <div class="apps-header">
+
+        <h3>
+            Herramientas
+        </h3>
+
+        <button class="admin-open-btn" id="adminOpenBtn" type="button">
+            ⚙ Administración de usuarios
+        </button>
+    </div>
+
+
+
+    <div class="apps-grid">
+
+
+
+        <!-- MOVIMIENTO DE MATERIALES -->
+
+        <div
+            class="app-card" data-app="mm"
+            onclick="abrir('mm.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M3 6h11v10H3z"/>
+                    <path d="M14 10h4l3 3v3h-7z"/>
+                    <circle cx="7" cy="18" r="2"/>
+                    <circle cx="18" cy="18" r="2"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Movimiento de Materiales
+                    </div>
+
+                    <div class="app-description">
+                        Emisión e historial de MM
+                    </div>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ETIQUETAS -->
+
+        <div
+            class="app-card" data-app="etiquetas"
+            onclick="abrir('generador_etiquetas/index.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path d="M3 12l9-9h7v7l-9 9z"/>
+                    <circle cx="16" cy="7" r="1"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Etiquetas
+                    </div>
+
+                    <div class="app-description">
+                        Generación de etiquetas
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- INSTRUCCIONES -->
+
+        <div
+            class="app-card" data-app="instrucciones"
+            onclick="abrir('instrucciones/instrucciones_form.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M3 6h11v10H3z"/>
+                    <path d="M14 10h4l3 3v3h-7z"/>
+                    <circle cx="7" cy="18" r="2"/>
+                    <circle cx="18" cy="18" r="2"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Instrucciones de Entrega
+                    </div>
+
+                    <div class="app-description">
+                        Documentación para despachos
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- REMITOS -->
+
+        <div
+            class="app-card" data-app="remitos"
+            onclick="abrir('remito.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linejoin="round"
+                >
+                    <path d="M6 2h9l4 4v16H6z"/>
+                    <path d="M14 2v5h5"/>
+                    <path d="M9 12h6"/>
+                    <path d="M9 16h6"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Seguimiento de Remitos
+                    </div>
+
+                    <div class="app-description">
+                        Control de documentación
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HRM -->
+
+        <div
+            class="app-card" data-app="hrm"
+            onclick="abrir('hrm.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linejoin="round"
+                >
+                    <path d="M5 3h14v18H5z"/>
+                    <path d="M8 7h8"/>
+                    <path d="M8 11h8"/>
+                    <path d="M8 15h5"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Registro HRM
+                    </div>
+
+                    <div class="app-description">
+                        Materiales y certificados
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- COMMERCIAL INVOICE -->
+
+        <div
+            class="app-card" data-app="invoice"
+            onclick="abrir('commercial-invoice-modo-empresa-v5.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path d="M5 2h11l3 3v17H5z"/>
+                    <path d="M8 10h8"/>
+                    <path d="M8 14h8"/>
+                    <path d="M8 18h5"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Commercial Invoice
+                    </div>
+
+                    <div class="app-description">
+                        Facturas comerciales
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CALCULADORA -->
+
+        <div
+            class="app-card" data-app="kilos"
+            onclick="abrir('kilos.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                >
+                    <path d="M4 20h16"/>
+                    <path d="M6 20l2-12h8l2 12"/>
+                    <circle cx="12" cy="12" r="2"/>
+                    <path d="M12 10V7"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Calculadora de Peso
+                    </div>
+
+                    <div class="app-description">
+                        Cálculo de materiales
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- APROBACION -->
+
+        <div
+            class="app-card" data-app="aprobacion"
+            onclick="abrir('apro_terceros.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path d="M3 5h18v14H3z"/>
+                    <path d="M3 6l9 7 9-7"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Solicitud de Aprobación
+                    </div>
+
+                    <div class="app-description">
+                        Solicitudes por correo
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- DESPACHO -->
+
+        <div
+            class="app-card" data-app="despacho"
+            onclick="abrir('autorizacion_entrega.html')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path d="M4 5h16v14H4z"/>
+                    <path d="M8 9h8"/>
+                    <path d="M8 13h5"/>
+                    <path d="M16 16l2 2 4-4"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Despacho a Cliente
+                    </div>
+
+                    <div class="app-description">
+                        Avisos de entrega y despacho
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- DEVOLUCION CALIBRES -->
+        <div
+            class="app-card" data-app="devolucion_calibres"
+            onclick="abrir('devolucion_calibres.html')"
+        >
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 15.5 15.5 4a2 2 0 0 1 2.8 0L20 5.7a2 2 0 0 1 0 2.8L8.5 20a2 2 0 0 1-2.8 0L4 18.3a2 2 0 0 1 0-2.8Z"/>
+                    <path d="m14 5.5 2 2"/>
+                    <path d="m11.5 8 1.5 1.5"/>
+                    <path d="m9 10.5 2 2"/>
+                    <path d="m6.5 13 1.5 1.5"/>
+                </svg>
+            </div>
+            <div class="card-bottom">
+                <div>
+                    <div class="app-name">Devolución Calibres</div>
+                    <div class="app-description">Seguimiento de calibres y EOP Block</div>
+                </div>
+                <div class="arrow">→</div>
+            </div>
+        </div>
+
+
+        <!-- AUTORIZADOR -->
+
+        <div
+            class="app-card" data-app="autorizador"
+            onclick="alert('El archivo ruta_autorizador.html no estaba incluido en la carpeta enviada.')"
+        >
+
+            <div class="icon-box">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M8 12l3 3 5-6"/>
+                </svg>
+
+            </div>
+
+
+            <div class="card-bottom">
+
+                <div>
+
+                    <div class="app-name">
+                        Autorizador de Compras
+                    </div>
+
+                    <div class="app-description">
+                        Circuito de autorizaciones
+                    </div>
+
+                </div>
+
+                <div class="arrow">→</div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="footer">
+
+        <span>
+            © 2026 · MECÁNICA 14
+        </span>
+
+        <span>
+            Portal Interno
+        </span>
+
+    </div>
+
+
+</main>
+
+
+
+<script>
+
+/* =========================================================
+   ABRIR APLICACIONES
+========================================================= */
+
+function abrir(ruta){
+
+    window.open(
+        ruta,
+        "_blank"
+    );
+
+}
+
+
+
+/* =========================================================
+   RELOJ
+========================================================= */
+
+function actualizarReloj(){
+
+    const ahora =
+        new Date();
+
+
+    document
+        .getElementById("hora")
+        .textContent =
+        ahora.toLocaleTimeString(
+            "es-AR",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+
+    document
+        .getElementById("fecha")
+        .textContent =
+        ahora.toLocaleDateString(
+            "es-AR",
+            {
+                weekday:"long",
+                day:"2-digit",
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+}
+
+
+actualizarReloj();
+
+
+setInterval(
+    actualizarReloj,
+    30000
+);
+
+
+
+/* =========================================================
+   FORMATO PESOS
+========================================================= */
+
+function formatoPesos(
+    valor,
+    decimales = 2
+){
+
+    const numero =
+        Number(valor);
+
+
+    if(!Number.isFinite(numero)){
+
+        return "$ —";
+
+    }
+
+
+    return "$ " +
+        numero.toLocaleString(
+            "es-AR",
+            {
+                minimumFractionDigits:
+                    decimales,
+
+                maximumFractionDigits:
+                    decimales
+            }
+        );
+
+}
+
+
+
+/* =========================================================
+   DOLAR BILLETE BNA
+========================================================= */
+
+async function cargarDolarBillete(){
+
+    const url =
+        "https://monedapi.ar/api/v2/usd/bna";
+
+
+    try{
+
+        const respuesta =
+            await fetch(
+                url,
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        if(!respuesta.ok){
+
+            throw new Error(
+                "HTTP " +
+                respuesta.status
+            );
+
+        }
+
+
+        const data =
+            await respuesta.json();
+
+
+        document
+            .getElementById(
+                "billeteCompra"
+            )
+            .textContent =
+            formatoPesos(
+                data.buy,
+                2
+            );
+
+
+        document
+            .getElementById(
+                "billeteVenta"
+            )
+            .textContent =
+            formatoPesos(
+                data.sell,
+                2
+            );
+
+
+        console.log(
+            "Dólar Billete OK",
+            data
+        );
+
+
+        return {
+            ok:true
+        };
+
+    }
+    catch(error){
+
+        console.error(
+            "Error Dólar Billete:",
+            error
+        );
+
+
+        document
+            .getElementById(
+                "billeteCompra"
+            )
+            .textContent =
+            "$ —";
+
+
+        document
+            .getElementById(
+                "billeteVenta"
+            )
+            .textContent =
+            "$ —";
+
+
+        return {
+            ok:false
+        };
+
+    }
+
+}
+
+
+
+/* =========================================================
+   EURO BILLETE BNA
+========================================================= */
+
+async function cargarEuroBillete(){
+
+    const url =
+        "https://monedapi.ar/api/v2/eur/bna";
+
+
+    try{
+
+        const respuesta =
+            await fetch(
+                url,
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        if(!respuesta.ok){
+
+            throw new Error(
+                "HTTP " +
+                respuesta.status
+            );
+
+        }
+
+
+        const data =
+            await respuesta.json();
+
+
+        document
+            .getElementById(
+                "euroCompra"
+            )
+            .textContent =
+            formatoPesos(
+                data.buy,
+                2
+            );
+
+
+        document
+            .getElementById(
+                "euroVenta"
+            )
+            .textContent =
+            formatoPesos(
+                data.sell,
+                2
+            );
+
+
+        console.log(
+            "Euro Billete OK",
+            data
+        );
+
+
+        return {
+            ok:true
+        };
+
+    }
+    catch(error){
+
+        console.error(
+            "Error Euro Billete:",
+            error
+        );
+
+
+        document
+            .getElementById(
+                "euroCompra"
+            )
+            .textContent =
+            "$ —";
+
+
+        document
+            .getElementById(
+                "euroVenta"
+            )
+            .textContent =
+            "$ —";
+
+
+        return {
+            ok:false
+        };
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CONVERTIR NUMERO BNA
+========================================================= */
+
+function numeroBNA(valor){
+
+    if(!valor){
+
+        return NaN;
+
+    }
+
+
+    let texto =
+        String(valor)
+        .trim();
+
+
+    texto =
+        texto.replace(
+            ",",
+            "."
+        );
+
+
+    return Number(texto);
+
+}
+
+
+
+/* =========================================================
+   QUITAR ACENTOS
+========================================================= */
+
+function sinAcentos(texto){
+
+    return texto
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        );
+
+}
+
+
+
+/* =========================================================
+   BUSCAR VALORES DE UNA MONEDA
+========================================================= */
+
+function buscarFilaDivisa(
+    contenido,
+    moneda
+){
+
+    if(!contenido){
+
+        return null;
+
+    }
+
+
+    const texto =
+        sinAcentos(
+            String(contenido)
+        );
+
+
+    const lineas =
+        texto
+        .replace(/\r/g,"")
+        .split("\n");
+
+
+    let nombres;
+
+
+    if(moneda === "USD"){
+
+        nombres = [
+            "dolar u.s.a",
+            "dolar u.s.a.",
+            "dolar usa",
+            "dolar u s a"
+        ];
+
+    }
+    else{
+
+        nombres = [
+            "euro"
+        ];
+
+    }
+
+
+    /*
+       PRIMER METODO
+
+       Busca la línea donde aparece la moneda.
+
+       Esto funciona muy bien con Jina porque
+       suele devolver:
+
+       Dolar U.S.A | 1503.0000 | 1512.0000
+    */
+
+    for(
+        let i = 0;
+        i < lineas.length;
+        i++
+    ){
+
+        const lineaOriginal =
+            lineas[i];
+
+
+        const linea =
+            lineaOriginal
+            .toLowerCase()
+            .trim();
+
+
+        const esMoneda =
+            nombres.some(
+                nombre =>
+                    linea.includes(nombre)
+            );
+
+
+        if(!esMoneda){
+
+            continue;
+
+        }
+
+
+        /*
+           Tomamos esa línea y unas pocas líneas
+           posteriores, por si compra y venta
+           aparecen separados.
+        */
+
+        const bloque =
+            lineas
+            .slice(
+                i,
+                i + 6
+            )
+            .join(" ");
+
+
+        console.log(
+            "Bloque encontrado para",
+            moneda,
+            bloque
+        );
+
+
+        /*
+           Divisas BNA tienen 4 o más decimales.
+
+           Ejemplos:
+           1503.0000
+           1512.0000
+           1738.9710
+           1753.1640
+        */
+
+        const numeros =
+            bloque.match(
+                /\d{3,6}[.,]\d{4,5}/g
+            );
+
+
+        if(
+            numeros
+            &&
+            numeros.length >= 2
+        ){
+
+            const compra =
+                numeroBNA(
+                    numeros[0]
+                );
+
+
+            const venta =
+                numeroBNA(
+                    numeros[1]
+                );
+
+
+            if(
+                Number.isFinite(compra)
+                &&
+                Number.isFinite(venta)
+            ){
+
+                return {
+
+                    compra:compra,
+
+                    venta:venta
+
+                };
+
+            }
+
+        }
+
+    }
+
+
+
+    /*
+       SEGUNDO METODO
+
+       Regex pensado tanto para HTML convertido
+       a texto como para tabla Markdown.
+
+       Acepta:
+       espacios
+       |
+       :
+       -
+       *
+    */
+
+    let patron;
+
+
+    if(moneda === "USD"){
+
+        patron =
+            /Dolar\s*U\.?\s*S\.?\s*A\.?[\s|:*_-]+([0-9]{3,6}[.,][0-9]{4,5})[\s|:*_-]+([0-9]{3,6}[.,][0-9]{4,5})/i;
+
+    }
+    else{
+
+        patron =
+            /Euro[\s|:*_-]+([0-9]{3,6}[.,][0-9]{4,5})[\s|:*_-]+([0-9]{3,6}[.,][0-9]{4,5})/i;
+
+    }
+
+
+    const resultado =
+        texto.match(
+            patron
+        );
+
+
+    if(!resultado){
+
+        return null;
+
+    }
+
+
+    const compra =
+        numeroBNA(
+            resultado[1]
+        );
+
+
+    const venta =
+        numeroBNA(
+            resultado[2]
+        );
+
+
+    if(
+        !Number.isFinite(compra)
+        ||
+        !Number.isFinite(venta)
+    ){
+
+        return null;
+
+    }
+
+
+    return {
+
+        compra:compra,
+
+        venta:venta
+
+    };
+
+}
+
+
+
+/* =========================================================
+   PROCESAR RESPUESTA
+========================================================= */
+
+function procesarContenidoBNA(contenido){
+
+    if(!contenido){
+
+        return null;
+
+    }
+
+
+    let texto =
+        contenido;
+
+
+    /*
+       Si es HTML:
+       convertir a texto visible.
+    */
+
+    if(
+        contenido
+        .toLowerCase()
+        .includes("<html")
+
+        ||
+
+        contenido
+        .toLowerCase()
+        .includes("<body")
+
+        ||
+
+        contenido
+        .toLowerCase()
+        .includes("<table")
+    ){
+
+        try{
+
+            const parser =
+                new DOMParser();
+
+
+            const documento =
+                parser.parseFromString(
+                    contenido,
+                    "text/html"
+                );
+
+
+            if(documento.body){
+
+                texto =
+                    documento.body.innerText;
+
+            }
+
+        }
+        catch(error){
+
+            console.warn(
+                "No se pudo convertir HTML:",
+                error
+            );
+
+        }
+
+    }
+
+
+    return texto;
+
+}
+
+
+
+/* =========================================================
+   DESCARGAR DIVISAS
+========================================================= */
+
+async function obtenerDivisasBNA(){
+
+    const paginaBNA =
+        "https://www.bna.com.ar/Cotizador/MonedasHistorico";
+
+
+    /*
+       ORDEN IMPORTANTE:
+
+       Primero Jina, porque devuelve una versión
+       de texto muy fácil de procesar.
+
+       Después probamos otras opciones.
+    */
+
+    const fuentes = [
+
+        {
+            nombre:
+                "Jina Reader",
+
+            url:
+                "https://r.jina.ai/https://www.bna.com.ar/Cotizador/MonedasHistorico"
+        },
+
+        {
+            nombre:
+                "AllOrigins",
+
+            url:
+                "https://api.allorigins.win/raw?url=" +
+                encodeURIComponent(
+                    paginaBNA
+                )
+        },
+
+        {
+            nombre:
+                "CORSProxy",
+
+            url:
+                "https://corsproxy.io/?" +
+                encodeURIComponent(
+                    paginaBNA
+                )
+        },
+
+        {
+            nombre:
+                "BNA directo",
+
+            url:
+                paginaBNA
+        }
+
+    ];
+
+
+    let ultimoError =
+        null;
+
+
+    for(
+        const fuente
+        of
+        fuentes
+    ){
+
+        try{
+
+            console.log(
+                "Probando fuente:",
+                fuente.nombre
+            );
+
+
+            const respuesta =
+                await fetch(
+                    fuente.url,
+                    {
+                        cache:"no-store"
+                    }
+                );
+
+
+            if(!respuesta.ok){
+
+                throw new Error(
+                    "HTTP " +
+                    respuesta.status
+                );
+
+            }
+
+
+            const contenido =
+                await respuesta.text();
+
+
+            if(
+                !contenido
+                ||
+                contenido.length < 100
+            ){
+
+                throw new Error(
+                    "Respuesta vacía"
+                );
+
+            }
+
+
+            const texto =
+                procesarContenidoBNA(
+                    contenido
+                );
+
+
+            console.log(
+                "Respuesta recibida de",
+                fuente.nombre
+            );
+
+
+            /*
+               Intentamos extraer las dos monedas
+               EN ESTA MISMA FUENTE.
+            */
+
+            const dolar =
+                buscarFilaDivisa(
+                    texto,
+                    "USD"
+                );
+
+
+            const euro =
+                buscarFilaDivisa(
+                    texto,
+                    "EUR"
+                );
+
+
+            console.log(
+                "Resultado",
+                fuente.nombre,
+                {
+                    dolar,
+                    euro
+                }
+            );
+
+
+            /*
+               Solo consideramos válida la fuente
+               si encontramos las DOS divisas.
+            */
+
+            if(
+                dolar
+                &&
+                euro
+            ){
+
+                return {
+
+                    dolar:dolar,
+
+                    euro:euro,
+
+                    fuente:
+                        fuente.nombre
+
+                };
+
+            }
+
+
+            throw new Error(
+                "Se descargó la página pero no se reconocieron las cotizaciones"
+            );
+
+        }
+        catch(error){
+
+            ultimoError =
+                error;
+
+
+            console.warn(
+                "Falló " +
+                fuente.nombre +
+                ":",
+                error
+            );
+
+        }
+
+    }
+
+
+    throw (
+        ultimoError
+        ||
+        new Error(
+            "No fue posible obtener las Divisas"
+        )
+    );
+
+}
+
+
+
+/* =========================================================
+   CARGAR DOLAR + EURO DIVISA
+========================================================= */
+
+async function cargarDivisas(){
+
+    try{
+
+        const datos =
+            await obtenerDivisasBNA();
+
+
+        /*
+           DOLAR
+        */
+
+        document
+            .getElementById(
+                "divisaCompra"
+            )
+            .textContent =
+            formatoPesos(
+                datos.dolar.compra,
+                4
+            );
+
+
+        document
+            .getElementById(
+                "divisaVenta"
+            )
+            .textContent =
+            formatoPesos(
+                datos.dolar.venta,
+                4
+            );
+
+
+        /*
+           EURO
+        */
+
+        document
+            .getElementById(
+                "euroDivisaCompra"
+            )
+            .textContent =
+            formatoPesos(
+                datos.euro.compra,
+                4
+            );
+
+
+        document
+            .getElementById(
+                "euroDivisaVenta"
+            )
+            .textContent =
+            formatoPesos(
+                datos.euro.venta,
+                4
+            );
+
+
+        console.log(
+            "DIVISAS CARGADAS:",
+            datos
+        );
+
+
+        return {
+
+            ok:true,
+
+            fuente:
+                datos.fuente
+
+        };
+
+    }
+    catch(error){
+
+        console.error(
+            "ERROR FINAL DIVISAS:",
+            error
+        );
+
+
+        document
+            .getElementById(
+                "divisaCompra"
+            )
+            .textContent =
+            "$ —";
+
+
+        document
+            .getElementById(
+                "divisaVenta"
+            )
+            .textContent =
+            "$ —";
+
+
+        document
+            .getElementById(
+                "euroDivisaCompra"
+            )
+            .textContent =
+            "$ —";
+
+
+        document
+            .getElementById(
+                "euroDivisaVenta"
+            )
+            .textContent =
+            "$ —";
+
+
+        return {
+            ok:false
+        };
+
+    }
+
+}
+
+
+
+/* =========================================================
+   ACTUALIZAR TODO
+========================================================= */
+
+async function actualizarCotizaciones(){
+
+    const footer =
+        document
+        .getElementById(
+            "actualizacionCotizaciones"
+        );
+
+
+    footer.textContent =
+        "Actualizando cotizaciones...";
+
+
+    const resultados =
+        await Promise.all(
+            [
+
+                cargarDolarBillete(),
+
+                cargarEuroBillete(),
+
+                cargarDivisas()
+
+            ]
+        );
+
+
+    const dolarBillete =
+        resultados[0];
+
+
+    const euroBillete =
+        resultados[1];
+
+
+    const divisas =
+        resultados[2];
+
+
+    const ahora =
+        new Date();
+
+
+    const hora =
+        ahora.toLocaleTimeString(
+            "es-AR",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+
+    const errores =
+        [];
+
+
+    if(!dolarBillete.ok){
+
+        errores.push(
+            "Dólar Billete"
+        );
+
+    }
+
+
+    if(!euroBillete.ok){
+
+        errores.push(
+            "Euro Billete"
+        );
+
+    }
+
+
+    if(!divisas.ok){
+
+        errores.push(
+            "Dólar/Euro Divisa"
+        );
+
+    }
+
+
+    if(
+        errores.length === 0
+    ){
+
+        footer.textContent =
+            "Banco Nación · Cotizaciones actualizadas · Consulta " +
+            hora;
+
+    }
+    else{
+
+        footer.textContent =
+            "Actualización parcial · No disponible: " +
+            errores.join(", ") +
+            " · Consulta " +
+            hora;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+actualizarCotizaciones();
+
+
+/*
+   Actualización automática
+   cada 15 minutos.
+*/
+
+setInterval(
+    actualizarCotizaciones,
+    15 * 60 * 1000
+);
+
+</script>
+
+
+
+<script type="module">
+
+import {
+    initializeApp
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence,
+    createUserWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+
+import {
+    getFirestore,
+    collection,
+    onSnapshot
+,
+    doc,
+    setDoc,
+    getDoc,
+    getDocs,
+    deleteDoc}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+
+/*
+   MIS PENDIENTES
+   El Portal solamente visualiza.
+   La administración se hace desde el archivo To-Do.
+*/
+
+const todoFirebaseConfig = {
+
+    apiKey:
+        "AIzaSyAuf4jScad52QQWgE0TihJypVPhKIUtwmE",
+
+    authDomain:
+        "app-remitos.firebaseapp.com",
+
+    projectId:
+        "app-remitos",
+
+    storageBucket:
+        "app-remitos.firebasestorage.app",
+
+    messagingSenderId:
+        "620026371986",
+
+    appId:
+        "1:620026371986:web:7f3e6e06b07983f3656b4b"
+
+};
+
+
+const todoApp =
+    initializeApp(
+        todoFirebaseConfig,
+        "portalTodo"
+    );
+
+
+const todoDb =
+    getFirestore(
+        todoApp
+    );
+
+/* =========================================================
+   AUTENTICACION PORTAL M14
+========================================================= */
+
+const portalAuth = getAuth(todoApp);
+
+/* App secundaria: permite crear usuarios sin cerrar la sesión del administrador */
+const adminCreatorApp = initializeApp(todoFirebaseConfig, "portalAdminCreator");
+const adminCreatorAuth = getAuth(adminCreatorApp);
+const ADMIN_EMAIL = "compras@mecanica14.com";
+
+const loginScreen = document.getElementById("loginScreen");
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginBtn = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
+const userBox = document.getElementById("userBox");
+const userName = document.getElementById("userName");
+const userRole = document.getElementById("userRole");
+const logoutBtn = document.getElementById("logoutBtn");
+
+function mensajeLogin(error){
+    const codigo = error?.code || "";
+
+    if(
+        codigo === "auth/invalid-credential" ||
+        codigo === "auth/wrong-password" ||
+        codigo === "auth/user-not-found"
+    ){
+        return "Correo o contraseña incorrectos.";
+    }
+
+    if(codigo === "auth/too-many-requests"){
+        return "Demasiados intentos. Esperá unos minutos y volvé a probar.";
+    }
+
+    if(codigo === "auth/network-request-failed"){
+        return "No se pudo conectar con Firebase. Revisá la conexión a Internet.";
+    }
+
+    return "No fue posible iniciar sesión.";
+}
+
+try{
+    await setPersistence(portalAuth, browserLocalPersistence);
+}
+catch(error){
+    console.warn("Persistencia local no disponible:", error);
+}
+
+loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    loginError.textContent = "";
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Ingresando...";
+
+    try{
+        await signInWithEmailAndPassword(
+            portalAuth,
+            loginEmail.value.trim(),
+            loginPassword.value
+        );
+        loginPassword.value = "";
+    }
+    catch(error){
+        console.error("Error de acceso:", error);
+        loginError.textContent = mensajeLogin(error);
+    }
+    finally{
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Ingresar al Portal";
+    }
+});
+
+logoutBtn.addEventListener("click", async () => {
+    await signOut(portalAuth);
+});
+
+
+const APPS_M14 = [
+    ["mm","Movimiento de Materiales"],
+    ["etiquetas","Etiquetas"],
+    ["instrucciones","Instrucciones de Entrega"],
+    ["remitos","Seguimiento de Remitos"],
+    ["hrm","Registro HRM"],
+    ["invoice","Commercial Invoice"],
+    ["kilos","Calculadora de Peso"],
+    ["aprobacion","Solicitud de Aprobación"],
+    ["despacho","Despacho a Cliente"],
+    ["autorizador","Autorizador de Compras"],
+    ["devolucion_calibres","Devolución Calibres"],
+    ["todo","To-Do"],
+    ["pendientes","Mis Pendientes (panel del Portal)"]
+];
+
+const adminOpenBtn = document.getElementById("adminOpenBtn");
+const adminModal = document.getElementById("adminModal");
+const adminCloseBtn = document.getElementById("adminCloseBtn");
+const adminCreateForm = document.getElementById("adminCreateForm");
+const adminUsers = document.getElementById("adminUsers");
+const adminMessage = document.getElementById("adminMessage");
+
+function permisosTodos(valor=true){
+    const obj = {};
+    APPS_M14.forEach(([id]) => obj[id] = valor);
+    return obj;
+}
+
+function aplicarPermisos(permisos, esAdmin=false){
+    document.querySelectorAll("[data-app]").forEach(el => {
+        const app = el.dataset.app;
+        const permitido = esAdmin || permisos?.[app] === true;
+
+        if(el.classList.contains("app-card")){
+            el.classList.toggle("permiso-oculto", !permitido);
+        }else{
+            el.style.display = permitido ? "" : "none";
+        }
+    });
+}
+
+async function asegurarPerfilAdmin(user){
+    if((user.email || "").toLowerCase() !== ADMIN_EMAIL) return;
+
+    const ref = doc(todoDb, "usuarios_portal", user.uid);
+    const snap = await getDoc(ref);
+
+    if(!snap.exists()){
+        await setDoc(ref,{
+            uid:user.uid,
+            nombre:"Compras",
+            email:user.email,
+            rol:"admin",
+            activo:true,
+            permisos:permisosTodos(true),
+            creado:new Date().toISOString()
+        });
+    }
+}
+
+async function cargarPerfilUsuario(user){
+    const email = (user.email || "").toLowerCase();
+    const esAdmin = email === ADMIN_EMAIL;
+
+    if(esAdmin){
+        await asegurarPerfilAdmin(user);
+        return {
+            nombre:"Compras",
+            email:user.email,
+            rol:"admin",
+            activo:true,
+            permisos:permisosTodos(true)
+        };
+    }
+
+    const snap = await getDoc(doc(todoDb,"usuarios_portal",user.uid));
+
+    if(!snap.exists()){
+        return {
+            nombre:user.email,
+            email:user.email,
+            rol:"usuario",
+            activo:false,
+            permisos:{}
+        };
+    }
+
+    return snap.data();
+}
+
+function htmlPermisos(uid, permisos, bloquear=false){
+    return APPS_M14.map(([id,nombre]) => `
+        <label class="permission-item">
+            <input
+                type="checkbox"
+                data-perm="${id}"
+                ${permisos?.[id] ? "checked" : ""}
+                ${bloquear ? "disabled" : ""}
+            >
+            <span>${nombre}</span>
+        </label>
+    `).join("");
+}
+
+async function cargarUsuariosAdmin(){
+    adminUsers.innerHTML = "Cargando usuarios...";
+
+    try{
+        const snap = await getDocs(collection(todoDb,"usuarios_portal"));
+        const usuarios = [];
+
+        snap.forEach(d => usuarios.push({id:d.id,...d.data()}));
+
+        usuarios.sort((a,b) => {
+            if(a.rol === "admin") return -1;
+            if(b.rol === "admin") return 1;
+            return String(a.nombre || a.email).localeCompare(String(b.nombre || b.email));
+        });
+
+        if(!usuarios.length){
+            adminUsers.innerHTML = '<div class="admin-message">Todavía no hay usuarios registrados.</div>';
+            return;
+        }
+
+        adminUsers.innerHTML = usuarios.map(u => {
+            const admin = u.rol === "admin";
+            return `
+                <div class="admin-user" data-uid="${u.id}">
+                    <div class="admin-user-top">
+                        <div>
+                            <div class="admin-user-email">${todoEscape(u.nombre || u.email || "Usuario")}</div>
+                            <div style="font-size:10px;color:#8393a3;margin-top:2px">${todoEscape(u.email || "")}</div>
+                        </div>
+                        <span class="admin-user-role">${admin ? "ADMINISTRADOR" : "USUARIO"}</span>
+                    </div>
+
+                    <div class="admin-permissions">
+                        ${htmlPermisos(u.id,u.permisos,admin)}
+                    </div>
+
+                    ${admin ? "" : `
+                    <div class="admin-user-actions">
+                        <button class="admin-delete" type="button" data-delete-user="${u.id}" data-delete-email="${todoEscape(u.email || "")}">
+                            Eliminar usuario
+                        </button>
+                        <button class="admin-save" type="button" data-save-user="${u.id}">
+                            Guardar permisos
+                        </button>
+                    </div>`}
+                </div>
+            `;
+        }).join("");
+
+        
+        adminUsers.querySelectorAll("[data-delete-user]").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const uid = btn.dataset.deleteUser;
+                const email = btn.dataset.deleteEmail || "este usuario";
+
+                const confirmar = confirm(
+                    "¿Eliminar a " + email + " del Portal M14?\n\n" +
+                    "Perderá inmediatamente todos los permisos del Portal."
+                );
+
+                if(!confirmar) return;
+
+                btn.disabled = true;
+                btn.textContent = "Eliminando...";
+
+                try{
+                    await deleteDoc(doc(todoDb,"usuarios_portal",uid));
+                    await cargarUsuariosAdmin();
+                }catch(error){
+                    console.error("Error eliminando usuario:",error);
+                    alert("No se pudo eliminar el usuario.");
+                    btn.disabled = false;
+                    btn.textContent = "Eliminar usuario";
+                }
+            });
+        });
+
+        adminUsers.querySelectorAll("[data-save-user]").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const uid = btn.dataset.saveUser;
+                const caja = adminUsers.querySelector(`[data-uid="${uid}"]`);
+                const permisos = {};
+
+                caja.querySelectorAll("[data-perm]").forEach(chk => {
+                    permisos[chk.dataset.perm] = chk.checked;
+                });
+
+                btn.disabled = true;
+                btn.textContent = "Guardando...";
+
+                try{
+                    await setDoc(
+                        doc(todoDb,"usuarios_portal",uid),
+                        {permisos},
+                        {merge:true}
+                    );
+                    btn.textContent = "Guardado ✓";
+                    setTimeout(() => btn.textContent = "Guardar permisos",1200);
+                }catch(error){
+                    console.error(error);
+                    btn.textContent = "Error";
+                }finally{
+                    btn.disabled = false;
+                }
+            });
+        });
+
+    }catch(error){
+        console.error("Error cargando usuarios:",error);
+        adminUsers.innerHTML = '<div class="admin-message error">No se pudieron cargar los usuarios.</div>';
+    }
+}
+
+adminOpenBtn.addEventListener("click", async () => {
+    adminModal.classList.add("visible");
+    await cargarUsuariosAdmin();
+});
+
+adminCloseBtn.addEventListener("click", () => {
+    adminModal.classList.remove("visible");
+});
+
+adminModal.addEventListener("click", event => {
+    if(event.target === adminModal){
+        adminModal.classList.remove("visible");
+    }
+});
+
+adminCreateForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const nombre = document.getElementById("newUserName").value.trim();
+    const email = document.getElementById("newUserEmail").value.trim().toLowerCase();
+    const password = document.getElementById("newUserPassword").value;
+
+    adminMessage.className = "admin-message";
+    adminMessage.textContent = "Creando usuario...";
+
+    try{
+        const cred = await createUserWithEmailAndPassword(
+            adminCreatorAuth,
+            email,
+            password
+        );
+
+        await setDoc(
+            doc(todoDb,"usuarios_portal",cred.user.uid),
+            {
+                uid:cred.user.uid,
+                nombre,
+                email,
+                rol:"usuario",
+                activo:true,
+                permisos:permisosTodos(false),
+                creado:new Date().toISOString()
+            }
+        );
+
+        await signOut(adminCreatorAuth);
+
+        adminCreateForm.reset();
+        adminMessage.textContent = "Usuario creado. Ahora habilitá las aplicaciones que corresponden.";
+        await cargarUsuariosAdmin();
+
+    }catch(error){
+        console.error("Error creando usuario:",error);
+        adminMessage.className = "admin-message error";
+
+        if(error.code === "auth/email-already-in-use"){
+            adminMessage.textContent = "Ese correo ya está registrado.";
+        }else if(error.code === "auth/weak-password"){
+            adminMessage.textContent = "La contraseña debe tener al menos 6 caracteres.";
+        }else{
+            adminMessage.textContent = "No se pudo crear el usuario: " + (error.code || "error");
+        }
+    }
+});
+
+
+onAuthStateChanged(portalAuth, async (user) => {
+    if(user){
+        try{
+            const email = (user.email || "").toLowerCase();
+            const esAdmin = email === ADMIN_EMAIL;
+            const perfil = await cargarPerfilUsuario(user);
+
+            if(!esAdmin && perfil.activo === false){
+                alert("Tu usuario no está habilitado para ingresar al Portal M14.");
+                await signOut(portalAuth);
+                return;
+            }
+
+            userName.textContent = perfil.nombre || user.email || "Usuario M14";
+            userRole.textContent = esAdmin ? "Administrador" : "Usuario";
+
+            adminOpenBtn.classList.toggle("visible",esAdmin);
+            aplicarPermisos(perfil.permisos,esAdmin);
+
+            userBox.classList.add("visible");
+            loginScreen.classList.add("oculto");
+            document.body.classList.remove("auth-pending");
+        }
+        catch(error){
+            console.error("Error cargando perfil:",error);
+            loginError.textContent = "No se pudo cargar el perfil del usuario.";
+            await signOut(portalAuth);
+        }
+    }
+    else{
+        adminOpenBtn.classList.remove("visible");
+        userBox.classList.remove("visible");
+        loginScreen.classList.remove("oculto");
+        document.body.classList.add("auth-pending");
+        loginPassword.value = "";
+        loginError.textContent = "";
+    }
+});
+
+
+const todoBoard =
+    document.getElementById(
+        "todoBoard"
+    );
+
+
+const todoMore =
+    document.getElementById(
+        "todoMore"
+    );
+
+
+function todoHoyISO(){
+
+    const d =
+        new Date();
+
+
+    return (
+        d.getFullYear()
+        + "-"
+        + String(
+            d.getMonth() + 1
+        ).padStart(2,"0")
+        + "-"
+        + String(
+            d.getDate()
+        ).padStart(2,"0")
+    );
+
+}
+
+
+function todoFechaAR(fecha){
+
+    if(!fecha){
+
+        return "";
+
+    }
+
+
+    const partes =
+        fecha.split("-");
+
+
+    return (
+        partes[2]
+        + "/"
+        + partes[1]
+        + "/"
+        + partes[0]
+    );
+
+}
+
+
+function todoEscape(valor){
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        valor || "";
+
+
+    return div.innerHTML;
+
+}
+
+
+function tipoAlerta(tarea){
+
+    if(
+        tarea.hecha
+    ){
+
+        return null;
+
+    }
+
+
+    const hoy =
+        todoHoyISO();
+
+
+    const vence =
+        tarea.vence
+        ||
+        tarea.fecha
+        ||
+        "";
+
+
+    const recordar =
+        tarea.recordar
+        ||
+        "";
+
+
+    /*
+       En el Portal todas las tarjetas se muestran
+       visualmente como RECORDATORIO.
+
+       La fecha "recordar" sigue determinando cuándo
+       aparece una tarea. Si ya venció o vence hoy,
+       también continúa visible.
+    */
+
+    if(
+        (vence && vence <= hoy)
+        ||
+        (recordar && recordar <= hoy)
+    ){
+
+        return {
+            tipo:"recordatorio",
+            orden:0,
+            estado:"RECORDATORIO",
+            fecha:vence || recordar
+        };
+
+    }
+
+
+    return null;
+
+}
+
+function mostrarTodo(tareas){
+
+    const alertas =
+        tareas
+        .map(
+            tarea => {
+
+                const alerta =
+                    tipoAlerta(
+                        tarea
+                    );
+
+
+                if(!alerta){
+
+                    return null;
+
+                }
+
+
+                return {
+                    ...tarea,
+                    ...alerta
+                };
+
+            }
+        )
+        .filter(Boolean)
+        .sort(
+            (a,b) => {
+
+                if(
+                    a.orden
+                    !==
+                    b.orden
+                ){
+
+                    return (
+                        a.orden
+                        -
+                        b.orden
+                    );
+
+                }
+
+
+                return (
+                    (a.fecha || "")
+                    .localeCompare(
+                        b.fecha || ""
+                    )
+                );
+
+            }
+        );
+
+
+    const vencidas = 0;
+    const hoy = 0;
+    const recordatorios = alertas.length;
+
+
+    document
+        .getElementById(
+            "todoVencidas"
+        )
+        .textContent =
+        vencidas;
+
+
+    document
+        .getElementById(
+            "todoHoy"
+        )
+        .textContent =
+        hoy;
+
+
+    document
+        .getElementById(
+            "todoRecordatorios"
+        )
+        .textContent =
+        recordatorios;
+
+
+    if(
+        alertas.length === 0
+    ){
+
+        todoBoard.innerHTML = `
+            <div class="todo-empty">
+                ✓ No tenés alertas activas en este momento.
+            </div>
+        `;
+
+
+        todoMore.style.display =
+            "none";
+
+
+        return;
+
+    }
+
+
+    const maximo =
+        8;
+
+
+    const visibles =
+        alertas.slice(
+            0,
+            maximo
+        );
+
+
+    todoBoard.innerHTML =
+        visibles
+        .map(
+            tarea => {
+
+                const nota =
+                    tarea.nota
+                    ?
+                    `
+                    <div class="todo-alert-note">
+                        ${todoEscape(tarea.nota)}
+                    </div>
+                    `
+                    :
+                    "";
+
+
+                return `
+                    <div class="todo-alert ${tarea.tipo}">
+
+                        <div class="todo-alert-line"></div>
+
+                        <div>
+
+                            <div class="todo-alert-title">
+                                ${todoEscape(tarea.titulo)}
+                            </div>
+
+                            ${nota}
+
+                        </div>
+
+                        <div class="todo-alert-meta">
+
+                            <span class="todo-alert-status">
+                                ${tarea.estado}
+                            </span>
+
+                            <div class="todo-alert-date">
+                                ${(tarea.vence || tarea.fecha) ? `<div><strong>Vence:</strong> ${todoFechaAR(tarea.vence || tarea.fecha)}</div>` : ``}
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }
+        )
+        .join("");
+
+
+    const restantes =
+        alertas.length
+        -
+        visibles.length;
+
+
+    if(
+        restantes > 0
+    ){
+
+        todoMore.style.display =
+            "block";
+
+
+        todoMore.textContent =
+            "+ "
+            +
+            restantes
+            +
+            (
+                restantes === 1
+                ?
+                " alerta adicional"
+                :
+                " alertas adicionales"
+            );
+
+    }
+    else{
+
+        todoMore.style.display =
+            "none";
+
+    }
+
+}
+
+
+onSnapshot(
+
+    collection(
+        todoDb,
+        "todo_personal"
+    ),
+
+    (snapshot) => {
+
+        const tareas =
+            snapshot.docs.map(
+                docu => ({
+                    id:docu.id,
+                    ...docu.data()
+                })
+            );
+
+
+        mostrarTodo(
+            tareas
+        );
+
+    },
+
+    (error) => {
+
+        console.error(
+            "Error cargando To-Do:",
+            error
+        );
+
+
+        todoBoard.innerHTML = `
+            <div class="todo-empty">
+                No fue posible cargar las alertas del To-Do.
+            </div>
+        `;
+
+    }
+
+);
+
+</script>
+
+
+
+<div class="admin-modal" id="adminModal">
+    <div class="admin-dialog">
+        <div class="admin-head">
+            <div>
+                <h2>Administración M14</h2>
+                <p>Usuarios y permisos de acceso a las aplicaciones</p>
+            </div>
+            <button class="admin-close" id="adminCloseBtn" type="button">×</button>
+        </div>
+
+        <div class="admin-body">
+            <div class="admin-section">
+                <div class="admin-section-title">Crear nuevo usuario</div>
+                <form class="admin-create" id="adminCreateForm">
+                    <input class="admin-input" id="newUserName" placeholder="Nombre / sector" required>
+                    <input class="admin-input" id="newUserEmail" type="email" placeholder="Correo electrónico" required>
+                    <input class="admin-input" id="newUserPassword" type="password" minlength="6" placeholder="Contraseña inicial" required>
+                    <button class="admin-primary" type="submit">Crear usuario</button>
+                </form>
+                <div class="admin-message" id="adminMessage"></div>
+            </div>
+
+            <div class="admin-section">
+                <div class="admin-section-title">Usuarios del Portal</div>
+                <div class="admin-users" id="adminUsers">
+                    Cargando usuarios...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+M14 VERCEL - PAQUETE FINAL
+
+[OK] Etiquetas CSS inline
+[OK] Etiquetas JS inline
+[OK] Instrucciones CSS inline
+[OK] Instrucciones JS inline
+[OK] MM logo embebido
+[OK] Permiso Mis Pendientes
+[OK] Eliminar usuario
+[OK] Sin rutas C:/Users en HTML/CSS/JS
+
+[OK] Archivos operativos restaurados desde el ZIP original

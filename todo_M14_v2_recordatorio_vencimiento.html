@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Pendientes | M14</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#eef2f7;--card:#fff;--text:#243b53;--muted:#829ab1;--line:#e2e8f0;--blue:#334e68;--blue2:#2563eb;--green:#16a34a;--red:#dc2626;--yellow:#d97706;--shadow:0 4px 14px rgba(0,0,0,.08)}
+body{margin:30px;font-family:"Segoe UI",Tahoma,Geneva,sans-serif;background:var(--bg);color:#1f2937}
+.app-header,.container{max-width:1100px;margin-left:auto;margin-right:auto}
+.app-header{margin-bottom:20px;background:#fff;padding:18px 22px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+.app-title{display:flex;align-items:center;gap:14px}.app-icon{width:48px;height:48px;border-radius:10px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center}.app-icon svg{width:27px;height:27px}.app-title h1{margin:0;font-size:23px;color:var(--text)}.app-title p{margin:3px 0 0;color:var(--muted);font-size:13px}.app-status{font-size:13px;font-weight:600;color:var(--green);background:#f0fdf4;padding:8px 12px;border-radius:20px}
+.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}.summary-card,.form-card,.toolbar,.task,.empty{background:#fff;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,.06)}.summary-card{padding:15px 17px}.summary-label{font-size:11px;color:#94a3b8;text-transform:uppercase;font-weight:700}.summary-value{margin-top:5px;font-size:25px;font-weight:750;color:var(--text)}
+.form-card{padding:20px;margin-bottom:18px}.form-header{margin-bottom:16px;padding-bottom:13px;border-bottom:1px solid #e5e7eb}.form-header h3{margin:0;font-size:17px;color:var(--text)}.form-header p{margin:3px 0 0;font-size:12px;color:#94a3b8}
+.form-grid{display:grid;grid-template-columns:minmax(190px,1.4fr) minmax(210px,1.7fr) 120px 140px 140px auto;gap:12px;align-items:end}.field{display:flex;flex-direction:column;min-width:0}.field label{margin-bottom:5px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase}
+input,select{width:100%;height:39px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;font-family:inherit;font-size:14px;color:#1f2937}input:focus,select:focus{outline:none;border-color:#4a6fa5;box-shadow:0 0 0 3px rgba(74,111,165,.15)}
+button{border:none;border-radius:7px;cursor:pointer;color:#fff;font-family:inherit;font-weight:600;font-size:13px;transition:.15s}button:hover{transform:translateY(-1px);filter:brightness(.96)}.add-btn{height:39px;padding:0 16px;background:var(--blue2);white-space:nowrap}
+.toolbar{padding:12px;display:flex;gap:10px;margin-bottom:12px}#buscador{flex:1}.filter-btn{height:39px;padding:0 13px;background:#64748b}
+.board{display:grid;gap:10px}.task{border-left:5px solid #94a3b8;padding:14px 15px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:13px;align-items:center}.task.vencida{border-left-color:var(--red)}.task.vence-hoy{border-left-color:#f59e0b}.task.recordatorio{border-left-color:#8b5cf6}.task.proxima{border-left-color:#3b82f6}.task.done{opacity:.58;background:#f8fafc}.check-btn{width:30px;height:30px;border-radius:8px;padding:0;background:#e8eef5;color:#5d7287}.task.done .check-btn{background:#dcfce7;color:#15803d}.task-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}.task.done .task-title{text-decoration:line-through}.task-note{color:#718096;font-size:12px;margin-bottom:6px}.task-meta{display:flex;flex-wrap:wrap;gap:7px;font-size:10px;color:#64748b}.badge{display:inline-flex;align-items:center;padding:4px 7px;border-radius:12px;background:#f1f5f9;font-weight:650}.badge.alta{color:#b91c1c;background:#fee2e2}.badge.media{color:#a16207;background:#fef3c7}.badge.baja{color:#1d4ed8;background:#dbeafe}.badge.recordar{color:#6d28d9;background:#ede9fe}.badge.vencer{color:#b45309;background:#fef3c7}.badge.vencida{color:#b91c1c;background:#fee2e2}.task-actions{display:flex;gap:6px}.edit-btn,.delete-btn{height:30px;padding:0 10px}.edit-btn{background:#2563eb}.delete-btn{background:#dc2626}.empty{display:none;padding:30px;text-align:center;color:#94a3b8}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.60);backdrop-filter:blur(4px);justify-content:center;align-items:center;z-index:1000;padding:20px}.modal-content{width:min(600px,100%);background:#fff;border-radius:13px;box-shadow:0 18px 45px rgba(0,0,0,.22);overflow:hidden}.modal-header{padding:18px 20px 14px;border-bottom:1px solid #e5e7eb}.modal-header h3{margin:0;font-size:18px}.modal-body{padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}.modal-body .wide{grid-column:span 2}.modal-footer{padding:14px 20px 18px;border-top:1px solid #e5e7eb;background:#fafcff;display:flex;justify-content:flex-end;gap:8px}.cancel-btn{background:#64748b;padding:9px 14px}.save-btn{background:#2563eb;padding:9px 14px}
+@media(max-width:950px){.summary{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}.field-add{grid-column:span 2}.field-add button{width:100%}}
+@media(max-width:650px){body{margin:15px}.app-header{flex-direction:column;align-items:flex-start;gap:10px}.summary{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.field-add{grid-column:auto}.task{grid-template-columns:auto 1fr}.task-actions{grid-column:2}.modal-body{grid-template-columns:1fr}.modal-body .wide{grid-column:auto}}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-title">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+    </div>
+    <div><h1>Mis Pendientes</h1><p>To-Do personal para tareas rápidas y recordatorios</p></div>
+  </div>
+  <div class="app-status">● Sistema To-Do</div>
+</div>
+
+<div class="container">
+  <div class="summary">
+    <div class="summary-card"><div class="summary-label">Pendientes</div><div class="summary-value" id="sumPendientes">0</div></div>
+    <div class="summary-card"><div class="summary-label">Recordatorios</div><div class="summary-value" id="sumRecordatorios">0</div></div>
+    <div class="summary-card"><div class="summary-label">Vencen hoy</div><div class="summary-value" id="sumHoy">0</div></div>
+    <div class="summary-card"><div class="summary-label">Vencidas</div><div class="summary-value" id="sumVencidas">0</div></div>
+    <div class="summary-card"><div class="summary-label">Completadas</div><div class="summary-value" id="sumHechas">0</div></div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-header"><h3>Nueva tarea</h3><p>Agregá algo rápido para no olvidarlo.</p></div>
+    <div class="form-grid">
+      <div class="field"><label>Tarea</label><input id="titulo" placeholder="Ej: Reclamar fecha de entrega"></div>
+      <div class="field"><label>Nota</label><input id="nota" placeholder="Detalle opcional"></div>
+      <div class="field"><label>Prioridad</label><select id="prioridad"><option value="media">Media</option><option value="alta">Alta</option><option value="baja">Baja</option></select></div>
+      <div class="field"><label>Recordar el</label><input type="date" id="recordar"></div>
+      <div class="field"><label>Vence el</label><input type="date" id="vence"></div>
+      <div class="field field-add"><label>&nbsp;</label><button class="add-btn" id="agregarBtn">＋ Agregar</button></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input id="buscador" placeholder="Buscar pendiente...">
+    <select id="filtroEstado" style="max-width:180px"><option value="pendientes">Pendientes</option><option value="todas">Todas</option><option value="hechas">Completadas</option></select>
+    <button class="filter-btn" id="limpiarBusqueda">Limpiar</button>
+  </div>
+
+  <div id="board" class="board"></div>
+  <div id="empty" class="empty">No hay tareas para mostrar.</div>
+</div>
+
+<div id="modalEditar" class="modal">
+  <div class="modal-content">
+    <div class="modal-header"><h3>Editar tarea</h3></div>
+    <div class="modal-body">
+      <div class="field wide"><label>Tarea</label><input id="editTitulo"></div>
+      <div class="field wide"><label>Nota</label><input id="editNota"></div>
+      <div class="field"><label>Prioridad</label><select id="editPrioridad"><option value="media">Media</option><option value="alta">Alta</option><option value="baja">Baja</option></select></div>
+      <div class="field"><label>Recordar el</label><input type="date" id="editRecordar"></div>
+      <div class="field"><label>Vence el</label><input type="date" id="editVence"></div>
+    </div>
+    <div class="modal-footer"><button class="cancel-btn" id="cancelarEdicion">Cancelar</button><button class="save-btn" id="guardarEdicion">Guardar cambios</button></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyAuf4jScad52QQWgE0TihJypVPhKIUtwmE",
+  authDomain:"app-remitos.firebaseapp.com",
+  projectId:"app-remitos",
+  storageBucket:"app-remitos.firebasestorage.app",
+  messagingSenderId:"620026371986",
+  appId:"1:620026371986:web:7f3e6e06b07983f3656b4b"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+
+const titulo=document.getElementById("titulo");
+const nota=document.getElementById("nota");
+const prioridad=document.getElementById("prioridad");
+const recordar=document.getElementById("recordar");
+const vence=document.getElementById("vence");
+const board=document.getElementById("board");
+const empty=document.getElementById("empty");
+const buscador=document.getElementById("buscador");
+const filtroEstado=document.getElementById("filtroEstado");
+let tareas=[];
+let idEditando=null;
+
+function hoyISO(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function categoriaFecha(t){
+  if(t.hecha)return"done";
+  const h=hoyISO();
+  if(t.vence && t.vence<h)return"vencida";
+  if(t.vence===h)return"vence-hoy";
+  if(t.recordar && t.recordar<=h)return"recordatorio";
+  return"proxima";
+}
+function textoFecha(f){
+  if(!f)return"Sin fecha";
+  const p=f.split("-");
+  return `${p[2]}/${p[1]}/${p[0]}`;
+}
+function escapeHtml(v){
+  const d=document.createElement("div");
+  d.textContent=v||"";
+  return d.innerHTML;
+}
+function actualizarResumen(){
+  const p=tareas.filter(t=>!t.hecha),h=hoyISO();
+  document.getElementById("sumPendientes").textContent=p.length;
+  document.getElementById("sumRecordatorios").textContent=p.filter(t=>t.recordar && t.recordar<=h && (!t.vence || t.vence>h)).length;
+  document.getElementById("sumHoy").textContent=p.filter(t=>t.vence===h).length;
+  document.getElementById("sumVencidas").textContent=p.filter(t=>t.vence && t.vence<h).length;
+  document.getElementById("sumHechas").textContent=tareas.filter(t=>t.hecha).length;
+}
+function render(){
+  const texto=buscador.value.toLowerCase().trim(),estado=filtroEstado.value;
+  let lista=tareas.filter(t=>{
+    const ok=(t.titulo||"").toLowerCase().includes(texto)||(t.nota||"").toLowerCase().includes(texto);
+    if(!ok)return false;
+    if(estado==="pendientes"&&t.hecha)return false;
+    if(estado==="hechas"&&!t.hecha)return false;
+    return true;
+  });
+
+  const op={alta:0,media:1,baja:2};
+  lista.sort((a,b)=>{
+    if(a.hecha!==b.hecha)return a.hecha?1:-1;
+    const fa=a.vence||a.recordar||"9999-12-31",fb=b.vence||b.recordar||"9999-12-31";
+    if(fa!==fb)return fa.localeCompare(fb);
+    return(op[a.prioridad]??1)-(op[b.prioridad]??1);
+  });
+
+  board.innerHTML="";
+  lista.forEach(t=>{
+    const cat=categoriaFecha(t);
+    const div=document.createElement("div");
+    div.className=`task ${cat} ${t.hecha?"done":""}`;
+    let badgesFecha="";
+    if(t.recordar){
+      const activo=t.recordar<=hoyISO()&&!t.hecha;
+      badgesFecha+=`<span class="badge ${activo?"recordar":""}">🔔 Recordar: ${textoFecha(t.recordar)}</span>`;
+    }
+    if(t.vence){
+      const esVencida=t.vence<hoyISO()&&!t.hecha;
+      const esHoy=t.vence===hoyISO()&&!t.hecha;
+      const clase=esVencida?"vencida":"vencer";
+      const prefijo=esVencida?"⚠ Vencida":esHoy?"⚠ Vence hoy":"Vence";
+      badgesFecha+=`<span class="badge ${clase}">${prefijo}: ${textoFecha(t.vence)}</span>`;
+    }
+    if(!t.recordar&&!t.vence)badgesFecha=`<span class="badge">Sin fechas</span>`;
+    div.innerHTML=`
+      <button class="check-btn">${t.hecha?"✓":""}</button>
+      <div>
+        <div class="task-title">${escapeHtml(t.titulo)}</div>
+        ${t.nota?`<div class="task-note">${escapeHtml(t.nota)}</div>`:""}
+        <div class="task-meta"><span class="badge ${t.prioridad||"media"}">${(t.prioridad||"media").toUpperCase()}</span>${badgesFecha}</div>
+      </div>
+      <div class="task-actions"><button class="edit-btn">Editar</button><button class="delete-btn">X</button></div>`;
+    div.querySelector(".check-btn").onclick=()=>updateDoc(doc(db,"todo_personal",t.id),{hecha:!t.hecha});
+    div.querySelector(".edit-btn").onclick=()=>abrirEdicion(t);
+    div.querySelector(".delete-btn").onclick=async()=>{if(confirm("¿Eliminar esta tarea?"))await deleteDoc(doc(db,"todo_personal",t.id));};
+    board.appendChild(div);
+  });
+  empty.style.display=lista.length?"none":"block";
+  actualizarResumen();
+}
+
+document.getElementById("agregarBtn").onclick=async()=>{
+  const tt=titulo.value.trim();
+  if(!tt){titulo.focus();return;}
+  await addDoc(collection(db,"todo_personal"),{
+    titulo:tt,nota:nota.value.trim(),prioridad:prioridad.value,recordar:recordar.value||"",vence:vence.value||"",hecha:false,creado:serverTimestamp()
+  });
+  titulo.value="";nota.value="";prioridad.value="media";recordar.value="";vence.value="";titulo.focus();
+};
+
+const q=query(collection(db,"todo_personal"),orderBy("creado","desc"));
+onSnapshot(q,s=>{
+  tareas=s.docs.map(d=>{
+    const data=d.data();
+    return{
+      id:d.id,
+      ...data,
+      recordar:data.recordar||"",
+      vence:data.vence||data.fecha||""
+    };
+  });
+  render();
+});
+
+buscador.oninput=render;
+filtroEstado.onchange=render;
+document.getElementById("limpiarBusqueda").onclick=()=>{buscador.value="";filtroEstado.value="pendientes";render();buscador.focus();};
+
+function abrirEdicion(t){
+  idEditando=t.id;
+  document.getElementById("editTitulo").value=t.titulo||"";
+  document.getElementById("editNota").value=t.nota||"";
+  document.getElementById("editPrioridad").value=t.prioridad||"media";
+  document.getElementById("editRecordar").value=t.recordar||"";
+  document.getElementById("editVence").value=t.vence||"";
+  document.getElementById("modalEditar").style.display="flex";
+}
+function cerrarEdicion(){document.getElementById("modalEditar").style.display="none";idEditando=null;}
+document.getElementById("cancelarEdicion").onclick=cerrarEdicion;
+document.getElementById("guardarEdicion").onclick=async()=>{
+  if(!idEditando)return;
+  const tt=document.getElementById("editTitulo").value.trim();
+  if(!tt){document.getElementById("editTitulo").focus();return;}
+  await updateDoc(doc(db,"todo_personal",idEditando),{
+    titulo:tt,
+    nota:document.getElementById("editNota").value.trim(),
+    prioridad:document.getElementById("editPrioridad").value,
+    recordar:document.getElementById("editRecordar").value||"",
+    vence:document.getElementById("editVence").value||""
+  });
+  cerrarEdicion();
+};
+document.getElementById("modalEditar").onclick=e=>{if(e.target.id==="modalEditar")cerrarEdicion();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")cerrarEdicion();});
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Despacho a Cliente</title>
+
+<style>
+
+  *{
+    box-sizing: border-box;
+  }
+
+body {
+  font-family: Arial, sans-serif;
+  background:#eef2f5;
+  padding:20px;
+}
+
+.card {
+  max-width: 650px;
+  margin:auto;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  overflow:hidden;
+}
+
+.header {
+  background:#0078d4;
+  color:white;
+  padding:15px 20px;
+}
+
+.content {
+  padding:20px;
+}
+
+label {
+  font-weight:bold;
+}
+
+input, select {
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  margin-bottom:15px;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+
+button {
+  width:100%;
+  padding:12px;
+  background:#0078d4;
+  color:white;
+  border:none;
+  border-radius:6px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.footer {
+  text-align:center;
+  font-size:12px;
+  color:#666;
+  padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+  <div class="header">
+    <h2>Despacho a Cliente</h2>
+  </div>
+
+  <div class="content">
+
+    <label>Cliente</label>
+    <select id="cliente" onchange="cargarEmails()">
+      <option value="">Seleccionar</option>
+      <option value="cliente1">Halliburton</option>
+      <option value="cliente2">Schlumberger</option>
+      <option value="cliente3">Weatherford</option>
+      <option value="cliente4">Weatherford - Córdoba</option>
+    </select>
+
+    <label>Para</label>
+    <input type="text" id="para">
+
+    <label>CC</label>
+    <input type="text" id="cc">
+
+    <label>Tipo de entrega</label>
+    <select id="tipoEntrega" onchange="toggleTipo()">
+      <option value="domicilio">Entrega en domicilio</option>
+      <option value="retiro">Retiro por transporte</option>
+      <option value="weatherford">Envío a Weatherford Córdoba</option>
+    </select>
+
+    <!-- ENTREGA DOMICILIO -->
+    <div id="bloqueFecha">
+      <label>Fecha estimada de entrega</label>
+      <input type="date" id="fechaEntrega">
+    </div>
+
+    <!-- WEATHERFORD -->
+    <div id="bloqueTracking" style="display:none;">
+      <label>Número de seguimiento (Andesmar)</label>
+      <input type="text" id="tracking" placeholder="Ej: 123456789">
+    </div>
+
+    <!-- RETIRO -->
+    <div id="bloqueRetiro" style="display:none;">
+      <label>Fecha disponible para retiro</label>
+      <input type="date" id="fechaRetiro">
+
+      <label>Nombre del transporte</label>
+      <input type="text" id="transporte">
+
+      <label>Dirección del depósito</label>
+      <input type="text" id="direccion">
+
+      <label>Horario</label>
+      <input type="text" id="horario">
+    </div>
+
+    <button onclick="enviarMail()">Enviar aviso</button>
+
+  </div>
+
+  <div class="footer">
+    Adjuntar copia del remito de forma manual
+  </div>
+
+</div>
+
+<script>
+
+const clientes = {
+  cliente1: {
+    para: ["pablo.ghergo@halliburton.com"],
+    cc: ["JulianRamon.Padilla@halliburton.com; gaston.cejas@halliburton.com; JorgeLuis.HoyosRodriguez@halliburton.com; LuanaYeanette.PinoAlarcon@halliburton.com; Nicolas.Weisman@halliburton.com; svend@mecanica14.com"]
+  },
+  cliente2: {
+    para: ["LGarces3@slb.com"],
+    cc: ["RGonzalez135@slb.com; esanchez@mecanica14.com"]
+  },
+  cliente3: {
+    para: ["Marcelo.Manriquez@weatherford.com"],
+    cc: ["natalia.arias@Weatherford.com; esanchez@mecanica14.com"]
+  },
+  cliente4: {
+    para: ["Sergio.Moreno@weatherford.com"],
+    cc: ["esanchez@mecanica14.com"]
+  }
+};
+
+function cargarEmails() {
+  let cliente = document.getElementById("cliente").value;
+
+  if (clientes[cliente]) {
+    document.getElementById("para").value = clientes[cliente].para.join(";");
+    document.getElementById("cc").value = clientes[cliente].cc.join(";");
+  } else {
+    document.getElementById("para").value = "";
+    document.getElementById("cc").value = "";
+  }
+}
+
+function toggleTipo() {
+  let tipo = document.getElementById("tipoEntrega").value;
+
+  document.getElementById("bloqueFecha").style.display =
+    (tipo === "domicilio") ? "block" : "none";
+
+  document.getElementById("bloqueTracking").style.display =
+    (tipo === "weatherford") ? "block" : "none";
+
+  document.getElementById("bloqueRetiro").style.display =
+    (tipo === "retiro") ? "block" : "none";
+}
+
+function enviarMail() {
+
+  let para = document.getElementById("para").value;
+  let cc = document.getElementById("cc").value;
+  let tipo = document.getElementById("tipoEntrega").value;
+
+  let subject = "";
+  let cuerpo = "";
+
+  if (tipo === "domicilio") {
+
+    let fecha = document.getElementById("fechaEntrega").value;
+
+    subject = "Aviso de despacho";
+
+    cuerpo = `Estimados;
+Solicitamos su autorización para proceder con la entrega, según el remito adjunto.
+Muchas gracias.
+
+Fecha estimada de entrega: ${fecha}
+
+------------------------------
+JOSÉ MARÍA GÓMEZ
+Mecanica 14 - Sector Compras
+`;
+
+  } else if (tipo === "weatherford") {
+
+    let tracking = document.getElementById("tracking").value;
+
+    subject = "Aviso de despacho – Envío a Weatherford Córdoba";
+
+    cuerpo = `Estimados;
+Confirmamos despacho según Remito adjunto.
+Muchas gracias.
+
+Código seguimiento Andesmar: ${tracking}
+Tracking: https://andesmarcargas.com/seguimiento.html
+
+------------------------------
+JOSÉ MARÍA GÓMEZ
+Mecanica 14 - Sector Compras
+`;
+
+  } else {
+
+    let fecha = document.getElementById("fechaRetiro").value;
+    let transporte = document.getElementById("transporte").value;
+    let direccion = document.getElementById("direccion").value;
+    let horario = document.getElementById("horario").value;
+
+    subject = "Aviso de despacho – Disponible para retiro";
+
+    cuerpo = `Estimados;
+Informamos que la carga se encontrará disponible para retiro a partir de la siguiente fecha:
+
+Fecha: ${fecha}
+Transporte: ${transporte}
+Dirección: ${direccion}
+Horario: ${horario}
+
+Agradecemos su gestión.
+Muchas gracias.
+
+------------------------------
+JOSÉ MARÍA GÓMEZ
+Mecanica 14 - Sector Compras
+`;
+
+  }
+
+  window.location.href = `mailto:${para}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(cuerpo)}`;
+}
+
+</script>
+
+</body>
+</html>

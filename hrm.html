@@ -1,0 +1,2295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Registro HRM</title>
+
+<style>
+
+/* ==================================
+   GENERAL
+================================== */
+
+* {
+    box-sizing:border-box;
+}
+
+body {
+    font-family:"Segoe UI", Tahoma, Geneva, sans-serif;
+    margin:30px;
+    background:#eef2f7;
+    color:#1f2937;
+}
+
+
+/* ==================================
+   CABECERA
+================================== */
+
+.app-header {
+    background:white;
+    padding:18px 22px;
+    margin-bottom:20px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 4px 14px rgba(0,0,0,0.08);
+}
+
+.app-title {
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.app-icon {
+    width:48px;
+    height:48px;
+    border-radius:10px;
+    background:#334e68;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    font-weight:700;
+}
+
+.app-icon svg {
+    width:30px;
+    height:30px;
+    color:white;
+}
+
+.app-title h1 {
+    margin:0;
+    font-size:23px;
+    color:#243b53;
+}
+
+.app-title p {
+    margin:3px 0 0 0;
+    color:#829ab1;
+    font-size:13px;
+}
+
+.app-status {
+    font-size:13px;
+    font-weight:600;
+    color:#16a34a;
+    background:#f0fdf4;
+    padding:8px 12px;
+    border-radius:20px;
+}
+
+
+/* ==================================
+   FORMULARIO
+================================== */
+
+form {
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.08);
+}
+
+.form-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.form-header h3 {
+    margin:0;
+    font-size:17px;
+    color:#243b53;
+}
+
+.form-header p {
+    margin:3px 0 0 0;
+    font-size:12px;
+    color:#94a3b8;
+}
+
+.form-actions {
+    display:flex;
+    gap:8px;
+}
+
+
+/* ==================================
+   CAMPOS
+================================== */
+
+.form-fields {
+    display:grid;
+
+    grid-template-columns:
+        100px
+        minmax(170px,1.5fr)
+        repeat(8,minmax(75px,1fr))
+        minmax(150px,1.3fr)
+        auto;
+
+    gap:10px;
+    align-items:end;
+}
+
+.field {
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+}
+
+.field label {
+    font-size:11px;
+    font-weight:600;
+    color:#64748b;
+    margin-bottom:5px;
+    text-transform:uppercase;
+}
+
+input {
+    padding:9px 10px;
+    margin:0;
+    border:1px solid #cbd5e1;
+    border-radius:7px;
+    font-family:inherit;
+    font-size:14px;
+    background:white;
+    transition:0.2s;
+}
+
+input:focus {
+    outline:none;
+    border-color:#4a6fa5;
+    box-shadow:0 0 0 3px rgba(74,111,165,0.15);
+}
+
+.field input {
+    width:100%;
+}
+
+.field-important input {
+    font-weight:700;
+    background:#f8fafc;
+}
+
+
+/* ==================================
+   BOTONES
+================================== */
+
+button {
+    padding:9px 14px;
+    border:none;
+    border-radius:7px;
+    cursor:pointer;
+    color:white;
+    font-family:inherit;
+    font-weight:600;
+    font-size:13px;
+    transition:0.15s;
+}
+
+button:hover {
+    transform:translateY(-1px);
+    filter:brightness(0.95);
+}
+
+button:active {
+    transform:translateY(0);
+}
+
+.add-btn {
+    background:#2563eb;
+}
+
+.delete-btn {
+    background:#dc2626;
+}
+
+.upload-btn {
+    background:#16a34a;
+}
+
+.view-btn {
+    background:#64748b;
+}
+
+.order-btn {
+    background:#7c3aed;
+}
+
+.fix-btn {
+    background:#059669;
+}
+
+.field-button button {
+    height:37px;
+    white-space:nowrap;
+}
+
+
+/* ==================================
+   BUSCADOR
+================================== */
+
+.filtro-container {
+    background:white;
+    padding:14px;
+    margin-bottom:12px;
+    border-radius:10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    box-shadow:0 3px 10px rgba(0,0,0,0.06);
+}
+
+#buscador {
+    flex:1;
+    padding:11px 12px;
+    font-size:15px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+}
+
+.filtro-container button {
+    background:#64748b;
+}
+
+
+/* ==================================
+   TABLA
+================================== */
+
+.table-container {
+    max-height:700px;
+    overflow:auto;
+    border-radius:12px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.08);
+    background:white;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th {
+    background:#334e68;
+    color:white;
+    padding:11px 8px;
+    font-size:13px;
+    font-weight:600;
+    text-align:center;
+    white-space:nowrap;
+}
+
+td {
+    padding:10px 8px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:center;
+    font-size:13px;
+}
+
+thead th {
+    position:sticky;
+    top:0;
+    z-index:5;
+}
+
+tbody tr:nth-child(even) {
+    background:#f8fafc;
+}
+
+tbody tr:hover {
+    background:#eef4fb;
+}
+
+td span {
+    display:block;
+    width:100%;
+    padding:3px;
+}
+
+
+
+/* ==================================
+   EDITAR REGISTRO
+================================== */
+.edit-btn {
+    background:#2563eb;
+}
+
+.actions-cell {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    white-space:nowrap;
+}
+
+.modal-edit {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,0.60);
+    backdrop-filter:blur(4px);
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+    padding:20px;
+}
+
+.modal-edit-content {
+    width:min(900px,100%);
+    max-height:calc(100vh - 40px);
+    overflow:auto;
+    background:white;
+    border-radius:14px;
+    box-shadow:0 18px 45px rgba(0,0,0,0.22);
+}
+
+.modal-edit-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:20px 22px 16px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.modal-edit-header h3 {
+    margin:0;
+    color:#243b53;
+    font-size:18px;
+}
+
+.modal-edit-header p {
+    margin:4px 0 0;
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.modal-close {
+    width:34px;
+    height:34px;
+    padding:0;
+    border-radius:8px;
+    background:#eef2f7;
+    color:#64748b;
+    font-size:20px;
+}
+
+.modal-edit-body {
+    padding:20px 22px;
+}
+
+.edit-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.edit-grid .field-wide {
+    grid-column:span 2;
+}
+
+.modal-edit-footer {
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+    padding:16px 22px 20px;
+    border-top:1px solid #e5e7eb;
+    background:#fafcff;
+}
+
+.btn-save-edit {
+    background:#2563eb;
+}
+
+@media(max-width:760px) {
+    .edit-grid { grid-template-columns:repeat(2,1fr); }
+    .edit-grid .field-wide { grid-column:span 2; }
+}
+
+@media(max-width:520px) {
+    .edit-grid { grid-template-columns:1fr; }
+    .edit-grid .field-wide { grid-column:auto; }
+    .modal-edit-footer { flex-direction:column-reverse; }
+    .modal-edit-footer button { width:100%; }
+}
+
+/* ==================================
+   MODAL PDF
+================================== */
+
+.modal {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(15,23,42,0.72);
+    backdrop-filter:blur(4px);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.modal-content {
+    width:82%;
+    height:90%;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+.close {
+    position:absolute;
+    right:12px;
+    top:8px;
+    z-index:10;
+    background:white;
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+
+iframe {
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+
+/* ==================================
+   MODAL ELIMINAR
+================================== */
+
+.modal-delete {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(15,23,42,0.60);
+    backdrop-filter:blur(4px);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.modal-delete-content {
+    background:white;
+    padding:28px;
+    border-radius:12px;
+    text-align:center;
+    min-width:320px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-delete-content p {
+    font-size:16px;
+    margin-bottom:18px;
+}
+
+.btn-cancel {
+    background:#64748b;
+}
+
+.btn-confirm {
+    background:#dc2626;
+}
+
+
+/* ==================================
+   RESPONSIVE
+================================== */
+
+@media(max-width:1500px) {
+
+    .form-fields {
+        grid-template-columns:repeat(6,1fr);
+    }
+
+}
+
+@media(max-width:900px) {
+
+    body {
+        margin:15px;
+    }
+
+    .app-header {
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .form-header {
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .form-fields {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+
+/* ==================================
+   AVISO DE INGRESO
+================================== */
+.aviso-toolbar{background:white;padding:12px 14px;margin-bottom:12px;border-radius:10px;display:flex;align-items:center;justify-content:flex-end;gap:12px;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+.mail-btn{background:#2563eb}
+.mail-btn:disabled{background:#94a3b8;cursor:not-allowed;transform:none;filter:none}
+.hrm-check{width:18px;height:18px;cursor:pointer;accent-color:#2563eb}
+.aviso-ok{display:inline-flex;align-items:center;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:700;white-space:nowrap}
+.aviso-pendiente{color:#94a3b8;font-size:11px}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================
+     CABECERA
+================================== -->
+
+<div class="app-header">
+
+    <div class="app-title">
+
+        <div class="app-icon">
+                <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M14 10h36v9H38v26h12v9H14v-9h12V19H14z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linejoin="round"/>
+    </svg>
+        </div>
+
+        <div>
+
+            <h1>
+                Registro HRM
+            </h1>
+
+            <p>
+                Gestión y trazabilidad de materiales
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="app-status">
+        ● Sistema HRM
+    </div>
+
+</div>
+
+
+
+<!-- ==================================
+     FORMULARIO
+================================== -->
+
+<form id="form">
+
+
+    <div class="form-header">
+
+        <div>
+
+            <h3>
+                Nuevo registro
+            </h3>
+
+            <p>
+                Ingresá los datos del material
+            </p>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button
+                class="order-btn"
+                type="button"
+                onclick="ordenarHRM()"
+            >
+                ↕ Ordenar HRM
+            </button>
+
+
+            <button
+                class="fix-btn"
+                type="button"
+                onclick="repararHRM()"
+            >
+                🔧 Reparar HRM
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="form-fields">
+
+
+        <div class="field field-important">
+
+            <label>
+                HRM
+            </label>
+
+            <input
+                type="text"
+                id="hrm"
+                placeholder="Ej: 3254"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Material
+            </label>
+
+            <input
+                type="text"
+                id="material"
+                placeholder="Ej: SAE 4140"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Ø EXT
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="ext"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Ø INT
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="int"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Largo
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="largo"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Ancho
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="ancho"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Espesor
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="espesor"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Kilos
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="kilos"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Cantidad
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="cantidad"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Remito
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="remito"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Proveedor
+            </label>
+
+            <input
+                type="text"
+                id="proveedor"
+                placeholder="Proveedor"
+            >
+
+        </div>
+
+
+        <div class="field">
+            <label>Depósito</label>
+            <input type="text" id="deposito" placeholder="Depósito">
+        </div>
+
+        <div class="field">
+            <label>Colada</label>
+            <input type="text" id="colada" placeholder="Colada">
+        </div>
+
+        <div class="field field-button">
+            <label>&nbsp;</label>
+
+            <button
+                class="add-btn"
+                type="submit"
+            >
+                ＋ Agregar
+            </button>
+
+        </div>
+
+
+    </div>
+
+</form>
+
+
+
+<!-- ==================================
+     BUSCADOR
+================================== -->
+
+<div class="filtro-container">
+
+    <input
+        type="text"
+        id="buscador"
+        placeholder="🔎 Buscar HRM, material, proveedor, depósito, colada, remito..."
+        oninput="filtrarTabla()"
+    >
+
+
+    <button
+        type="button"
+        onclick="limpiarFiltro()"
+    >
+        Limpiar
+    </button>
+
+</div>
+
+
+
+
+<!-- ==================================
+     AVISO DE INGRESO
+================================== -->
+<div class="aviso-toolbar">
+    <button type="button" id="btnAvisarIngreso" class="mail-btn" onclick="avisarIngreso()" disabled>
+        ✉ Avisar ingreso (0)
+    </button>
+</div>
+
+<!-- ==================================
+     TABLA
+================================== -->
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+    <th>☐</th>
+
+    <th>HRM</th>
+
+    <th>Material</th>
+
+    <th>Ø EXT</th>
+
+    <th>Ø INT</th>
+
+    <th>Largo</th>
+
+    <th>Ancho</th>
+
+    <th>Espesor</th>
+
+    <th>Kilos</th>
+
+    <th>Cantidad</th>
+
+    <th>Remito</th>
+
+    <th>Proveedor</th>
+
+    <th>Depósito</th>
+
+    <th>Colada</th>
+
+    <th>Avisado</th>
+
+    <th>Certificado</th>
+
+    <th>Acciones</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tabla"></tbody>
+
+</table>
+
+</div>
+
+
+
+
+<!-- ==================================
+     MODAL EDITAR
+================================== -->
+
+<div id="modalEditar" class="modal-edit" onclick="cerrarSiFondo(event,'modalEditar')">
+    <div class="modal-edit-content">
+
+        <div class="modal-edit-header">
+            <div>
+                <h3>Editar registro HRM</h3>
+                <p>Modificá los datos del material y guardá los cambios.</p>
+            </div>
+
+            <button type="button" class="modal-close" onclick="cerrarEditar()">×</button>
+        </div>
+
+        <div class="modal-edit-body">
+            <div class="edit-grid">
+
+                <div class="field">
+                    <label>HRM</label>
+                    <input type="number" id="editHrm">
+                </div>
+
+                <div class="field field-wide">
+                    <label>Material</label>
+                    <input type="text" id="editMaterial">
+                </div>
+
+                <div class="field">
+                    <label>Ø EXT</label>
+                    <input type="number" step="any" id="editExt">
+                </div>
+
+                <div class="field">
+                    <label>Ø INT</label>
+                    <input type="number" step="any" id="editInt">
+                </div>
+
+                <div class="field">
+                    <label>Largo</label>
+                    <input type="number" step="any" id="editLargo">
+                </div>
+
+                <div class="field">
+                    <label>Ancho</label>
+                    <input type="number" step="any" id="editAncho">
+                </div>
+
+                <div class="field">
+                    <label>Espesor</label>
+                    <input type="number" step="any" id="editEspesor">
+                </div>
+
+                <div class="field">
+                    <label>Kilos</label>
+                    <input type="number" step="any" id="editKilos">
+                </div>
+
+                <div class="field">
+                    <label>Cantidad</label>
+                    <input type="number" step="any" id="editCantidad">
+                </div>
+
+                <div class="field">
+                    <label>Remito</label>
+                    <input type="number" step="any" id="editRemito">
+                </div>
+
+                <div class="field field-wide">
+                    <label>Proveedor</label>
+                    <input type="text" id="editProveedor">
+                </div>
+
+                <div class="field">
+                    <label>Depósito</label>
+                    <input type="text" id="editDeposito">
+                </div>
+
+                <div class="field">
+                    <label>Colada</label>
+                    <input type="text" id="editColada">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal-edit-footer">
+            <button type="button" class="btn-cancel" onclick="cerrarEditar()">Cancelar</button>
+            <button type="button" class="btn-save-edit" onclick="guardarEdicion()">Guardar cambios</button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ==================================
+     MODAL PDF
+================================== -->
+
+<div
+    id="modal"
+    class="modal"
+    onclick="cerrarSiFondo(event,'modal')"
+>
+
+    <div class="modal-content">
+
+        <span
+            class="close"
+            onclick="cerrarModal()"
+        >
+            ✖
+        </span>
+
+        <iframe id="visorPDF"></iframe>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================================
+     MODAL ELIMINAR
+================================== -->
+
+<div
+    id="modalEliminar"
+    class="modal-delete"
+    onclick="cerrarSiFondo(event,'modalEliminar')"
+>
+
+    <div class="modal-delete-content">
+
+        <p>
+            ¿Seguro que querés eliminar este registro?
+        </p>
+
+
+        <button
+            class="btn-cancel"
+            onclick="cerrarEliminar()"
+        >
+            Cancelar
+        </button>
+
+
+        <button
+            class="btn-confirm"
+            onclick="confirmarEliminar()"
+        >
+            Eliminar
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<script type="module">
+
+
+/* ==================================
+   IMPORTS FIREBASE
+================================== */
+
+import {
+    initializeApp
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot,
+    deleteDoc,
+    doc,
+    updateDoc,
+    query,
+    orderBy,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+
+
+/* ==================================
+   CONFIGURACION FIREBASE
+================================== */
+
+const firebaseConfig = {
+
+    apiKey: "AIza...",
+
+    authDomain:
+        "app-hrm-3aa07.firebaseapp.com",
+
+    projectId:
+        "app-hrm-3aa07",
+
+    storageBucket:
+        "app-hrm-3aa07.firebasestorage.app",
+
+    messagingSenderId:
+        "777391808197",
+
+    appId:
+        "1:777391808197:web:3b02db671a2bb5ed659aac"
+
+};
+
+
+/*
+IMPORTANTE:
+
+En tu archivo original conservá tu API KEY completa.
+
+El archivo que me pasaste la muestra como:
+
+apiKey: "AIza..."
+
+No reemplaces tu clave completa por esa abreviación.
+*/
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getFirestore(app);
+
+
+const storage =
+    getStorage(app);
+
+
+
+/* ==================================
+   ELEMENTOS
+================================== */
+
+const form =
+    document.getElementById("form");
+
+
+const tabla =
+    document.getElementById("tabla");
+
+
+let idAEliminar = null;
+let idAEditar = null;
+const registrosHRM = new Map();
+
+
+
+/* ==================================
+   CARGAR HRM
+================================== */
+
+const q = query(
+
+    collection(
+        db,
+        "hrm"
+    ),
+
+    orderBy(
+        "hrm",
+        "desc"
+    )
+
+);
+
+
+onSnapshot(
+    q,
+    (snapshot)=>{
+
+
+        tabla.innerHTML = "";
+        registrosHRM.clear();
+
+
+        snapshot.forEach(
+            (docu)=>{
+
+
+                const data =
+                    docu.data();
+
+                registrosHRM.set(
+                    docu.id,
+                    data
+                );
+
+
+                const fila =
+                    document.createElement(
+                        "tr"
+                    );
+
+                fila.dataset.id = docu.id;
+
+
+                const fileInputId =
+                    "file_" + docu.id;
+
+
+
+                function celda(valor){
+                    return `
+                    <span>
+                        ${valor ?? ""}
+                    </span>
+                    `;
+                }
+
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        <input type="checkbox" class="hrm-check selector-hrm"
+                               data-id="${docu.id}"
+                               onchange="actualizarSeleccion()"
+                               aria-label="Seleccionar HRM ${data.hrm ?? ""}">
+                    </td>
+
+                    <td>
+                        ${celda(
+                            data.hrm,
+                            "hrm"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.material,
+                            "material"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.ext,
+                            "ext",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.int,
+                            "int",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.largo,
+                            "largo",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.ancho,
+                            "ancho",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.espesor,
+                            "espesor",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.kilos,
+                            "kilos",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.cantidad,
+                            "cantidad",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.remito,
+                            "remito",
+                            "number"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(
+                            data.proveedor,
+                            "proveedor"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${celda(data.deposito)}
+                    </td>
+
+                    <td>
+                        ${celda(data.colada)}
+                    </td>
+
+                    <td>
+                        ${
+                            data.avisoEnviado
+                            ? `<span class="aviso-ok" title="${data.avisoFecha || ""}">✓ Avisado</span>`
+                            : `<span class="aviso-pendiente">—</span>`
+                        }
+                    </td>
+
+                    <td>
+
+                    ${
+                        data.certificado
+
+                        ?
+
+                        `
+
+                        <button
+                            class="view-btn"
+                            onclick="verPDF(
+                                '${data.certificado}'
+                            )"
+                        >
+                            Ver
+                        </button>
+
+
+                        <input
+                            type="file"
+                            id="${fileInputId}"
+                            style="display:none"
+                        >
+
+
+                        <button
+                            class="upload-btn"
+                            onclick="subirArchivo(
+                                '${docu.id}',
+                                '${fileInputId}'
+                            )"
+                        >
+                            Reemplazar
+                        </button>
+
+                        `
+
+                        :
+
+                        `
+
+                        <input
+                            type="file"
+                            id="${fileInputId}"
+                            style="display:none"
+                        >
+
+
+                        <button
+                            class="upload-btn"
+                            onclick="subirArchivo(
+                                '${docu.id}',
+                                '${fileInputId}'
+                            )"
+                        >
+                            Subir
+                        </button>
+
+                        `
+
+                    }
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="actions-cell">
+
+                            <button
+                                class="edit-btn"
+                                onclick="editarRegistro('${docu.id}')"
+                            >
+                                Editar
+                            </button>
+
+                            <button
+                                class="delete-btn"
+                                onclick="eliminar('${docu.id}')"
+                            >
+                                X
+                            </button>
+
+                        </div>
+
+                    </td>
+
+
+                `;
+
+
+                tabla.appendChild(
+                    fila
+                );
+
+
+            }
+        );
+
+
+        /*
+        Si Firebase actualiza la tabla
+        mientras estamos buscando algo,
+        vuelve a aplicar el filtro.
+        */
+
+        window.filtrarTabla();
+        window.actualizarSeleccion();
+
+
+    }
+);
+
+
+
+/* ==================================
+   AGREGAR REGISTRO
+================================== */
+
+form.addEventListener(
+    "submit",
+    async(e)=>{
+
+
+        e.preventDefault();
+
+
+        await addDoc(
+
+            collection(
+                db,
+                "hrm"
+            ),
+
+            {
+
+                hrm:
+                    Number(
+                        form.hrm.value
+                    ),
+
+
+                material:
+                    form.material.value,
+
+
+                ext:
+                    Number(
+                        form.ext.value
+                    ) || 0,
+
+
+                int:
+                    Number(
+                        form.int.value
+                    ) || 0,
+
+
+                largo:
+                    Number(
+                        form.largo.value
+                    ) || 0,
+
+
+                ancho:
+                    Number(
+                        form.ancho.value
+                    ) || 0,
+
+
+                espesor:
+                    Number(
+                        form.espesor.value
+                    ) || 0,
+
+
+                kilos:
+                    Number(
+                        form.kilos.value
+                    ) || 0,
+
+
+                cantidad:
+                    Number(
+                        form.cantidad.value
+                    ) || 0,
+
+
+                remito:
+                    Number(
+                        form.remito.value
+                    ) || 0,
+
+
+                proveedor:
+                    form.proveedor.value,
+
+                deposito:
+                    form.deposito.value,
+
+                colada:
+                    form.colada.value,
+
+
+                certificado:"",
+                avisoEnviado:false,
+                avisoFecha:""
+
+            }
+
+        );
+
+
+        form.reset();
+
+
+    }
+);
+
+
+
+/* ==================================
+   EDITAR REGISTRO
+================================== */
+
+window.editarRegistro = (id) => {
+
+    const registro = registrosHRM.get(id);
+
+    if(!registro) return;
+
+    idAEditar = id;
+
+    document.getElementById("editHrm").value = registro.hrm ?? "";
+    document.getElementById("editMaterial").value = registro.material ?? "";
+    document.getElementById("editExt").value = registro.ext ?? "";
+    document.getElementById("editInt").value = registro.int ?? "";
+    document.getElementById("editLargo").value = registro.largo ?? "";
+    document.getElementById("editAncho").value = registro.ancho ?? "";
+    document.getElementById("editEspesor").value = registro.espesor ?? "";
+    document.getElementById("editKilos").value = registro.kilos ?? "";
+    document.getElementById("editCantidad").value = registro.cantidad ?? "";
+    document.getElementById("editRemito").value = registro.remito ?? "";
+    document.getElementById("editProveedor").value = registro.proveedor ?? "";
+    document.getElementById("editDeposito").value = registro.deposito ?? "";
+    document.getElementById("editColada").value = registro.colada ?? "";
+
+    document.getElementById("modalEditar").style.display = "flex";
+};
+
+
+window.cerrarEditar = () => {
+
+    document.getElementById("modalEditar").style.display = "none";
+    idAEditar = null;
+};
+
+
+function numeroEditar(id){
+
+    const valor = document.getElementById(id).value.trim();
+
+    return valor === "" ? 0 : Number(valor);
+}
+
+
+window.guardarEdicion = async () => {
+
+    if(!idAEditar) return;
+
+    const hrm = numeroEditar("editHrm");
+
+    if(!Number.isFinite(hrm) || hrm <= 0){
+        alert("Ingresá un HRM válido.");
+        return;
+    }
+
+    const datos = {
+        hrm: hrm,
+        material: document.getElementById("editMaterial").value.trim(),
+        ext: numeroEditar("editExt"),
+        int: numeroEditar("editInt"),
+        largo: numeroEditar("editLargo"),
+        ancho: numeroEditar("editAncho"),
+        espesor: numeroEditar("editEspesor"),
+        kilos: numeroEditar("editKilos"),
+        cantidad: numeroEditar("editCantidad"),
+        remito: numeroEditar("editRemito"),
+        proveedor: document.getElementById("editProveedor").value.trim(),
+        deposito: document.getElementById("editDeposito").value.trim(),
+        colada: document.getElementById("editColada").value.trim()
+    };
+
+    const camposNumericos = [
+        datos.ext,
+        datos.int,
+        datos.largo,
+        datos.ancho,
+        datos.espesor,
+        datos.kilos,
+        datos.cantidad,
+        datos.remito
+    ];
+
+    if(camposNumericos.some(valor => !Number.isFinite(valor))){
+        alert("Revisá los campos numéricos.");
+        return;
+    }
+
+    await updateDoc(
+        doc(db, "hrm", idAEditar),
+        datos
+    );
+
+    window.cerrarEditar();
+};
+
+
+/* ==================================
+   CERTIFICADOS
+================================== */
+
+window.subirArchivo =
+async(
+    id,
+    inputId
+)=>{
+
+
+    const input =
+        document.getElementById(
+            inputId
+        );
+
+
+    input.value = "";
+
+
+    input.onchange =
+    async()=>{
+
+
+        const file =
+            input.files[0];
+
+
+        if(
+            !file
+        ){
+
+            return;
+
+        }
+
+
+        const storageRef =
+            ref(
+
+                storage,
+
+                "certificados/"
+                +
+                Date.now()
+                +
+                "_"
+                +
+                file.name
+
+            );
+
+
+        await uploadBytes(
+            storageRef,
+            file
+        );
+
+
+        const url =
+            await getDownloadURL(
+                storageRef
+            );
+
+
+        await updateDoc(
+
+            doc(
+                db,
+                "hrm",
+                id
+            ),
+
+            {
+                certificado:
+                    url
+            }
+
+        );
+
+
+    };
+
+
+    input.click();
+
+
+};
+
+
+
+/* ==================================
+   ELIMINAR
+================================== */
+
+window.eliminar =
+(id)=>{
+
+
+    idAEliminar =
+        id;
+
+
+    document
+        .getElementById(
+            "modalEliminar"
+        )
+        .style
+        .display =
+        "flex";
+
+
+};
+
+
+
+window.confirmarEliminar =
+async()=>{
+
+
+    if(
+        !idAEliminar
+    ){
+
+        return;
+
+    }
+
+
+    await deleteDoc(
+
+        doc(
+            db,
+            "hrm",
+            idAEliminar
+        )
+
+    );
+
+
+    document
+        .getElementById(
+            "modalEliminar"
+        )
+        .style
+        .display =
+        "none";
+
+
+    idAEliminar =
+        null;
+
+
+};
+
+
+
+window.cerrarEliminar =
+()=>{
+
+
+    document
+        .getElementById(
+            "modalEliminar"
+        )
+        .style
+        .display =
+        "none";
+
+
+};
+
+
+
+/* ==================================
+   VER PDF
+================================== */
+
+window.verPDF =
+(url)=>{
+
+
+    document
+        .getElementById(
+            "visorPDF"
+        )
+        .src =
+        url;
+
+
+    document
+        .getElementById(
+            "modal"
+        )
+        .style
+        .display =
+        "flex";
+
+
+};
+
+
+
+window.cerrarModal =
+()=>{
+
+
+    document
+        .getElementById(
+            "modal"
+        )
+        .style
+        .display =
+        "none";
+
+
+    document
+        .getElementById(
+            "visorPDF"
+        )
+        .src =
+        "";
+
+
+};
+
+
+
+window.cerrarSiFondo =
+(e,id)=>{
+
+
+    if(
+        e.target.id === id
+    ){
+
+        document
+            .getElementById(id)
+            .style
+            .display =
+            "none";
+
+    }
+
+
+};
+
+
+
+
+/* ==================================
+   AVISO DE INGRESO
+================================== */
+
+function seleccionados(){
+    return Array.from(document.querySelectorAll(".selector-hrm:checked"));
+}
+
+window.actualizarSeleccion = () => {
+    const cantidad = seleccionados().length;
+    const boton = document.getElementById("btnAvisarIngreso");
+    boton.disabled = cantidad === 0;
+    boton.textContent = `✉ Avisar ingreso (${cantidad})`;
+};
+
+function agregarDato(lineas, etiqueta, valor, unidad=""){
+    if(valor === undefined || valor === null || valor === "") return;
+    const numero = Number(valor);
+    if(!Number.isNaN(numero) && numero === 0) return;
+    lineas.push(`${etiqueta}: ${valor}${unidad}`);
+}
+
+function textoHRM(data){
+    const lineas = [];
+    lineas.push(`HRM: ${data.hrm ?? ""}`);
+    agregarDato(lineas, "Proveedor", data.proveedor);
+    agregarDato(lineas, "Remito", data.remito);
+    agregarDato(lineas, "Material", data.material);
+    agregarDato(lineas, "Ø EXT", data.ext, " mm");
+    agregarDato(lineas, "Ø INT", data.int, " mm");
+    agregarDato(lineas, "Largo", data.largo, " mm");
+    agregarDato(lineas, "Ancho", data.ancho, " mm");
+    agregarDato(lineas, "Espesor", data.espesor, " mm");
+    agregarDato(lineas, "Cantidad", data.cantidad);
+    agregarDato(lineas, "Kilos", data.kilos, " kg");
+    agregarDato(lineas, "Depósito", data.deposito);
+    agregarDato(lineas, "Colada", data.colada);
+    
+   
+    if(data.certificado){
+        lineas.push("Certificado: Sí");
+    }else{
+        lineas.push("Certificado: No");
+    }
+
+    return lineas.join("\n");
+}
+
+window.avisarIngreso = () => {
+    const checks = seleccionados();
+
+    if(checks.length === 0){
+        alert("Seleccioná al menos un HRM.");
+        return;
+    }
+
+    const items = checks.map(check => ({
+        id: check.dataset.id,
+        data: registrosHRM.get(check.dataset.id)
+    })).filter(item => item.data);
+
+    if(items.length === 0){
+        alert("No se pudieron leer los HRM seleccionados.");
+        return;
+    }
+
+    const numeros = items.map(item => item.data.hrm).filter(Boolean).join(", ");
+    const asunto = items.length === 1
+        ? `Ingreso de material - HRM ${numeros}`
+        : `Ingreso de materiales - HRM ${numeros}`;
+
+    const encabezado = items.length === 1
+        ? "Se informa el ingreso del siguiente material:"
+        : "Se informa el ingreso de los siguientes materiales:";
+
+    const detalle = items.map((item, indice) => {
+        const prefijo = items.length > 1 ? `${indice + 1}. ` : "";
+        return prefijo + textoHRM(item.data);
+    }).join("\n\n------------------------------\n\n");
+
+    const cuerpo = `Buen día,\n\n${encabezado}\n\n${detalle}\n\nSaludos.`;
+
+    const enlace = "mailto:?subject=" +
+        encodeURIComponent(asunto) +
+        "&body=" +
+        encodeURIComponent(cuerpo);
+
+    window.location.href = enlace;
+
+    setTimeout(() => {
+        const confirmar = confirm(
+            "¿Enviaste el correo?\n\nAceptar: marcar como Avisado.\nCancelar: dejar pendiente."
+        );
+        if(confirmar) guardarAvisados(items);
+    }, 1200);
+};
+
+async function guardarAvisados(items){
+    const fecha = new Date().toLocaleString("es-AR");
+    try{
+        await Promise.all(items.map(item =>
+            updateDoc(doc(db, "hrm", item.id), {
+                avisoEnviado:true,
+                avisoFecha:fecha
+            })
+        ));
+    }catch(error){
+        console.error(error);
+        alert("El correo se abrió, pero no se pudo guardar el estado Avisado en Firebase.");
+    }
+}
+
+
+/* ==================================
+   BUSCADOR
+================================== */
+
+window.filtrarTabla =
+()=>{
+
+
+    const buscador =
+        document.getElementById(
+            "buscador"
+        );
+
+
+    if(
+        !buscador
+    ){
+
+        return;
+
+    }
+
+
+    const texto =
+        buscador
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const filas =
+        document.querySelectorAll(
+            "#tabla tr"
+        );
+
+
+    filas.forEach(
+        (fila)=>{
+
+
+            const contenido =
+                fila
+                .innerText
+                .toLowerCase();
+
+
+            fila.style.display =
+                contenido.includes(
+                    texto
+                )
+                ?
+                ""
+                :
+                "none";
+
+
+        }
+    );
+
+
+};
+
+
+
+window.limpiarFiltro =
+()=>{
+
+
+    const buscador =
+        document.getElementById(
+            "buscador"
+        );
+
+
+    buscador.value =
+        "";
+
+
+    window.filtrarTabla();
+
+
+    buscador.focus();
+
+
+};
+
+
+
+/* ==================================
+   ORDENAR HRM
+================================== */
+
+window.ordenarHRM =
+()=>{
+
+
+    location.reload();
+
+
+};
+
+
+
+/* ==================================
+   REPARAR HRM
+================================== */
+
+window.repararHRM =
+async()=>{
+
+
+    const snapshot =
+        await getDocs(
+
+            collection(
+                db,
+                "hrm"
+            )
+
+        );
+
+
+    for(
+        const docu
+        of snapshot.docs
+    ){
+
+
+        const data =
+            docu.data();
+
+
+        const hrmNum =
+            Number(
+
+                String(
+                    data.hrm
+                )
+                .replace(
+                    /\D/g,
+                    ""
+                )
+
+            );
+
+
+        if(
+            !isNaN(
+                hrmNum
+            )
+        ){
+
+
+            await updateDoc(
+
+                doc(
+                    db,
+                    "hrm",
+                    docu.id
+                ),
+
+                {
+                    hrm:
+                        hrmNum
+                }
+
+            );
+
+
+        }
+
+
+    }
+
+
+    alert(
+        "HRM reparados"
+    );
+
+
+};
+
+
+
+document.addEventListener("keydown",(e)=>{
+    if(e.key === "Escape"){
+        window.cerrarEditar();
+        window.cerrarEliminar();
+        window.cerrarModal();
+    }
+});
+
+</script>
+
+
+</body>
+
+</html>
