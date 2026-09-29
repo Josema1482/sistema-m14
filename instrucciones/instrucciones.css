@@ -1,0 +1,56 @@
+*{box-sizing:border-box}
+:root{font-family:"Segoe UI",Arial,sans-serif;color:#243b53;background:#f3f6f9}
+body{margin:0;min-height:100vh;background:#f3f6f9;color:#243b53}
+
+.app-header{
+  width:calc(100% - 60px);max-width:1100px;min-height:88px;margin:11px auto 0;padding:16px 22px;
+  background:#fff;border:1px solid rgba(226,232,240,.95);border-radius:14px;
+  box-shadow:0 4px 16px rgba(15,39,66,.055);display:flex;align-items:center;justify-content:space-between;gap:20px
+}
+.app-header-left{display:flex;align-items:center;gap:15px;min-width:0}
+.app-icon{width:48px;height:48px;flex:0 0 48px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#365673;color:#fff}
+.app-icon svg{width:25px;height:25px}
+.app-header-copy{min-width:0}
+.app-header h1{margin:0;color:#243b53;font-size:22px;font-weight:650;letter-spacing:.1px}
+.app-header p{margin:4px 0 0;color:#7890a7;font-size:12px}
+.system-status{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:18px;background:#effaf3;color:#079447;font-size:11px;font-weight:600}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#16c765}
+
+.main{width:calc(100% - 60px);max-width:1100px;margin:28px auto 45px}
+.card{background:#fff;border:1px solid #e4eaf0;border-radius:14px;box-shadow:0 7px 22px rgba(15,39,66,.06);overflow:hidden}
+.card-head{padding:22px 24px 18px;border-bottom:1px solid #edf1f5;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.card-head h2{margin:0;color:#2b455f;font-size:17px;font-weight:650}
+.card-head p{margin:5px 0 0;color:#8497aa;font-size:12px}
+.a4-badge{padding:6px 10px;border-radius:7px;background:#eef3f7;color:#607a91;font-size:10px;font-weight:700;letter-spacing:.7px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:19px 22px;padding:24px}
+.field{min-width:0}
+.field.full{grid-column:1/-1}
+label{display:block;margin:0 0 7px;color:#526b82;font-size:12px;font-weight:650}
+input,select{width:100%;height:43px;padding:0 12px;border:1px solid #d7e0e8;border-radius:8px;background:#fff;color:#2c4358;font:inherit;font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s}
+select{cursor:pointer}
+input::placeholder{color:#a5b2bf}
+input:focus,select:focus{border-color:#6d8da8;box-shadow:0 0 0 3px rgba(54,86,115,.09)}
+select option:disabled{font-weight:700;color:#6b7f91;background:#f3f6f8}
+
+.actions{padding:18px 24px 22px;border-top:1px solid #edf1f5;display:flex;justify-content:flex-end;gap:10px}
+button{height:42px;border-radius:8px;padding:0 18px;font:inherit;font-size:12px;font-weight:650;cursor:pointer;transition:transform .12s,box-shadow .12s,background .12s}
+button:active{transform:translateY(1px)}
+.btn-secondary{border:1px solid #d7e0e8;background:#fff;color:#60778c}
+.btn-secondary:hover{background:#f7f9fb}
+.btn-primary{border:0;background:#365673;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 10px rgba(54,86,115,.16)}
+.btn-primary:hover{background:#2d4a65}
+.btn-primary svg{width:16px;height:16px}
+
+@media(max-width:760px){
+  .app-header{width:calc(100% - 28px);min-height:78px;padding:13px 15px}
+  .system-status{display:none}
+  .app-header h1{font-size:18px}
+  .app-icon{width:44px;height:44px;flex-basis:44px}
+  .main{width:calc(100% - 28px);margin-top:18px}
+  .a4-badge{display:none}
+  .form-grid{grid-template-columns:1fr;padding:18px}
+  .field.full{grid-column:auto}
+  .actions{padding:16px 18px;flex-direction:column-reverse}
+  .btn-secondary,.btn-primary{width:100%}
+}

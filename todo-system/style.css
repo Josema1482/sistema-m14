@@ -1,0 +1,92 @@
+body{
+    background:#f5f7fb;
+    font-family:Arial;
+}
+
+.dark{
+    background:#181818;
+    color:white;
+}
+
+.dark .card-box,
+.dark .dashboard-card,
+.dark .modal-content{
+    background:#242424;
+    color:white;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.dashboard-card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card-box{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.table td,
+.table th{
+    vertical-align:middle;
+}
+
+.prioridad-alta{
+    border-left:6px solid #dc3545;
+}
+
+.prioridad-media{
+    border-left:6px solid #fd7e14;
+}
+
+.prioridad-baja{
+    border-left:6px solid #198754;
+}
+
+.vencida{
+    background:#ffe5e5 !important;
+}
+
+.vence-hoy{
+    background:#fff3cd !important;
+}
+
+.comment{
+    background:#f1f1f1;
+    border-radius:8px;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+.historial{
+    background:#eef3ff;
+    padding:8px;
+    border-radius:8px;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.dark .comment{
+    background:#333;
+}
+
+.dark .historial{
+    background:#2c3550;
+}
