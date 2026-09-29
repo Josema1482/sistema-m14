@@ -200,6 +200,7 @@
         <span id="editingBadge" class="editing-badge">Editando factura</span>
         <button class="ghost" type="button" onclick="newInvoice()">＋ Nueva factura</button>
         <button class="secondary" type="button" onclick="toggleHistory()">▤ Historial</button>
+        <button class="success" id="saveChangesBtn" type="button" onclick="saveEditedInvoice()" style="display:none">💾 Guardar cambios</button>
         <button class="primary" type="button" onclick="generatePDF()">Generar PDF</button>
       </div>
     </div>
@@ -623,6 +624,55 @@
       if (!isoDate) return '';
       const [y, m, d] = isoDate.split('-');
       return `${d}-${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Number(m)-1] || m}-${y.slice(2)}`;
+    }
+
+    async function saveEditedInvoice() {
+      if (!editingInvoiceId) {
+        alert('Abrí una factura del historial para guardar cambios.');
+        return;
+      }
+      try {
+        await setDefaultValues();
+        const itemRows = getItemRows();
+        const packageRows = getPackageRows();
+        if (!itemRows.length) {
+          alert('Agregá al menos una fila en Items.');
+          return;
+        }
+        const totalValue = itemRows.reduce((sum, row) => sum + parseNumber(row.value), 0);
+        const totalQty = itemRows.reduce((sum, row) => sum + parseNumber(row.qty), 0);
+        const totalWeightItems = itemRows.reduce((sum, row) => sum + parseNumber(row.weight), 0);
+        const totalWeightPackages = packageRows.reduce((sum, row) => sum + parseNumber(row.weight), 0);
+        const totalWeight = totalWeightPackages || totalWeightItems || 0;
+        const totalPackages = packageRows.length || new Set(itemRows.map(r => r.package).filter(Boolean)).size || itemRows.length;
+        const values = {
+          invoiceNo: document.getElementById('invoiceNo').value.trim(),
+          airwaybill: document.getElementById('airwaybill').value.trim(),
+          exportDate: formatDateForPdf(document.getElementById('exportDate').value),
+          exportReferences: document.getElementById('exportReferences').value.trim(),
+          consignee: document.getElementById('consignee').value.trim(),
+          consigneeAddress: document.getElementById('consigneeAddress').value.trim(),
+          consigneeCity: document.getElementById('consigneeCity').value.trim(),
+          consigneeCountry: document.getElementById('consigneeCountry').value.trim(),
+          consigneePhone: document.getElementById('consigneePhone').value.trim(),
+          consigneeEmail: document.getElementById('consigneeEmail').value.trim(),
+          importer: document.getElementById('importer').value.trim(),
+          countryExport: document.getElementById('countryExport').value.trim(),
+          countryManufacture: document.getElementById('countryManufacture').value.trim(),
+          countryDestination: document.getElementById('countryDestination').value.trim(),
+          comments: document.getElementById('comments').value.trim(),
+          fob: document.getElementById('fob').value.trim(),
+          totalValue, totalQty, totalWeight, totalPackages
+        };
+        const saved = await saveInvoiceRecord(values, itemRows, packageRows);
+        if (saved) {
+          alert('Cambios guardados correctamente.');
+          await loadHistory();
+        }
+      } catch (error) {
+        console.error(error);
+        alert('No se pudieron guardar los cambios. Revisá la conexión.');
+      }
     }
 
     async function generatePDF() {
@@ -1300,6 +1350,7 @@ ${escapeHtml(values.consigneeEmail)}</div>
         if(!(d.packages || []).length) addPackageRow({package:'1',weight:'0.000'});
         document.getElementById('editingBadge').textContent='Editando factura Nº '+invoiceNumberText(d.invoiceNumber);
         document.getElementById('editingBadge').classList.add('show');
+        document.getElementById('saveChangesBtn').style.display='inline-block';
         document.getElementById('historyCard').classList.remove('open');
         updateSummaries();
         window.scrollTo({top:0,behavior:'smooth'});
@@ -1317,6 +1368,7 @@ ${escapeHtml(values.consigneeEmail)}</div>
       addItemRow({item:'1',weight:'0.000',package:'1',description:'',qty:'1',icc:'',value:'0.00'});
       addPackageRow({package:'1',description:'',dimension:'',weight:'0.000'});
       document.getElementById('editingBadge').classList.remove('show');
+      document.getElementById('saveChangesBtn').style.display='none';
       await setDefaultValues();
       updateSummaries();
     }
