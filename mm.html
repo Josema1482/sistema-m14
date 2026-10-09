@@ -544,7 +544,11 @@ button:active{
     padding:7px 12px;
 }
 
-.btn-eliminar{
+    .btn-editar{background:#2563eb;color:white;padding:7px 11px;}
+    .btn-editar:disabled{opacity:.4;cursor:not-allowed;}
+    .mm-anulado{background:#fff1f2!important;color:#991b1b;}
+    .mm-estado{font-weight:800;color:#b91c1c;}
+    .btn-eliminar{
     background:#dc2626;
     color:white;
 
@@ -939,6 +943,7 @@ button:active{
 
 
 
+    <div id="avisoEdicion" style="display:none;margin-top:14px;padding:12px;background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;font-weight:600"></div>
     <div class="action-bar">
 
         <button
@@ -957,6 +962,7 @@ button:active{
         >
             Imprimir Movimiento
         </button>
+        <button type="button" id="btnGuardarEdicion" class="btn-primary" style="display:none;background:#16a34a" onclick="guardarEdicion()">Guardar cambios</button>
 
     </div>
 
@@ -1066,12 +1072,12 @@ button:active{
                         Cliente
                     </th>
 
-                    <th width="90">
-                        Ver
-                    </th>
+                    <th width="90">Ver</th>
+                    <th width="90">Editar</th>
+                    <th width="100">Estado</th>
 
                     <th width="90">
-                        Eliminar
+                        Anular
                     </th>
 
                 </tr>
@@ -1119,7 +1125,7 @@ import {
     collection,
     addDoc,
     getDocs,
-    deleteDoc,
+    getDoc,
     updateDoc,
     doc,
     query,
@@ -1171,6 +1177,10 @@ const db =
 
 let numeroActual =
     3198;
+
+let edicionActual = null;
+let historialCache = new Map();
+let cancelarHistorial = null;
 
 
 
@@ -1577,6 +1587,7 @@ function fechaHoy(){
 
 window.imprimir =
 async function(){
+    if(edicionActual){alert("Estás editando un MM. Usá Guardar cambios o Nuevo movimiento antes de imprimir uno nuevo.");return;}
 
 
     await actualizarCliente();
@@ -2211,7 +2222,10 @@ async function(){
                 fecha,
 
             html:
-                html
+                html,
+            anulado:false,
+            datosFormulario:datos,
+            detalleFormulario:obtenerDetalleFormulario()
 
         }
 
@@ -2353,6 +2367,9 @@ async function actualizarCliente(){
 
 window.nuevoMovimiento =
 function(){
+    edicionActual = null;
+    document.getElementById("avisoEdicion").style.display="none";
+    document.getElementById("btnGuardarEdicion").style.display="none";
 
 
     document
@@ -2421,109 +2438,164 @@ function(){
 ========================================================= */
 
 function cargarHistorial(){
-
-
-    const q =
-        query(
-
-            collection(
-                db,
-                "mm_historial"
-            ),
-
-            orderBy(
-                "numero",
-                "desc"
-            )
-
-        );
-
-
-
-    onSnapshot(
-        q,
-        (snapshot)=>{
-
-
-            const tbody =
-                document.querySelector(
-                    "#tablaHistorial tbody"
-                );
-
-
-            tbody.innerHTML =
-                "";
-
-
-            snapshot.forEach(
-                (docu)=>{
-
-
-                    const data =
-                        docu.data();
-
-
-                    const tr =
-                        document.createElement(
-                            "tr"
-                        );
-
-
-                    tr.innerHTML = `
-
-                        <td>
-                            ${data.mm || ""}
-                        </td>
-
-                        <td>
-                            ${data.fecha || ""}
-                        </td>
-
-                        <td>
-                            ${data.cliente || ""}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-ver"
-                                onclick='verMM(${JSON.stringify(data.html)})'
-                            >
-                                Ver
-                            </button>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-eliminar"
-                                onclick="eliminarMM('${docu.id}')"
-                            >
-                                ×
-                            </button>
-
-                        </td>
-
-                    `;
-
-
-                    tbody.appendChild(
-                        tr
-                    );
-
-                }
-            );
-
-
-            filtrarHistorial();
-
-        }
-    );
-
+    if(cancelarHistorial) return;
+    const q = query(collection(db,"mm_historial"),orderBy("numero","desc"));
+    cancelarHistorial = onSnapshot(q,(snapshot)=>{
+        const tbody = document.querySelector("#tablaHistorial tbody");
+        tbody.innerHTML = "";
+        historialCache = new Map();
+        snapshot.forEach((docu)=>{
+            const data=docu.data();
+            historialCache.set(docu.id,data);
+            const anulado = data.anulado === true;
+            const tr=document.createElement("tr");
+            if(anulado) tr.className="mm-anulado";
+            const celda=(texto)=>{const td=document.createElement("td");td.textContent=texto || "";tr.appendChild(td);return td;};
+            celda(data.mm);celda(data.fecha);celda(data.cliente);
+            const acciones=(texto,clase,funcion,deshabilitado=false)=>{
+                const td=document.createElement("td");
+                const boton=document.createElement("button");
+                boton.textContent=texto;boton.className=clase;boton.disabled=deshabilitado;
+                boton.addEventListener("click",()=>funcion(docu.id));
+                td.appendChild(boton);tr.appendChild(td);
+            };
+            acciones("Ver","btn-ver",verMMRegistro);
+            acciones("Editar","btn-editar",editarMM,anulado);
+            celda(anulado ? "ANULADO" : "Vigente").className=anulado?"mm-estado":"";
+            if(anulado) celda("Bloqueado");
+            else acciones("Anular","btn-eliminar",anularMM);
+            tbody.appendChild(tr);
+        });
+        filtrarHistorial();
+    },error=>{console.error("Error al cargar historial",error);});
 }
 
+function obtenerDetalleFormulario(){
+    return Array.from(document.querySelectorAll("#tablaDetalle tr")).slice(1).map(tr=>({
+        cantidad:tr.querySelector(".cant")?.value || "",
+        detalle:tr.querySelector(".det")?.value || "",
+        referencia:tr.querySelector(".ref")?.value || ""
+    })).filter(f=>f.cantidad || f.detalle || f.referencia);
+}
 
+function extraerDatosHistoricos(html){
+    const docHTML = new DOMParser().parseFromString(html || "","text/html");
+    const copia=docHTML.querySelector(".mov");
+    if(!copia) throw new Error("El documento histórico no tiene el formato esperado.");
+    const datos={};
+    const nombres={"Cliente:":"sr","CUIT:":"cuit","Domicilio:":"dom","Localidad:":"loc","Teléfono:":"telefono","Contacto:":"contacto"};
+    copia.querySelectorAll(".datos > div").forEach(div=>{
+        const clave=div.querySelector("b")?.textContent.trim();
+        if(nombres[clave]) datos[nombres[clave]]=div.textContent.replace(div.querySelector("b").textContent,"").trim();
+    });
+    datos.obs=copia.querySelector(".obs")?.textContent.replace(/Observaciones:\s*/i,"").trim() || "";
+    const detalle=Array.from(copia.querySelectorAll(".tabla tr")).slice(1).map(tr=>{
+        const td=tr.querySelectorAll("td");
+        return {cantidad:td[0]?.textContent.trim()||"",detalle:td[1]?.textContent.trim()||"",referencia:td[2]?.textContent.trim()||""};
+    });
+    return {datos,detalle};
+}
+
+window.editarMM = async function(id){
+    const data=historialCache.get(id);
+    if(!data || data.anulado){alert("Este MM está anulado o ya no está disponible.");return;}
+    if(edicionActual && edicionActual.id!==id && !confirm("¿Descartar los cambios del MM que estás editando?"))return;
+    let valores;
+    try{valores=data.datosFormulario ? {datos:data.datosFormulario,detalle:data.detalleFormulario||[]} : extraerDatosHistoricos(data.html);}
+    catch(error){alert("No se pudieron recuperar los datos para editar: "+error.message);return;}
+    edicionActual={id,numero:data.numero,mm:data.mm,fecha:data.fecha};
+    const d=valores.datos;
+    document.getElementById("nuevoCliente").value=d.sr||"";
+    document.getElementById("sr").value="";
+    for(const [campo,clave] of [["cuit","cuit"],["dom","dom"],["loc","loc"],["telefono","telefono"],["contacto","contacto"],["obs","obs"]]) document.getElementById(campo).value=d[clave]||"";
+    const tabla=document.getElementById("tablaDetalle");
+    while(tabla.rows.length>1)tabla.deleteRow(1);
+    (valores.detalle.length?valores.detalle:[{},{},{}]).forEach(f=>{
+        agregarFila();const tr=tabla.rows[tabla.rows.length-1];
+        tr.querySelector(".cant").value=f.cantidad||"";
+        tr.querySelector(".det").value=f.detalle||"";
+        tr.querySelector(".ref").value=f.referencia||"";
+    });
+    const aviso=document.getElementById("avisoEdicion");
+    aviso.textContent="Editando "+data.mm+" — al guardar se actualizará el mismo registro y conservará su fecha original.";
+    aviso.style.display="block";
+    document.getElementById("btnGuardarEdicion").style.display="inline-block";
+    aviso.scrollIntoView({behavior:"smooth",block:"center"});
+};
+
+function escaparHTML(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+function actualizarHTMLHistorico(html,datos,detalle){
+    const docHTML=new DOMParser().parseFromString(html,"text/html");
+    const nombres={"Cliente:":"sr","CUIT:":"cuit","Domicilio:":"dom","Localidad:":"loc","Teléfono:":"telefono","Contacto:":"contacto"};
+    docHTML.querySelectorAll(".datos > div").forEach(div=>{
+        const clave=div.querySelector("b")?.textContent.trim();
+        if(nombres[clave])div.innerHTML="<b>"+escaparHTML(clave)+"</b> "+escaparHTML(datos[nombres[clave]]);
+    });
+    docHTML.querySelectorAll(".obs").forEach(div=>{div.innerHTML="<b>Observaciones:</b> "+escaparHTML(datos.obs);});
+    docHTML.querySelectorAll(".tabla").forEach(tabla=>{
+        while(tabla.rows.length>1)tabla.deleteRow(1);
+        detalle.forEach(f=>{
+            const tr=tabla.insertRow();
+            for(const valor of [f.cantidad,f.detalle,f.referencia]){const td=tr.insertCell();td.textContent=valor;}
+        });
+    });
+    return "<!DOCTYPE html>\n"+docHTML.documentElement.outerHTML;
+}
+
+window.guardarEdicion = async function(){
+    if(!edicionActual)return;
+    const {id,mm}=edicionActual;
+    const btn=document.getElementById("btnGuardarEdicion");btn.disabled=true;
+    try{
+        const ref=doc(db,"mm_historial",id);
+        const snap=await getDoc(ref);
+        if(!snap.exists() || snap.data().anulado===true)throw new Error("El MM fue anulado o eliminado. No se puede modificar.");
+        const anterior=snap.data();
+        const datos={sr:document.getElementById("nuevoCliente").value.trim()||document.getElementById("sr").value,
+            cuit:document.getElementById("cuit").value,dom:document.getElementById("dom").value,
+            loc:document.getElementById("loc").value,telefono:document.getElementById("telefono").value,
+            contacto:document.getElementById("contacto").value,obs:document.getElementById("obs").value};
+        if(!datos.sr.trim())throw new Error("Ingresá un cliente.");
+        const detalle=obtenerDetalleFormulario();
+        const html=actualizarHTMLHistorico(anterior.html,datos,detalle);
+        await updateDoc(ref,{cliente:datos.sr,html,datosFormulario:datos,detalleFormulario:detalle,fechaModificacion:new Date().toISOString()});
+        nuevoMovimiento();alert(mm+" actualizado correctamente. No se generó un nuevo número.");
+    }catch(error){console.error(error);alert("No se pudieron guardar los cambios: "+error.message);}
+    finally{btn.disabled=false;}
+};
+
+window.verMMRegistro=function(id){
+    const data=historialCache.get(id);
+    if(!data)return;
+    verMM(data.anulado?marcarHTMLAnulado(data.html):data.html);
+};
+
+function marcarHTMLAnulado(html){
+    const docHTML=new DOMParser().parseFromString(html||"","text/html");
+    docHTML.querySelectorAll(".mov").forEach(mov=>{
+        const aviso=docHTML.createElement("div");
+        aviso.textContent="ANULADO";
+        aviso.setAttribute("style","font:bold 38px Arial;color:#b91c1c;text-align:center;border:4px solid #b91c1c;padding:8px;margin:10px 0;");
+        mov.insertBefore(aviso,mov.firstChild);
+    });
+    return "<!DOCTYPE html>\n"+docHTML.documentElement.outerHTML;
+}
+
+window.anularMM=async function(id){
+    const data=historialCache.get(id);
+    if(!data || data.anulado)return;
+    if(!confirm("¿Anular "+data.mm+"? Permanecerá en el historial, pero no podrá editarse."))return;
+    try{
+        const ref=doc(db,"mm_historial",id);
+        const snap=await getDoc(ref);
+        if(!snap.exists())throw new Error("El MM ya no existe.");
+        if(snap.data().anulado)throw new Error("El MM ya está anulado.");
+        await updateDoc(ref,{anulado:true,fechaAnulacion:new Date().toISOString()});
+        if(edicionActual?.id===id)nuevoMovimiento();
+        alert("MM anulado. El registro se conserva y queda bloqueado.");
+    }catch(error){alert("No se pudo anular: "+error.message);}
+};
 
 /* =========================================================
    BUSCADOR HISTORIAL
@@ -2679,43 +2751,6 @@ function(html){
 
 
     w.document.close();
-
-}
-
-
-
-/* =========================================================
-   ELIMINAR MM
-========================================================= */
-
-window.eliminarMM =
-async function(id){
-
-
-    const confirmar =
-        confirm(
-            "¿Eliminar MM del historial?"
-        );
-
-
-    if(!confirmar)
-        return;
-
-
-    await deleteDoc(
-
-        doc(
-            db,
-            "mm_historial",
-            id
-        )
-
-    );
-
-
-    alert(
-        "MM eliminado"
-    );
 
 }
 
