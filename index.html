@@ -2395,7 +2395,44 @@ body.auth-pending .main{display:none}
         </div>
 
 
-        <!-- AUTORIZADOR -->
+        <!-- CONTROL DE FOSFATIZADO -->
+        <div class="app-card" data-app="fosfatizado" onclick="abrir('Control_Fosfatizado_M14_v8.html')">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 3h6M10 3v7l-5.5 8.5A2.2 2.2 0 0 0 6.35 22h11.3a2.2 2.2 0 0 0 1.85-3.5L14 10V3"/>
+                    <path d="M8 16h8M10 19h.01M14 18h.01"/>
+                </svg>
+            </div>
+            <div class="card-bottom">
+                <div>
+                    <div class="app-name">Control de Fosfatizado</div>
+                    <div class="app-description">Stock y movimientos de artículos</div>
+                </div>
+                <div class="arrow">→</div>
+            </div>
+        </div>
+
+        <!-- SOLICITUD DE RETIRO IMAZ -->
+        <div class="app-card" data-app="retiros_imaz" onclick="abrir('retiros_imaz_estilo_m14_v3.html')">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h11v10H3z"/>
+                    <path d="M14 10h4l3 3v3h-7z"/>
+                    <circle cx="7" cy="18" r="2"/>
+                    <circle cx="18" cy="18" r="2"/>
+                </svg>
+            </div>
+            <div class="card-bottom">
+                <div>
+                    <div class="app-name">Solicitud de Retiro Imaz</div>
+                    <div class="app-description">Solicitudes de retiro y PDF</div>
+                </div>
+                <div class="arrow">→</div>
+            </div>
+        </div>
+
+    </div><!-- /apps-grid -->
+
     <div class="footer">
 
         <span>
@@ -3738,6 +3775,8 @@ const APPS_M14 = [
     ["despacho","Despacho a Cliente"],
     ["autorizador","Autorizador de Compras"],
     ["devolucion_calibres","Devolución Calibres"],
+    ["fosfatizado","Control de Fosfatizado"],
+    ["retiros_imaz","Solicitud de Retiro Imaz"],
     ["todo","To-Do"],
     ["pendientes","Mis Pendientes (panel del Portal)"]
 ];
