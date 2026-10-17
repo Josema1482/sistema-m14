@@ -545,9 +545,14 @@ button:active{
 }
 
     .btn-editar{background:#2563eb;color:white;padding:7px 11px;}
+    .btn-duplicar{background:#7c3aed;color:white;padding:7px 11px;}
+    .btn-etiqueta{background:#0f766e;color:white;padding:7px 11px;}
+    .aviso-duplicado{background:#f5f3ff!important;border-color:#c4b5fd!important;}
     .btn-editar:disabled{opacity:.4;cursor:not-allowed;}
     .mm-anulado{background:#fff1f2!important;color:#991b1b;}
     .mm-estado{font-weight:800;color:#b91c1c;}
+    .btn-borrar-definitivo{background:#7f1d1d;color:#fff;padding:7px 11px;}
+    .btn-borrar-definitivo:disabled{opacity:.45;cursor:wait;}
     .btn-eliminar{
     background:#dc2626;
     color:white;
@@ -826,6 +831,7 @@ button:active{
 
 
 
+
     <div class="info-box">
 
         <div class="info-icon">
@@ -927,6 +933,19 @@ button:active{
     </button>
 
 
+
+    <div class="grid-clientes" style="margin-top:18px" id="opcionesDespachoMM">
+        <div class="field"><label for="transporteMM">Transporte</label>
+            <select id="transporteMM"><option value="">Seleccionar transporte</option><option value="Transportes Imaz">Transportes Imaz</option><option value="Transportes Cruz del Sur">Transportes Cruz del Sur</option><option value="Transportes del Neuquén">Transportes del Neuquén</option><option value="Multiservicios">Multiservicios</option><option value="Via Cargo">Via Cargo</option><option value="Jetsmart">Jetsmart</option><option value="Jetpaq">Jetpaq</option><option value="Otro">Otro transporte...</option></select>
+            <input id="transporteOtroMM" placeholder="Nombre del transporte" style="display:none;margin-top:7px" aria-label="Otro transporte">
+        </div>
+        <div class="field"><label for="pagoFleteMM">Pago del flete</label>
+            <select id="pagoFleteMM"><option value="">Seleccionar</option><option value="Origen">En origen</option><option value="Destino">En destino</option></select>
+        </div>
+        <div class="field"><label for="modalidadEntregaMM">Modalidad de entrega</label>
+            <select id="modalidadEntregaMM"><option value="">Seleccionar</option><option value="Retiran depósito">Retiran depósito</option><option value="Entrega a domicilio">Entrega a domicilio</option></select>
+        </div>
+    </div>
 
     <div class="observaciones">
 
@@ -1074,11 +1093,14 @@ button:active{
 
                     <th width="90">Ver</th>
                     <th width="90">Editar</th>
+                    <th width="100">Duplicar</th>
+                    <th width="100">Etiqueta</th>
                     <th width="100">Estado</th>
 
                     <th width="90">
                         Anular
                     </th>
+                    <th width="90">Eliminar</th>
 
                 </tr>
 
@@ -1127,6 +1149,7 @@ import {
     getDocs,
     getDoc,
     updateDoc,
+    deleteDoc,
     doc,
     query,
     where,
@@ -1585,6 +1608,39 @@ function fechaHoy(){
    IMPRIMIR
 ========================================================= */
 
+function transporteSeleccionadoMM(){
+    const sel=document.getElementById("transporteMM").value;
+    return sel==="Otro" ? document.getElementById("transporteOtroMM").value.trim() : sel;
+}
+function cargarTransporteMM(valor){
+    const select=document.getElementById("transporteMM");
+    const otro=document.getElementById("transporteOtroMM");
+    const v=String(valor||"").trim();
+    if(!v){select.value="";otro.value="";}
+    else if(Array.from(select.options).some(o=>o.value===v && v!=="Otro")){select.value=v;otro.value="";}
+    else {select.value="Otro";otro.value=v==="Otro"?"":v;}
+    otro.style.display=select.value==="Otro"?"block":"none";
+}
+document.getElementById("transporteMM").addEventListener("change",function(){
+    const otro=document.getElementById("transporteOtroMM");
+    otro.style.display=this.value==="Otro"?"block":"none";
+    if(this.value==="Otro")otro.focus();else otro.value="";
+});
+function opcionesDespachoMM(){return {
+    transporte:transporteSeleccionadoMM(),
+    pagoFlete:document.getElementById("pagoFleteMM").value,
+    modalidadEntrega:document.getElementById("modalidadEntregaMM").value
+};}
+function cargarOpcionesDespachoMM(datos){
+    cargarTransporteMM(datos.transporte||"");
+    document.getElementById("pagoFleteMM").value=datos.pagoFlete||"";
+    document.getElementById("modalidadEntregaMM").value=datos.modalidadEntrega||"";
+}
+function bloqueDespachoImpresoMM(datos){
+    const esc=v=>String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    return `<div class="datos despacho-mm"><div><b>Transporte:</b> ${esc(datos.transporte)}</div><div><b>Pago del flete:</b> ${esc(datos.pagoFlete==="Origen"?"En origen":datos.pagoFlete==="Destino"?"En destino":datos.pagoFlete)}</div><div><b>Modalidad de entrega:</b> ${esc(datos.modalidadEntrega)}</div></div>`;
+}
+
 window.imprimir =
 async function(){
     if(edicionActual){alert("Estás editando un MM. Usá Guardar cambios o Nuevo movimiento antes de imprimir uno nuevo.");return;}
@@ -1693,7 +1749,8 @@ async function(){
             contacto.value,
 
         obs:
-            obs.value
+            obs.value,
+        ...opcionesDespachoMM()
 
     };
 
@@ -1868,6 +1925,8 @@ async function(){
                 </div>
 
 
+
+                ${bloqueDespachoImpresoMM(datos)}
 
                 <table class="tabla">
 
@@ -2225,7 +2284,10 @@ async function(){
                 html,
             anulado:false,
             datosFormulario:datos,
-            detalleFormulario:obtenerDetalleFormulario()
+            detalleFormulario:obtenerDetalleFormulario(),
+            transporte:datos.transporte,
+            pagoFlete:datos.pagoFlete,
+            modalidadEntrega:datos.modalidadEntrega
 
         }
 
@@ -2368,6 +2430,7 @@ async function actualizarCliente(){
 window.nuevoMovimiento =
 function(){
     edicionActual = null;
+    document.getElementById("avisoEdicion").classList.remove("aviso-duplicado");
     document.getElementById("avisoEdicion").style.display="none";
     document.getElementById("btnGuardarEdicion").style.display="none";
 
@@ -2423,6 +2486,8 @@ function(){
     agregarFila();
 
 
+    cargarOpcionesDespachoMM({});
+
     document
         .getElementById(
             "sr"
@@ -2461,9 +2526,12 @@ function cargarHistorial(){
             };
             acciones("Ver","btn-ver",verMMRegistro);
             acciones("Editar","btn-editar",editarMM,anulado);
+            acciones("Duplicar","btn-duplicar",duplicarMM,anulado);
+            acciones("Etiqueta","btn-etiqueta",etiquetaMM,anulado);
             celda(anulado ? "ANULADO" : "Vigente").className=anulado?"mm-estado":"";
             if(anulado) celda("Bloqueado");
             else acciones("Anular","btn-eliminar",anularMM);
+            acciones("Eliminar","btn-borrar-definitivo",eliminarMMDefinitivo);
             tbody.appendChild(tr);
         });
         filtrarHistorial();
@@ -2488,6 +2556,11 @@ function extraerDatosHistoricos(html){
         const clave=div.querySelector("b")?.textContent.trim();
         if(nombres[clave]) datos[nombres[clave]]=div.textContent.replace(div.querySelector("b").textContent,"").trim();
     });
+    copia.querySelectorAll(".despacho-mm > div").forEach(div=>{
+        const clave=div.querySelector("b")?.textContent.trim();
+        const mapa={"Transporte:":"transporte","Pago del flete:":"pagoFlete","Modalidad de entrega:":"modalidadEntrega"};
+        if(mapa[clave])datos[mapa[clave]]=div.textContent.replace(div.querySelector("b").textContent,"").trim();
+    });
     datos.obs=copia.querySelector(".obs")?.textContent.replace(/Observaciones:\s*/i,"").trim() || "";
     const detalle=Array.from(copia.querySelectorAll(".tabla tr")).slice(1).map(tr=>{
         const td=tr.querySelectorAll("td");
@@ -2504,6 +2577,8 @@ window.editarMM = async function(id){
     try{valores=data.datosFormulario ? {datos:data.datosFormulario,detalle:data.detalleFormulario||[]} : extraerDatosHistoricos(data.html);}
     catch(error){alert("No se pudieron recuperar los datos para editar: "+error.message);return;}
     edicionActual={id,numero:data.numero,mm:data.mm,fecha:data.fecha};
+    document.getElementById("avisoEdicion").classList.remove("aviso-duplicado");
+    cargarOpcionesDespachoMM({...valores.datos,transporte:data.transporte||valores.datos.transporte});
     const d=valores.datos;
     document.getElementById("nuevoCliente").value=d.sr||"";
     document.getElementById("sr").value="";
@@ -2533,6 +2608,11 @@ function actualizarHTMLHistorico(html,datos,detalle){
         if(nombres[clave])div.innerHTML="<b>"+escaparHTML(clave)+"</b> "+escaparHTML(datos[nombres[clave]]);
     });
     docHTML.querySelectorAll(".obs").forEach(div=>{div.innerHTML="<b>Observaciones:</b> "+escaparHTML(datos.obs);});
+    docHTML.querySelectorAll(".mov").forEach(copia=>{
+        copia.querySelectorAll(".despacho-mm").forEach(el=>el.remove());
+        const tabla=copia.querySelector(".tabla");
+        if(tabla)tabla.insertAdjacentHTML("beforebegin",bloqueDespachoImpresoMM(datos));
+    });
     docHTML.querySelectorAll(".tabla").forEach(tabla=>{
         while(tabla.rows.length>1)tabla.deleteRow(1);
         detalle.forEach(f=>{
@@ -2555,14 +2635,123 @@ window.guardarEdicion = async function(){
         const datos={sr:document.getElementById("nuevoCliente").value.trim()||document.getElementById("sr").value,
             cuit:document.getElementById("cuit").value,dom:document.getElementById("dom").value,
             loc:document.getElementById("loc").value,telefono:document.getElementById("telefono").value,
-            contacto:document.getElementById("contacto").value,obs:document.getElementById("obs").value};
+            contacto:document.getElementById("contacto").value,obs:document.getElementById("obs").value,
+            ...opcionesDespachoMM()};
         if(!datos.sr.trim())throw new Error("Ingresá un cliente.");
         const detalle=obtenerDetalleFormulario();
         const html=actualizarHTMLHistorico(anterior.html,datos,detalle);
-        await updateDoc(ref,{cliente:datos.sr,html,datosFormulario:datos,detalleFormulario:detalle,fechaModificacion:new Date().toISOString()});
+        await updateDoc(ref,{cliente:datos.sr,html,datosFormulario:datos,detalleFormulario:detalle,transporte:datos.transporte,pagoFlete:datos.pagoFlete,modalidadEntrega:datos.modalidadEntrega,fechaModificacion:new Date().toISOString()});
         nuevoMovimiento();alert(mm+" actualizado correctamente. No se generó un nuevo número.");
     }catch(error){console.error(error);alert("No se pudieron guardar los cambios: "+error.message);}
     finally{btn.disabled=false;}
+};
+
+
+/* Duplicar prepara una nueva carga; no altera el MM original ni reserva numeración. */
+window.duplicarMM=function(id){
+    const data=historialCache.get(id);
+    if(!data || data.anulado){alert("No se puede duplicar un MM anulado.");return;}
+    if(edicionActual && !confirm("¿Descartar los cambios de la edición actual para duplicar este MM?"))return;
+    let valores;
+    try{valores=data.datosFormulario ? {datos:data.datosFormulario,detalle:data.detalleFormulario||[]} : extraerDatosHistoricos(data.html);}
+    catch(error){alert("No se pudo recuperar el MM: "+error.message);return;}
+    edicionActual=null;
+    const d=valores.datos;
+    document.getElementById("nuevoCliente").value=d.sr||data.cliente||"";
+    document.getElementById("sr").value="";
+    for(const campo of ["cuit","dom","loc","telefono","contacto","obs"])
+        document.getElementById(campo).value=d[campo]||"";
+    cargarOpcionesDespachoMM({...d,transporte:data.transporte||d.transporte});
+    const tabla=document.getElementById("tablaDetalle");
+    while(tabla.rows.length>1)tabla.deleteRow(1);
+    (valores.detalle.length?valores.detalle:[{},{},{}]).forEach(f=>{
+        agregarFila();const tr=tabla.rows[tabla.rows.length-1];
+        tr.querySelector(".cant").value=f.cantidad||"";
+        tr.querySelector(".det").value=f.detalle||"";
+        tr.querySelector(".ref").value=f.referencia||"";
+    });
+    const aviso=document.getElementById("avisoEdicion");
+    aviso.classList.add("aviso-duplicado");
+    aviso.textContent="Copia de "+data.mm+" preparada. Modificá lo necesario y presioná Imprimir Movimiento para crear un MM nuevo con numeración nueva. El original no cambia.";
+    aviso.style.display="block";
+    document.getElementById("btnGuardarEdicion").style.display="none";
+    aviso.scrollIntoView({behavior:"smooth",block:"center"});
+};
+
+/* Etiqueta de despacho con formato del Generador de Etiquetas M14. */
+window.etiquetaMM=function(id){
+    const data=historialCache.get(id);
+    if(!data || data.anulado){alert("No se puede generar etiqueta de un MM anulado.");return;}
+    let anteriores={};
+    try{anteriores=data.datosFormulario||extraerDatosHistoricos(data.html).datos||{};}catch(e){anteriores={};}
+    const seguro=escaparHTML;
+    const valores={
+        numeroMM:String(data.mm||""),
+        destinatario:String(data.cliente||anteriores.sr||""),
+        ciudad:String(anteriores.loc||anteriores.localidad||anteriores.ciudad||""),
+        entrega:String(anteriores.dom||anteriores.domicilio||anteriores.direccion||""),
+        contacto:String(anteriores.contacto||data.contacto||""),
+        telefono:String(anteriores.telefono||data.telefono||""),
+        rto:String(anteriores.rto||""),of:String(anteriores.of||""),oc:String(anteriores.oc||""),
+        transporte:String(data.transporte||anteriores.transporte||""),
+        pago:String(data.pagoFlete||anteriores.pagoFlete||""),
+        modalidad:String(data.modalidadEntrega||anteriores.modalidadEntrega||"")
+    };
+    // La etiqueta no requiere volver a cargar el MM: se imprime desde el registro guardado.
+    // Los campos RTO, OF y OC solo aparecen cuando el movimiento los contiene.
+    const campos=[];
+    const inputs="";
+    const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Etiquetas ${seguro(data.mm||'')} - Mecánica 14</title><style>
+    *{box-sizing:border-box}body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:#eef2f7;color:#182334}
+    .panel{max-width:940px;margin:20px auto;padding:22px;background:white;border-radius:12px;box-shadow:0 5px 18px #0001}
+    .panel h2{margin:0 0 7px}.panel p{font-size:13px;color:#526174}.campos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px}
+    label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}input{width:100%;padding:10px;border:1px solid #bcc7d4;border-radius:6px;font-size:14px}
+    button{background:#194d77;color:white;border:0;border-radius:7px;padding:12px 22px;margin-top:17px;font-size:15px;font-weight:bold;cursor:pointer}
+    .a4{width:210mm;height:297mm;padding:8mm;margin:18px auto;background:white;display:flex;flex-direction:column;justify-content:space-between;gap:8mm;box-shadow:0 4px 18px #0002}
+    .label{height:calc((297mm - 24mm)/2);border:2px solid #111;border-radius:18px;padding:9mm 12mm;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;break-inside:avoid}
+    .numero-mm{text-align:right;font-size:15px;font-weight:800;letter-spacing:.3px}
+    .dest{text-align:center;padding:8px 0 12px;border-bottom:2px solid #d9dfe5;overflow-wrap:anywhere}
+    .dest .big{font-size:28px;font-weight:850;line-height:1.14;letter-spacing:.3px}
+    .dest .direccion{font-size:16px;margin-top:7px;line-height:1.35}
+    .contacto{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 0;border-bottom:1px solid #d9dfe5}
+    .contacto .dato{font-size:15px;overflow-wrap:anywhere;line-height:1.35}
+    .contacto .dato b{display:block;font-size:11px;color:#526174;letter-spacing:.7px;margin-bottom:3px}
+    .info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:14px;margin:9px 0}
+    .info div{border:1px solid #d5dce4;padding:7px;border-radius:6px;overflow-wrap:anywhere}
+    .extras{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px;padding:12px 0}
+    .extras span{line-height:1.35}.extras b{display:block;font-size:11px;color:#526174;letter-spacing:.6px;margin-bottom:3px}
+    .remit{display:flex;align-items:center;gap:13px;border-top:2px solid #d9dfe5;padding-top:11px;font-size:12px;line-height:1.35}
+    .logo{width:100px;height:58px;flex-shrink:0;display:flex;align-items:center;justify-content:center}.logo img{max-width:100%;max-height:100%;object-fit:contain}
+    .despacho{background:#111;color:white;text-align:center;padding:12px 8px;border-radius:8px;font-size:19px;font-weight:800;margin-top:10px;overflow-wrap:anywhere;text-transform:uppercase}
+    @page{size:A4;margin:0}@media print{body{background:white}.panel{display:none!important}.a4{margin:0;box-shadow:none}}
+    @media(max-width:850px){.campos{grid-template-columns:1fr 1fr}.a4{max-width:100%;height:auto;min-height:297mm}}
+    </style></head><body>
+    <div class="panel"><h2>Etiqueta de despacho · ${seguro(data.mm||'MM')}</h2><p>Datos recuperados del movimiento guardado. Dos etiquetas iguales por hoja A4.</p><button id="imprimir">Imprimir 2 etiquetas en A4</button></div>
+    <main class="a4"><section class="label">
+    <div class="numero-mm">MM: <span data-campo="numeroMM"></span></div>
+    <div class="dest"><div class="big" data-campo="destinatario"></div><div class="direccion"><span data-campo="entrega"></span> <span data-campo="ciudad"></span></div></div>
+    <div class="contacto"><div class="dato" data-optional="contacto"><b>CONTACTO</b><span data-campo="contacto"></span></div><div class="dato" data-optional="telefono"><b>TELÉFONO</b><span data-campo="telefono"></span></div></div>
+    <div class="info" id="refs"><div data-ref="rto"><b>RTO</b><br><span data-campo="rto"></span></div><div data-ref="of"><b>OF</b><br><span data-campo="of"></span></div><div data-ref="oc"><b>OC</b><br><span data-campo="oc"></span></div></div>
+    <div class="extras"><span><b>PAGO DEL FLETE</b><span data-campo="pago"></span></span><span><b>MODALIDAD DE ENTREGA</b><span data-campo="modalidad"></span></span></div>
+    <div class="remit"><div class="logo"><img src="${logoRuta}" alt="Logo Mecánica 14"></div><div><b>MECÁNICA 14</b><div>Vuelta de Obligado 592 - R8400IWJ</div><div>San Carlos de Bariloche - (0294) 15-4814828</div></div></div>
+    <div class="despacho">DESPACHAR POR: <span data-campo="transporte"></span></div></section></main>
+    <script>
+    const hoja=document.querySelector('.a4');hoja.appendChild(hoja.querySelector('.label').cloneNode(true));
+    const valores=${JSON.stringify(valores).replace(/</g,"\\u003c")};
+    const claves=['numeroMM','destinatario','ciudad','entrega','rto','of','oc','transporte','pago','modalidad','contacto','telefono'];
+    function actualizar(){
+        claves.forEach(k=>{let v=String(valores[k]||'').trim();if(k==='pago'&&v==='Origen')v='En origen';if(k==='pago'&&v==='Destino')v='En destino';if(k==='transporte')v=v.toLocaleUpperCase('es-AR');document.querySelectorAll('[data-campo="'+k+'"]').forEach(e=>e.textContent=v);});
+        document.querySelectorAll('[data-optional]').forEach(e=>e.style.display=String(valores[e.dataset.optional]||'').trim()?'':'none');
+        document.querySelectorAll('.contacto').forEach(e=>e.style.display=Array.from(e.children).some(c=>c.style.display!=='none')?'grid':'none');
+        document.querySelectorAll('[data-ref]').forEach(e=>e.style.display=valores[e.dataset.ref]?'':'none');
+        document.querySelectorAll('.info').forEach(e=>e.style.display=Array.from(e.children).some(c=>c.style.display!=='none')?'grid':'none');
+    }
+    actualizar();
+    document.getElementById('imprimir').onclick=()=>window.print();
+    <\/script></body></html>`;
+    const w=window.open('','_blank');
+    if(!w){alert('El navegador bloqueó la ventana. Permití las ventanas emergentes.');return;}
+    w.document.open();w.document.write(html);w.document.close();
 };
 
 window.verMMRegistro=function(id){
@@ -2595,6 +2784,37 @@ window.anularMM=async function(id){
         if(edicionActual?.id===id)nuevoMovimiento();
         alert("MM anulado. El registro se conserva y queda bloqueado.");
     }catch(error){alert("No se pudo anular: "+error.message);}
+};
+
+window.eliminarMMDefinitivo=async function(id){
+    const data=historialCache.get(id);
+    if(!data)return;
+    const numero=String(data.mm || id).trim();
+    const confirmacion=prompt(
+        "ELIMINACIÓN DEFINITIVA DE " + numero + "\n\n" +
+        "Se borrará de Firebase y no se podrá recuperar desde el historial.\n" +
+        "Esto NO reutiliza el número del MM.\n\n" +
+        "Para confirmar, escribí exactamente: " + numero
+    );
+    if(confirmacion===null)return;
+    if(confirmacion.trim()!==numero){
+        alert("No coincide el número de MM. No se eliminó nada.");
+        return;
+    }
+    if(!confirm("¿Confirmás que querés BORRAR DEFINITIVAMENTE " + numero + "?"))return;
+    try{
+        const ref=doc(db,"mm_historial",id);
+        const snap=await getDoc(ref);
+        if(!snap.exists())throw new Error("El MM ya no existe en Firebase.");
+        if(String(snap.data().mm || id).trim()!==numero)
+            throw new Error("El registro cambió. Actualizá el historial antes de eliminar.");
+        await deleteDoc(ref);
+        if(edicionActual?.id===id)nuevoMovimiento();
+        alert(numero + " eliminado definitivamente de Firebase.");
+    }catch(error){
+        console.error("Error al eliminar MM",error);
+        alert("No se pudo eliminar " + numero + ": " + error.message);
+    }
 };
 
 /* =========================================================
