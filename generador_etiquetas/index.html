@@ -80,8 +80,8 @@ body{margin:0;min-height:100vh;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans
         <div class="form-section-title"><span class="section-number">1</span>Destino</div>
         <div class="grid grid-2">
           <div class="field"><label for="destinatario">Destinatario</label><select id="destinatario">
-            <option>HALLIBURTON</option><option>YPF</option><option>SCHLUMBERGER</option><option>CNQ7-7A-AREA</option><option>WEATHERFORD INT. S.A.</option><option>YPF - UTE LOMA CAMPANA</option><option>YPF - UTE BANDURRIA SUR</option><option>YPF - UTE LA AMARGA CHICA</option><option>YPF - UTE NARAMBUENA</option><option>YPF - UTE BAJO DEL TORO</option><option>YPF - UTE RIO NEUQUEN</option><option>BAKER HUGES ARG</option><option>TORNERIA SAN SEBASTIAN</option>
-          </select></div>
+            <option>HALLIBURTON</option><option>YPF</option><option>SCHLUMBERGER</option><option>CNQ7-7A-AREA</option><option>WEATHERFORD INT. S.A.</option><option>YPF - UTE LOMA CAMPANA</option><option>YPF - UTE BANDURRIA SUR</option><option>YPF - UTE LA AMARGA CHICA</option><option>YPF - UTE NARAMBUENA</option><option>YPF - UTE BAJO DEL TORO</option><option>YPF - UTE RIO NEUQUEN</option><option>BAKER HUGES ARG</option><option>TORNERIA SAN SEBASTIAN</option><option value="__manual__">Otro cliente / Ingresar manualmente</option>
+          </select><input id="destinatarioManual" type="text" placeholder="Ingresá el nombre del cliente" style="display:none;margin-top:8px" aria-label="Nombre del cliente" /></div>
           <div class="field"><label for="ciudad">Ciudad</label><select id="ciudad"><option>BUENOS AIRES</option><option>CAPITAL FEDERAL</option><option>CORDOBA</option><option>MENDOZA</option><option>NEUQUEN</option><option>ROSARIO</option></select></div>
           <div class="field field-full"><label for="entrega">Entrega en</label><select id="entrega">
             <option disabled>------------Weatherford------------</option><option>ENTREGAR EN NQN - ALMACEN</option><option>ENTREGAR EN NQN - TALLER BASE 3</option><option>ENTREGAR EN ANDESMAR NQN - DESTINO FINAL ANDESMAR CBA</option>
@@ -90,7 +90,7 @@ body{margin:0;min-height:100vh;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans
             <option disabled>-----------------Baker-----------------</option><option>ENTREGAR EN BAKER MENDOZA</option><option>ENTREGAR EN BAKER NQN - DESTINO FINAL MENDOZA RUTA NRO. 7 - KM 5</option>
             <option disabled>-----------Schlumberger-----------</option><option>ENTREGAR EN SCHLUMBERGER NEUQUEN - SOLALIQUE 440</option>
             <option disabled>-----------------Otros-----------------</option><option>ENTREGAR EN LOGINTER</option><option>RETIRA DEPOSITO IMAZ</option><option>RETIRA CLIENTE DE MECANICA 14</option><option>RETIRA CLIENTE DEL TRANSPORTE</option><option>ENTREGAR EN BELLA VISTA 265</option>
-          </select></div>
+          </select><input id="entregaManual" type="text" placeholder="Ingresá el lugar o dirección de entrega" style="display:none;margin-top:8px" aria-label="Lugar de entrega manual" /></div>
         </div>
       </div>
 
@@ -133,6 +133,20 @@ const finaliza = document.getElementById("finaliza");
 const parcial = document.getElementById("parcial");
 const despachar = document.getElementById("despachar");
 
+const destinatarioManual = document.getElementById("destinatarioManual");
+const entregaManual = document.getElementById("entregaManual");
+function actualizarDestinatarioManual(){
+  const manual = destinatario.value === "__manual__";
+  destinatarioManual.style.display = manual ? "block" : "none";
+  destinatarioManual.required = manual;
+  entrega.style.display = manual ? "none" : "block";
+  entregaManual.style.display = manual ? "block" : "none";
+  entregaManual.required = manual;
+  if(manual) destinatarioManual.focus();
+  else { destinatarioManual.value = ""; entregaManual.value = ""; }
+}
+destinatario.addEventListener("change", actualizarDestinatarioManual);
+
 document.getElementById("btnImprimir").addEventListener("click", imprimir);
 document.getElementById("btnLimpiar").addEventListener("click", limpiarFormulario);
 
@@ -148,9 +162,19 @@ function esc(v){
 }
 
 function imprimir(){
+  if(destinatario.value === "__manual__" && !destinatarioManual.value.trim()){
+    alert("Ingresá el nombre del cliente.");
+    destinatarioManual.focus();
+    return;
+  }
+  if(destinatario.value === "__manual__" && !entregaManual.value.trim()){
+    alert("Ingresá el lugar de entrega.");
+    entregaManual.focus();
+    return;
+  }
   const datos = {
-    destinatario: esc(destinatario.value),
-    entrega: esc(entrega.value),
+    destinatario: esc(destinatario.value === "__manual__" ? destinatarioManual.value.trim() : destinatario.value),
+    entrega: esc(destinatario.value === "__manual__" ? entregaManual.value.trim() : entrega.value),
     ciudad: esc(ciudad.value),
     rto: esc(rto.value.trim()),
     of: esc(of.value.trim()),
@@ -250,6 +274,7 @@ body{font-family:"Segoe UI",Arial,sans-serif;background:white;margin:0;padding:0
 
 function limpiarFormulario(){
   document.getElementById("etiquetasForm").reset();
+  actualizarDestinatarioManual();
   destinatario.focus();
 }
 
