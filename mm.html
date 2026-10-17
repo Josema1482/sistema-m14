@@ -2711,8 +2711,8 @@ window.etiquetaMM=function(id){
     .label{height:calc((297mm - 24mm)/2);border:2px solid #111;border-radius:18px;padding:9mm 12mm;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;break-inside:avoid}
     .numero-mm{text-align:right;font-size:15px;font-weight:800;letter-spacing:.3px}
     .dest{text-align:center;padding:8px 0 12px;border-bottom:2px solid #d9dfe5;overflow-wrap:anywhere}
-    .dest .big{font-size:40px;font-weight:850;line-height:1.14;letter-spacing:.3px}
-    .dest .direccion{font-size:20px;margin-top:7px;line-height:1.35}
+    .dest .big{font-size:28px;font-weight:850;line-height:1.14;letter-spacing:.3px}
+    .dest .direccion{font-size:16px;margin-top:7px;line-height:1.35}
     .contacto{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 0;border-bottom:1px solid #d9dfe5}
     .contacto .dato{font-size:15px;overflow-wrap:anywhere;line-height:1.35}
     .contacto .dato b{display:block;font-size:11px;color:#526174;letter-spacing:.7px;margin-bottom:3px}
@@ -2728,7 +2728,7 @@ window.etiquetaMM=function(id){
     </style></head><body>
     <div class="panel"><h2>Etiqueta de despacho · ${seguro(data.mm||'MM')}</h2><p>Datos recuperados del movimiento guardado. Dos etiquetas iguales por hoja A4.</p><button id="imprimir">Imprimir 2 etiquetas en A4</button></div>
     <main class="a4"><section class="label">
-    <div class="numero-mm">MM: <span data-campo="numeroMM"></span></div>
+    <div class="numero-mm"><span data-campo="numeroMM"></span></div>
     <div class="dest"><div class="big" data-campo="destinatario"></div><div class="direccion"><span data-campo="entrega"></span> <span data-campo="ciudad"></span></div></div>
     <div class="contacto"><div class="dato" data-optional="contacto"><b>CONTACTO</b><span data-campo="contacto"></span></div><div class="dato" data-optional="telefono"><b>TELÉFONO</b><span data-campo="telefono"></span></div></div>
     <div class="info" id="refs"><div data-ref="rto"><b>RTO</b><br><span data-campo="rto"></span></div><div data-ref="of"><b>OF</b><br><span data-campo="of"></span></div><div data-ref="oc"><b>OC</b><br><span data-campo="oc"></span></div></div>
