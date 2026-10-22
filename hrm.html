@@ -234,6 +234,9 @@ button:active {
     background:#059669;
 }
 
+/* Casilla Restos */
+.field-restos .restos-opcion{display:flex;align-items:center;gap:8px;min-height:37px;font-size:13px;font-weight:600;color:#243b53;text-transform:none;margin:0}
+.field-restos .restos-opcion input{width:18px;height:18px;margin:0;accent-color:#2563eb}
 .field-button button {
     height:37px;
     white-space:nowrap;
@@ -845,7 +848,12 @@ iframe {
             <input type="text" id="colada" placeholder="Colada">
         </div>
 
-        <div class="field field-button">
+        <div class="field field-restos">
+        <label for="restos">Restos</label>
+        <label class="restos-opcion"><input type="checkbox" id="restos"> Sí</label>
+    </div>
+
+    <div class="field field-button">
             <label>&nbsp;</label>
 
             <button
@@ -1041,6 +1049,11 @@ iframe {
                 <div class="field">
                     <label>Colada</label>
                     <input type="text" id="editColada">
+                </div>
+
+                <div class="field field-restos">
+                    <label for="editRestos">Restos</label>
+                    <label class="restos-opcion"><input type="checkbox" id="editRestos"> Sí</label>
                 </div>
 
             </div>
@@ -1617,6 +1630,9 @@ form.addEventListener(
                 colada:
                     form.colada.value,
 
+                restos:
+                    document.getElementById("restos").checked,
+
 
                 certificado:"",
                 avisoEnviado:false,
@@ -1660,6 +1676,7 @@ window.editarRegistro = (id) => {
     document.getElementById("editProveedor").value = registro.proveedor ?? "";
     document.getElementById("editDeposito").value = registro.deposito ?? "";
     document.getElementById("editColada").value = registro.colada ?? "";
+    document.getElementById("editRestos").checked = registro.restos === true;
 
     document.getElementById("modalEditar").style.display = "flex";
 };
@@ -1704,7 +1721,8 @@ window.guardarEdicion = async () => {
         remito: numeroEditar("editRemito"),
         proveedor: document.getElementById("editProveedor").value.trim(),
         deposito: document.getElementById("editDeposito").value.trim(),
-        colada: document.getElementById("editColada").value.trim()
+        colada: document.getElementById("editColada").value.trim(),
+        restos: document.getElementById("editRestos").checked
     };
 
     const camposNumericos = [
@@ -2019,6 +2037,7 @@ function textoHRM(data){
     agregarDato(lineas, "Kilos", data.kilos, " kg");
     agregarDato(lineas, "Depósito", data.deposito);
     agregarDato(lineas, "Colada", data.colada);
+    lineas.push(`Restos: ${data.restos === true ? "Sí" : "No"}`);
     
    
     if(data.certificado){
