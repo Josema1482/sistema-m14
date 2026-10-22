@@ -947,6 +947,8 @@ iframe {
 
     <th>Colada</th>
 
+    <th>Restos</th>
+
     <th>Avisado</th>
 
     <th>Certificado</th>
@@ -1416,6 +1418,10 @@ onSnapshot(
 
                     <td>
                         ${celda(data.colada)}
+                    </td>
+
+                    <td>
+                        ${data.restos === true ? "Sí" : "No"}
                     </td>
 
                     <td>
