@@ -110,7 +110,7 @@ async function printReport(){
 }
 function demo(){providers=DATA.semillas.map(({puntajes,fecha,evaluador1,evaluador2,observaciones,origen,...p})=>({...p}));evaluations=DATA.semillas.map(p=>({id:'excel_'+p.id,proveedorId:p.id,fecha:p.fecha,puntajes:p.puntajes,evaluador1:p.evaluador1,evaluador2:p.evaluador2,observaciones:p.observaciones,origen:p.origen,datos:{nombre:p.nombre,razonSocial:p.razonSocial,tipo:p.tipo,rubro:p.rubro,critico:p.critico,contingencia:p.contingencia,preventiva:p.preventiva}}));render()}
 function latest(id){return evaluations.filter(e=>e.proveedorId===id).sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha)))[0]}
-function render(){let q=$('search').value.toLowerCase(),t=$('filter').value;let a=providers.filter(p=>(!t||p.tipo===t)&&[p.nombre,p.razonSocial,p.rubro].join(' ').toLowerCase().includes(q));$('count').textContent=providers.length;$('evalcount').textContent=evaluations.length;$('pending').textContent=providers.filter(p=>!latest(p.id)).length;$('rows').innerHTML=a.map(p=>{let e=latest(p.id);return `<tr><td><b>${escapeHtml(p.nombre)}</b><div class="muted">${escapeHtml(p.rubro)}</div></td><td>${p.tipo==='producto'?'Productos':'Servicios'}</td><td>${e?escapeHtml(e.fecha):'Sin evaluar'}</td><td>${e?score(e)+'/42':'—'}</td><td>${semaforo(p.critico)}</td><td><button class="alt" data-id="${escapeHtml(p.id)}" onclick="openProvider(this.dataset.id)">Abrir</button></td></tr>`}).join('')||'<tr><td colspan="6">No hay proveedores para mostrar.</td></tr>'}
+function render(){let q=$('search').value.toLowerCase(),t=$('filter').value;let a=providers.filter(p=>(!t||p.tipo===t)&&[p.nombre,p.razonSocial,p.rubro].join(' ').toLowerCase().includes(q));$('count').textContent=providers.length;$('evalcount').textContent=evaluations.length;$('pending').textContent=providers.filter(p=>!latest(p.id)).length;$('rows').innerHTML=a.map(p=>{let e=latest(p.id);return `<tr><td><b>${escapeHtml(p.nombre)}</b><div class="muted">${escapeHtml(p.rubro)}</div></td><td>${p.tipo==='producto'?'Productos':'Servicios'}</td><td>${e?escapeHtml(e.fecha):'Sin evaluar'}</td><td>${e?score(e)+'/42':'—'}</td><td>${semaforo(p.critico)}</td><td><button class="alt" data-id="${escapeHtml(p.id)}" onclick="openProvider(this.dataset.id)">Abrir</button> <button class="alt" style="color:#b91c1c;border-color:#fecaca;margin-left:6px" data-id="${escapeHtml(p.id)}" onclick="deleteProvider(this.dataset.id,this)">Eliminar</button></td></tr>`}).join('')||'<tr><td colspan="6">No hay proveedores para mostrar.</td></tr>'}
 function readFields(){return Object.fromEntries(FIELDS.map(k=>[k,$(k).value.trim()]))}
 function fill(d){FIELDS.forEach(k=>$(k).value=d[k]??'');$('fecha').value=d.fecha||today();drawCriteria(d.puntajes||[])}
 function drawCriteria(values){$('criteria').innerHTML=DATA.criterios[$('tipo').value].map((c,i)=>`<div>${i+1}. ${escapeHtml(c)}</div><div><select class="score" onchange="updateTotal()"><option value="">—</option>${[1,2,3].map(n=>`<option value="${n}" ${Number(values[i])===n?'selected':''}>${n}</option>`).join('')}</select></div>`).join('');updateTotal()}
@@ -118,21 +118,23 @@ function getScores(){return [...document.querySelectorAll('.score')].map(s=>s.va
 function showForm(){ $('editPanel').classList.remove('hidden');$('listPanel').classList.add('hidden');$('editPanel').scrollIntoView({behavior:'smooth'})}function closeForm(){$('editPanel').classList.add('hidden');$('listPanel').classList.remove('hidden');render()}
 function newProvider(){currentId=null;currentEval=null;$('formTitle').textContent='Nuevo proveedor';fill({tipo:'producto',critico:'NO'});$('historyRows').innerHTML='Sin evaluaciones anteriores';$('formMsg').textContent='';showForm()}
 function openProvider(id,evalId){let p=providers.find(x=>x.id===id);if(!p)return;currentId=id;let e=evalId?evaluations.find(x=>x.id===evalId):latest(id);currentEval=e?.id||null;$('formTitle').textContent='Proveedor: '+p.nombre;fill({...p,...(e?{...e.datos,fecha:e.fecha,evaluador1:e.evaluador1,evaluador2:e.evaluador2,observaciones:e.observaciones,puntajes:e.puntajes}: {fecha:today()})});$('formMsg').textContent='';renderHistory(id);showForm()}
-function renderHistory(id){let arr=evaluations.filter(e=>e.proveedorId===id).sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha)));$('historyRows').innerHTML=arr.map(e=>`<div class="row between" style="padding:10px 0;border-bottom:1px solid #e8eef4"><span><b>${escapeHtml(e.fecha)}</b> · ${score(e)}/42 · ${escapeHtml(e.evaluador1||'Sin evaluador')} ${e.origen?'· Importado del Excel':''}</span><div class="row no-print" style="gap:8px"><button class="alt" data-eval="${escapeHtml(e.id)}" onclick="openProvider(currentId,this.dataset.eval)">Ver informe</button><button class="alt" style="color:#b91c1c;border-color:#fecaca" data-eval="${escapeHtml(e.id)}" onclick="deleteEvaluation(this.dataset.eval,this)">Eliminar</button></div></div>`).join('')||'Sin evaluaciones registradas'}
-async function deleteEvaluation(evalId,button){
- const e=evaluations.find(x=>x.id===evalId);
- if(!e||!currentId||e.proveedorId!==currentId)return;
- const p=providers.find(x=>x.id===currentId);
- if(!confirm('¿Eliminar definitivamente la evaluación del '+(e.fecha||'sin fecha')+' de '+(p?.nombre||'este proveedor')+'?\n\nEsta acción no se puede deshacer. El proveedor y sus otras evaluaciones se conservarán.'))return;
- if(!connected){alert('No hay conexión con Firebase. No se eliminó la evaluación.');return;}
- const providerId=currentId;
+function renderHistory(id){let arr=evaluations.filter(e=>e.proveedorId===id).sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha)));$('historyRows').innerHTML=arr.map(e=>`<div class="row between" style="padding:10px 0;border-bottom:1px solid #e8eef4"><span><b>${escapeHtml(e.fecha)}</b> · ${score(e)}/42 · ${escapeHtml(e.evaluador1||'Sin evaluador')} ${e.origen?'· Importado del Excel':''}</span><div class="row no-print" style="gap:8px"><button class="alt" data-eval="${escapeHtml(e.id)}" onclick="openProvider(currentId,this.dataset.eval)">Ver informe</button></div></div>`).join('')||'Sin evaluaciones registradas'}
+async function deleteProvider(providerId,button){
+ const p=providers.find(x=>x.id===providerId);
+ if(!p)return;
+ const linked=evaluations.filter(e=>e.proveedorId===providerId);
+ const message='¿Eliminar definitivamente a "'+p.nombre+'" del listado general?\n\nSe eliminará la ficha del proveedor y '+linked.length+' evaluación(es) asociada(s).\n\nEsta acción NO se puede deshacer.';
+ if(!confirm(message))return;
+ if(!connected){alert('No hay conexión con Firebase. No se eliminó el proveedor.');return;}
  button.disabled=true;button.textContent='Eliminando...';
  try{
-  await db.collection('m14_evaluaciones_proveedores').doc(evalId).delete();
+  // El lote elimina la ficha y todas sus evaluaciones de forma atómica.
+  const batch=db.batch();
+  batch.delete(db.collection('m14_proveedores').doc(providerId));
+  linked.forEach(e=>batch.delete(db.collection('m14_evaluaciones_proveedores').doc(e.id)));
+  await batch.commit();
   await loadRemote();
-  openProvider(providerId);
-  $('formMsg').textContent='Evaluación eliminada definitivamente.';
- }catch(err){button.disabled=false;button.textContent='Eliminar';alert('No se pudo eliminar la evaluación: '+err.message);}
+ }catch(err){button.disabled=false;button.textContent='Eliminar';alert('No se pudo eliminar el proveedor: '+err.message);}
 }
 async function saveProviderOnly(){await save(false)}async function saveEvaluation(){await save(true)}async function save(withEval){let d=readFields();if(!d.nombre){alert('Ingresá el nombre del proveedor');return}if(!connected){$('formMsg').textContent='No se puede guardar: no hay conexión con Firebase. Revisá la conexión o los permisos de Firestore.';return}let id=currentId||idGen();let p={id,nombre:d.nombre,razonSocial:d.razonSocial,tipo:d.tipo,rubro:d.rubro,critico:d.critico,contingencia:d.contingencia,preventiva:d.preventiva};try{await db.collection('m14_proveedores').doc(id).set(p);if(withEval){let e={proveedorId:id,fecha:d.fecha||today(),puntajes:getScores(),evaluador1:d.evaluador1,evaluador2:d.evaluador2,observaciones:d.observaciones,datos:p,creadoEn:firebase.firestore.FieldValue.serverTimestamp()};await db.collection('m14_evaluaciones_proveedores').add(e)}await loadRemote();openProvider(id);$('formMsg').textContent=withEval?'Evaluación guardada correctamente.':'Ficha guardada correctamente.'}catch(err){$('formMsg').textContent='No se pudo guardar: '+err.message}}
 async function loadRemote(){let [a,b]=await Promise.all([db.collection('m14_proveedores').get(),db.collection('m14_evaluaciones_proveedores').get()]);providers=a.docs.map(x=>({id:x.id,...x.data()}));evaluations=b.docs.map(x=>({id:x.id,...x.data()}));render()}
